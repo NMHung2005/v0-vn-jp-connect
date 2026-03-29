@@ -1,6 +1,6 @@
 "use client"
 
-import { MapPin, ThumbsUp, BadgeCheck, X, Heart, Sparkles, Eye } from "lucide-react"
+import { MapPin, ThumbsUp, BadgeCheck, X, Heart, Eye } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -20,10 +20,9 @@ interface ProfileCardProps {
   }
   onLike: () => void
   onPass: () => void
-  onSuperLike: () => void
 }
 
-export function ProfileCard({ profile, onLike, onPass, onSuperLike }: ProfileCardProps) {
+export function ProfileCard({ profile, onLike, onPass }: ProfileCardProps) {
   return (
     <div className="flex flex-col items-center w-full max-w-md pb-4">
       {/* Main Card */}
@@ -108,36 +107,26 @@ export function ProfileCard({ profile, onLike, onPass, onSuperLike }: ProfileCar
       </div>
 
       {/* Action buttons */}
-      <div className="flex items-center justify-center gap-6 mt-6">
+      <div className="flex items-center justify-center gap-8 mt-6">
         <div className="flex flex-col items-center gap-2">
           <button
             onClick={onPass}
-            className="w-14 h-14 bg-card border-2 border-border rounded-full flex items-center justify-center text-muted-foreground hover:border-destructive hover:text-destructive hover:bg-destructive/10 hover:scale-110 transition-all shadow-lg"
+            className="w-16 h-16 bg-card border-2 border-border rounded-full flex items-center justify-center text-muted-foreground hover:border-destructive hover:text-destructive hover:bg-destructive/10 hover:scale-110 transition-all shadow-lg"
             aria-label="Pass"
           >
-            <X className="w-7 h-7" />
+            <X className="w-8 h-8" />
           </button>
-          <span className="text-xs text-muted-foreground font-medium">Pass</span>
+          <span className="text-sm text-muted-foreground font-medium">Pass</span>
         </div>
         <div className="flex flex-col items-center gap-2">
           <button
             onClick={onLike}
-            className="w-18 h-18 bg-primary rounded-full flex items-center justify-center text-primary-foreground hover:scale-110 transition-all shadow-lg shadow-primary/30 p-5"
+            className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-primary-foreground hover:scale-110 transition-all shadow-lg shadow-primary/30"
             aria-label="Like"
           >
-            <Heart className="w-9 h-9 fill-current" />
+            <Heart className="w-10 h-10 fill-current" />
           </button>
-          <span className="text-xs text-primary font-semibold">Like</span>
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <button
-            onClick={onSuperLike}
-            className="w-14 h-14 bg-card border-2 border-border rounded-full flex items-center justify-center text-amber-500 hover:border-amber-500 hover:bg-amber-500/10 hover:scale-110 transition-all shadow-lg"
-            aria-label="Super Like"
-          >
-            <Sparkles className="w-7 h-7" />
-          </button>
-          <span className="text-xs text-amber-500 font-medium">Super</span>
+          <span className="text-sm text-primary font-semibold">Like</span>
         </div>
       </div>
     </div>

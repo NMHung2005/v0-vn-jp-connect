@@ -1,6 +1,6 @@
 "use client"
 
-import { Heart, MessageCircle, Sparkles, UserPlus } from "lucide-react"
+import { Heart, MessageCircle, UserPlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
@@ -14,17 +14,10 @@ interface UserProfileActionsProps {
 
 export function UserProfileActions({ user }: UserProfileActionsProps) {
   const [isLiked, setIsLiked] = useState(false)
-  const [isSuperLiked, setIsSuperLiked] = useState(false)
   const [isConnected, setIsConnected] = useState(false)
 
   const handleLike = () => {
     setIsLiked(!isLiked)
-    if (isSuperLiked) setIsSuperLiked(false)
-  }
-
-  const handleSuperLike = () => {
-    setIsSuperLiked(!isSuperLiked)
-    if (isLiked) setIsLiked(false)
   }
 
   const handleConnect = () => {
@@ -45,20 +38,6 @@ export function UserProfileActions({ user }: UserProfileActionsProps) {
       >
         <Heart className={cn("w-5 h-5", isLiked && "fill-current")} />
         {isLiked ? "Liked" : "Like"}
-      </Button>
-
-      {/* Super Like Button */}
-      <Button
-        variant={isSuperLiked ? "default" : "outline"}
-        size="lg"
-        onClick={handleSuperLike}
-        className={cn(
-          "gap-2 min-w-[140px]",
-          isSuperLiked && "bg-amber-500 hover:bg-amber-500/90 text-white border-amber-500"
-        )}
-      >
-        <Sparkles className={cn("w-5 h-5", isSuperLiked && "fill-current")} />
-        {isSuperLiked ? "Super Liked" : "Super Like"}
       </Button>
 
       {/* Message Button */}

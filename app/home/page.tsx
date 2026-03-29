@@ -109,7 +109,6 @@ export default function HomePage() {
               profile={currentProfile}
               onLike={handleNext}
               onPass={handleNext}
-              onSuperLike={handleNext}
             />
           </div>
 
