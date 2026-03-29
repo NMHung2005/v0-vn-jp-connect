@@ -13,12 +13,12 @@ import { cn } from "@/lib/utils"
 
 const menuItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/admin" },
-  { id: "users", label: "Quản lý người dùng", icon: Users, href: "/admin/users" },
-  { id: "organizers", label: "Cấp quyền sự kiện", icon: Shield, href: "/admin/organizers" },
+  { id: "users", label: "User Management", icon: Users, href: "/admin/users" },
+  { id: "organizers", label: "Event Organizers", icon: Shield, href: "/admin/organizers" },
 ]
 
 const bottomItems = [
-  { id: "settings", label: "Cài đặt", icon: Settings, href: "/admin/settings" },
+  { id: "settings", label: "Settings", icon: Settings, href: "/admin/settings" },
 ]
 
 export function AdminSidebar() {
