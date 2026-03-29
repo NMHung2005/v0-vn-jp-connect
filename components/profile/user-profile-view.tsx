@@ -357,7 +357,7 @@ export function UserProfileView({ user, onMessage, onConnect, onReport }: UserPr
             {user.photos.map((photo, index) => (
               <div
                 key={index}
-                className="relative aspect-square rounded-xl overflow-hidden border border-border cursor-pointer hover:opacity-90 transition-opacity"
+                className="relative aspect-square w-full rounded-xl overflow-hidden border border-border cursor-pointer hover:opacity-90 transition-opacity"
                 onClick={() => setSelectedPhoto(photo)}
               >
                 <Image

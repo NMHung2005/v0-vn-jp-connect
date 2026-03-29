@@ -8,13 +8,14 @@ import {
   Settings,
   LogOut,
   Shield,
+  CalendarPlus,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const menuItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/admin" },
   { id: "users", label: "User Management", icon: Users, href: "/admin/users" },
-  { id: "organizers", label: "Event Organizers", icon: Shield, href: "/admin/organizers" },
+  { id: "events", label: "Create Event", icon: CalendarPlus, href: "/admin/organizers" },
 ]
 
 const bottomItems = [

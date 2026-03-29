@@ -609,7 +609,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
             <div
               key={photo}
               className={cn(
-                "relative aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer group",
+                "relative aspect-square w-full rounded-xl overflow-hidden border-2 transition-all cursor-pointer group",
                 photo === user.avatar ? "border-primary" : "border-transparent hover:border-primary/50"
               )}
               onClick={() => setSelectedPhoto(photo)}
@@ -678,7 +678,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
             <X className="w-5 h-5" />
           </button>
           {selectedPhoto && (
-            <div className="relative aspect-square">
+            <div className="relative aspect-square w-full">
               <Image src={selectedPhoto} alt="Photo preview" fill sizes="(max-width: 768px) 100vw, 672px" className="object-cover" />
             </div>
           )}
