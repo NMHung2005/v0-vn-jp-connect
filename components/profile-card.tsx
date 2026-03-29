@@ -1,7 +1,8 @@
 "use client"
 
-import { MapPin, ThumbsUp, BadgeCheck, X, Heart, Sparkles } from "lucide-react"
+import { MapPin, ThumbsUp, BadgeCheck, X, Heart, Sparkles, Eye } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 interface ProfileCardProps {
   profile: {
@@ -38,10 +39,22 @@ export function ProfileCard({ profile, onLike, onPass, onSuperLike }: ProfileCar
             loading="eager"
           />
           
-          {/* Positive rating badge */}
-          <div className="absolute top-4 right-4 bg-card/90 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5 text-sm font-semibold">
-            <ThumbsUp className="w-3.5 h-3.5 text-primary" />
-            <span className="text-foreground">{profile.positiveRating}%</span>
+          {/* Top badges */}
+          <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+            {/* View Profile Button */}
+            <Link
+              href={`/home/user/${profile.id}`}
+              className="bg-card/90 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 text-sm font-medium hover:bg-card transition-colors"
+            >
+              <Eye className="w-3.5 h-3.5 text-primary" />
+              <span className="text-foreground">View Profile</span>
+            </Link>
+
+            {/* Positive rating badge */}
+            <div className="bg-card/90 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5 text-sm font-semibold">
+              <ThumbsUp className="w-3.5 h-3.5 text-primary" />
+              <span className="text-foreground">{profile.positiveRating}%</span>
+            </div>
           </div>
 
           {/* Gradient overlay */}
