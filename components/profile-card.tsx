@@ -1,7 +1,8 @@
 "use client"
 
-import { MapPin, ThumbsUp, BadgeCheck, X, Heart, Sparkles } from "lucide-react"
+import { MapPin, ThumbsUp, X, Heart, User } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 interface ProfileCardProps {
   profile: {
@@ -96,14 +97,21 @@ export function ProfileCard({ profile, onLike, onPass }: ProfileCardProps) {
           </div>
 
           {/* Action Footer */}
-          <div className="flex items-center gap-6 mt-12">
+          <div className="flex items-center gap-4 mt-12">
             <button
               onClick={onPass}
-              className="px-8 py-4 bg-muted/50 hover:bg-destructive/10 hover:text-destructive text-foreground rounded-2xl flex items-center justify-center gap-3 font-bold transition-all border border-transparent hover:border-destructive/20"
+              className="px-6 py-4 bg-muted/50 hover:bg-destructive/10 hover:text-destructive text-foreground rounded-2xl flex items-center justify-center gap-2 font-bold transition-all border border-transparent hover:border-destructive/20"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5" />
               <span>Skip</span>
             </button>
+            <Link
+              href={`/home/user/${profile.id}`}
+              className="px-6 py-4 bg-muted hover:bg-muted/80 text-foreground rounded-2xl flex items-center justify-center gap-2 font-bold transition-all border border-border"
+            >
+              <User className="w-5 h-5" />
+              <span>Profile</span>
+            </Link>
             <button
               onClick={onLike}
               className="flex-1 py-4 bg-primary text-primary-foreground rounded-2xl flex items-center justify-center gap-3 font-bold hover:shadow-2xl hover:shadow-primary/40 hover:-translate-y-0.5 transition-all shadow-lg shadow-primary/20"

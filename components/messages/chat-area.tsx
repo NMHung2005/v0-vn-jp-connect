@@ -11,12 +11,13 @@ import {
   Languages,
   Lightbulb,
   ChevronDown,
-  ChevronUp,
   CheckCircle2,
   Copy,
-  Volume2
+  Volume2,
+  User
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import Link from "next/link"
 
 interface Message {
   id: string
@@ -32,11 +33,12 @@ interface ChatAreaProps {
 }
 
 const conversationData: Record<string, {
-  user: { name: string; avatar: string; online: boolean; nationality: "VN" | "JP" }
+  user: { id: number; name: string; avatar: string; online: boolean; nationality: "VN" | "JP" }
   messages: Message[]
 }> = {
   "1": {
     user: {
+      id: 1,
       name: "Yuki Tanaka",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face",
       online: true,
@@ -168,6 +170,13 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Link
+            href={`/home/user/${user.id}`}
+            className="flex items-center gap-2 px-3 py-1.5 bg-muted hover:bg-muted/80 rounded-full text-sm font-medium text-foreground transition-colors"
+          >
+            <User className="w-4 h-4" />
+            <span>View Profile</span>
+          </Link>
           <button className="p-2 hover:bg-muted rounded-full transition-colors">
             <Phone className="w-5 h-5 text-muted-foreground" />
           </button>

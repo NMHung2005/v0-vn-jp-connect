@@ -55,6 +55,7 @@ export function ProfileHeader({ user, onUpdate }: ProfileHeaderProps) {
           src={user.coverImage}
           alt="Cover"
           fill
+          sizes="(max-width: 768px) 100vw, 896px"
           className="object-cover"
         />
         <button className="absolute bottom-4 right-4 p-2 bg-background/80 backdrop-blur-sm rounded-full hover:bg-background transition-colors">
@@ -67,11 +68,12 @@ export function ProfileHeader({ user, onUpdate }: ProfileHeaderProps) {
         {/* Avatar */}
         <div className="absolute -top-16 left-6">
           <div className="relative">
-            <div className="w-32 h-32 rounded-full border-4 border-card overflow-hidden bg-muted">
+            <div className="relative w-32 h-32 rounded-full border-4 border-card overflow-hidden bg-muted">
               <Image
                 src={user.avatar}
                 alt={user.name}
                 fill
+                sizes="128px"
                 className="object-cover"
               />
             </div>
