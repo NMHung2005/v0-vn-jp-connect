@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { 
   Send, 
   Smile, 
@@ -17,6 +17,10 @@ import {
   Volume2
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { FeedbackDialog } from "./feedback-dialog"
+
+// Message threshold to trigger feedback popup
+const FEEDBACK_THRESHOLD = 10
 
 interface Message {
   id: string
@@ -102,6 +106,61 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
   const [showTranslatePanel, setShowTranslatePanel] = useState(false)
   const [textToTranslate, setTextToTranslate] = useState("")
   const [translatedResult, setTranslatedResult] = useState("")
+  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false)
+  const [messageCount, setMessageCount] = useState(0)
+  const [feedbackGiven, setFeedbackGiven] = useState<Record<string, boolean>>({})
+  const [messages, setMessages] = useState<Message[]>([])
+
+  // Initialize messages and check for feedback trigger
+  useEffect(() => {
+    if (conversationId && conversationData[conversationId]) {
+      const convMessages = conversationData[conversationId].messages
+      setMessages(convMessages)
+      setMessageCount(convMessages.length)
+
+      // Check if we should show feedback dialog
+      const ownMessages = convMessages.filter(m => m.isOwn).length
+      if (ownMessages >= FEEDBACK_THRESHOLD && !feedbackGiven[conversationId]) {
+        // Delay showing popup for better UX
+        const timer = setTimeout(() => {
+          setShowFeedbackDialog(true)
+        }, 1000)
+        return () => clearTimeout(timer)
+      }
+    }
+  }, [conversationId, feedbackGiven])
+
+  const handleSendMessage = () => {
+    if (!message.trim() || !conversationId) return
+
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      senderId: "me",
+      text: message.trim(),
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      isOwn: true,
+    }
+
+    setMessages(prev => [...prev, newMessage])
+    setMessageCount(prev => prev + 1)
+    setMessage("")
+
+    // Check if we should trigger feedback after sending
+    const newOwnMessageCount = messages.filter(m => m.isOwn).length + 1
+    if (newOwnMessageCount === FEEDBACK_THRESHOLD && !feedbackGiven[conversationId]) {
+      setTimeout(() => {
+        setShowFeedbackDialog(true)
+      }, 500)
+    }
+  }
+
+  const handleFeedbackSubmit = (feedback: { reaction: string; comment?: string }) => {
+    if (conversationId) {
+      setFeedbackGiven(prev => ({ ...prev, [conversationId]: true }))
+      // Here you would typically send the feedback to an API
+      console.log("[v0] Feedback submitted:", feedback)
+    }
+  }
 
   if (!conversationId || !conversationData[conversationId]) {
     return (
@@ -117,7 +176,7 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
     )
   }
 
-  const { user, messages } = conversationData[conversationId]
+  const { user } = conversationData[conversationId]
 
   const toggleTranslation = (messageId: string) => {
     setShowTranslation(prev => ({ ...prev, [messageId]: !prev[messageId] }))
@@ -412,7 +471,7 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault()
-                  // Handle send
+                  handleSendMessage()
                 }
               }}
             />
@@ -421,6 +480,8 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
             <Smile className="w-5 h-5 text-muted-foreground" />
           </button>
           <button 
+            onClick={handleSendMessage}
+            disabled={!message.trim()}
             className={cn(
               "p-3 rounded-full transition-colors flex-shrink-0",
               message.trim() 
@@ -432,6 +493,15 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
           </button>
         </div>
       </div>
+
+      {/* Feedback Dialog */}
+      <FeedbackDialog
+        isOpen={showFeedbackDialog}
+        onClose={() => setShowFeedbackDialog(false)}
+        onSubmit={handleFeedbackSubmit}
+        userName={user.name}
+        messageCount={messageCount}
+      />
     </div>
   )
 }
