@@ -7,8 +7,8 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'VN-JP Connect | Kết nối Việt - Nhật',
-  description: 'Nền tảng kết nối giữa người Nhật Bản và người Việt Nam học tiếng Nhật tại Hà Nội',
+  title: 'VN-JP Connect | Bridge Between Cultures',
+  description: 'A platform directly connecting Vietnamese and Japanese people for language exchange, friendship, and cultural collaboration.',
   generator: 'v0.app',
   icons: {
     icon: [
