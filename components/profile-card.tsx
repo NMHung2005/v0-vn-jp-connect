@@ -28,11 +28,12 @@ export function ProfileCard({ profile, onLike, onPass }: ProfileCardProps) {
       {/* Horizontal Rectangle Card */}
       <div className="flex flex-col md:flex-row w-full bg-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-border min-h-[450px]">
         {/* Left Side: Image (Proper Rectangle) */}
-        <div className="relative w-full md:w-[350px] lg:w-[400px] shrink-0">
+        <div className="relative w-full md:w-[350px] lg:w-[400px] shrink-0 min-h-[300px] md:min-h-0">
           <Image
             src={profile.image}
             alt={profile.name}
             fill
+            sizes="(max-width: 768px) 100vw, 400px"
             className="object-cover"
             priority
           />

@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { Search, Filter, MoreHorizontal, Ban, CheckCircle, Eye, Flag, X } from "lucide-react"
+import { Search, Filter, Ban, CheckCircle, Eye, Flag, X, FileImage, FileText, Download } from "lucide-react"
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 type UserStatus = "active" | "banned"
 type TabType = "all" | "reports"
@@ -18,6 +19,12 @@ interface User {
   reports: number
 }
 
+interface EvidenceFile {
+  name: string
+  type: "image" | "document"
+  url: string
+}
+
 interface Report {
   id: string
   reportedUser: User
@@ -26,6 +33,7 @@ interface Report {
   description: string
   date: string
   status: "pending" | "resolved" | "dismissed"
+  evidence: EvidenceFile[]
 }
 
 const mockUsers: User[] = [
@@ -40,10 +48,58 @@ const mockUsers: User[] = [
 ]
 
 const mockReports: Report[] = [
-  { id: "r1", reportedUser: mockUsers[2], reportedBy: "Yamada Kenichi", reason: "Spam", description: "User repeatedly sends advertising messages", date: "2024-03-28", status: "pending" },
-  { id: "r2", reportedUser: mockUsers[4], reportedBy: "Nguyen Van An", reason: "Inappropriate Language", description: "Using offensive language in comments", date: "2024-03-27", status: "pending" },
-  { id: "r3", reportedUser: mockUsers[7], reportedBy: "Sato Hanako", reason: "Harassment", description: "Sending harassing messages multiple times", date: "2024-03-26", status: "pending" },
-  { id: "r4", reportedUser: mockUsers[1], reportedBy: "Tran Thi Binh", reason: "Fake Content", description: "Posting false information about events", date: "2024-03-25", status: "resolved" },
+  { 
+    id: "r1", 
+    reportedUser: mockUsers[2], 
+    reportedBy: "Yamada Kenichi", 
+    reason: "Spam", 
+    description: "User repeatedly sends advertising messages", 
+    date: "2024-03-28", 
+    status: "pending",
+    evidence: [
+      { name: "spam_screenshot_1.png", type: "image", url: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&h=600&fit=crop" },
+      { name: "spam_screenshot_2.png", type: "image", url: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&h=600&fit=crop" },
+    ]
+  },
+  { 
+    id: "r2", 
+    reportedUser: mockUsers[4], 
+    reportedBy: "Nguyen Van An", 
+    reason: "Inappropriate Language", 
+    description: "Using offensive language in comments", 
+    date: "2024-03-27", 
+    status: "pending",
+    evidence: [
+      { name: "chat_log.pdf", type: "document", url: "/documents/chat_log.pdf" },
+      { name: "screenshot.png", type: "image", url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop" },
+    ]
+  },
+  { 
+    id: "r3", 
+    reportedUser: mockUsers[7], 
+    reportedBy: "Sato Hanako", 
+    reason: "Harassment", 
+    description: "Sending harassing messages multiple times", 
+    date: "2024-03-26", 
+    status: "pending",
+    evidence: [
+      { name: "harassment_proof_1.png", type: "image", url: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=800&h=600&fit=crop" },
+      { name: "harassment_proof_2.png", type: "image", url: "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800&h=600&fit=crop" },
+      { name: "message_history.pdf", type: "document", url: "/documents/message_history.pdf" },
+    ]
+  },
+  { 
+    id: "r4", 
+    reportedUser: mockUsers[1], 
+    reportedBy: "Tran Thi Binh", 
+    reason: "Fake Content", 
+    description: "Posting false information about events", 
+    date: "2024-03-25", 
+    status: "resolved",
+    evidence: [
+      { name: "fake_post.png", type: "image", url: "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=800&h=600&fit=crop" },
+    ]
+  },
 ]
 
 const statusConfig = {
@@ -65,6 +121,9 @@ export default function UsersPage() {
   const [showBanModal, setShowBanModal] = useState(false)
   const [banReason, setBanReason] = useState("")
   const [userToBan, setUserToBan] = useState<User | null>(null)
+  const [showEvidenceModal, setShowEvidenceModal] = useState(false)
+  const [selectedReport, setSelectedReport] = useState<Report | null>(null)
+  const [selectedEvidence, setSelectedEvidence] = useState<EvidenceFile | null>(null)
 
   const filteredUsers = mockUsers.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -88,6 +147,20 @@ export default function UsersPage() {
       setShowBanModal(false)
       setUserToBan(null)
       setBanReason("")
+    }
+  }
+
+  const handleViewEvidence = (report: Report) => {
+    setSelectedReport(report)
+    setShowEvidenceModal(true)
+  }
+
+  const handleEvidenceClick = (evidence: EvidenceFile) => {
+    if (evidence.type === "image") {
+      setSelectedEvidence(evidence)
+    } else {
+      // For documents, open in new tab
+      window.open(evidence.url, "_blank")
     }
   }
 
@@ -285,21 +358,33 @@ export default function UsersPage() {
                           {new Date(report.date).toLocaleDateString("en-US")}
                         </span>
                       </div>
+                      {/* Evidence Button */}
+                      {report.evidence.length > 0 && (
+                        <button
+                          onClick={() => handleViewEvidence(report)}
+                          className="mt-3 flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
+                        >
+                          <FileImage className="w-4 h-4" />
+                          View Evidence ({report.evidence.length} files)
+                        </button>
+                      )}
                     </div>
                   </div>
-                  {report.status === "pending" && (
-                    <div className="flex items-center gap-2">
-                      <button 
-                        onClick={() => handleBanClick(report.reportedUser)}
-                        className="px-4 py-2 text-sm font-medium bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
-                      >
-                        Ban Account
-                      </button>
-                      <button className="px-4 py-2 text-sm font-medium bg-muted text-muted-foreground rounded-lg hover:bg-muted/80 transition-colors">
-                        Dismiss
-                      </button>
-                    </div>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {report.status === "pending" && (
+                      <>
+                        <button 
+                          onClick={() => handleBanClick(report.reportedUser)}
+                          className="px-4 py-2 text-sm font-medium bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
+                        >
+                          Ban Account
+                        </button>
+                        <button className="px-4 py-2 text-sm font-medium bg-muted text-muted-foreground rounded-lg hover:bg-muted/80 transition-colors">
+                          Dismiss
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -424,6 +509,105 @@ export default function UsersPage() {
                 Confirm Ban
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Evidence Modal */}
+      {showEvidenceModal && selectedReport && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-card rounded-xl p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-semibold text-foreground">Evidence Files</h2>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Report: {selectedReport.reason} - {selectedReport.reportedUser.name}
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setShowEvidenceModal(false)
+                  setSelectedReport(null)
+                }}
+                className="p-2 hover:bg-muted rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            {/* Evidence Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              {selectedReport.evidence.map((evidence, index) => (
+                <div 
+                  key={index}
+                  onClick={() => handleEvidenceClick(evidence)}
+                  className="border border-border rounded-lg overflow-hidden cursor-pointer hover:border-primary transition-colors group"
+                >
+                  {evidence.type === "image" ? (
+                    <div className="relative aspect-video bg-muted">
+                      <Image
+                        src={evidence.url}
+                        alt={evidence.name}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 300px"
+                        className="object-cover group-hover:opacity-90 transition-opacity"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                        <Eye className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg" />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="aspect-video bg-muted/50 flex flex-col items-center justify-center gap-2 group-hover:bg-muted transition-colors">
+                      <FileText className="w-12 h-12 text-muted-foreground" />
+                      <Download className="w-5 h-5 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                  )}
+                  <div className="p-3 bg-card">
+                    <p className="text-sm font-medium text-foreground truncate">{evidence.name}</p>
+                    <p className="text-xs text-muted-foreground capitalize">{evidence.type}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={() => {
+                  setShowEvidenceModal(false)
+                  setSelectedReport(null)
+                }}
+                className="px-4 py-2 bg-muted text-muted-foreground rounded-lg hover:bg-muted/80 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Image Preview Modal */}
+      {selectedEvidence && selectedEvidence.type === "image" && (
+        <div 
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-[60]"
+          onClick={() => setSelectedEvidence(null)}
+        >
+          <div className="relative max-w-4xl max-h-[90vh] w-full mx-4">
+            <button
+              onClick={() => setSelectedEvidence(null)}
+              className="absolute -top-12 right-0 p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div className="relative w-full h-[80vh]">
+              <Image
+                src={selectedEvidence.url}
+                alt={selectedEvidence.name}
+                fill
+                sizes="(max-width: 768px) 100vw, 896px"
+                className="object-contain"
+              />
+            </div>
+            <p className="text-center text-white mt-4">{selectedEvidence.name}</p>
           </div>
         </div>
       )}
