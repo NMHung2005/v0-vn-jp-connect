@@ -10,69 +10,33 @@ import { cn } from "@/lib/utils"
 const events = [
   {
     id: 1,
-    title: "Photography Walk in Old Quarter",
-    category: "Photography",
-    date: "Apr 5, 2026",
-    time: "9:00 AM",
-    location: "Hoan Kiem Lake",
-    attendees: 24,
-    maxAttendees: 30,
-    image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=400&h=200&fit=crop",
-    isInterested: true,
-  },
-  {
-    id: 2,
     title: "VN-JP Cultural Exchange Night",
-    category: "Cultural",
-    date: "Apr 8, 2026",
+    category: "Cultural Exchange",
+    date: "Apr 5, 2026",
     time: "6:30 PM",
     location: "Japan Foundation, Hanoi",
     attendees: 45,
     maxAttendees: 60,
     image: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&h=200&fit=crop",
-    isInterested: false,
-  },
-  {
-    id: 3,
-    title: "Japanese Cooking Class",
-    category: "Food",
-    date: "Apr 12, 2026",
-    time: "2:00 PM",
-    location: "Cooking Studio, Tay Ho",
-    attendees: 12,
-    maxAttendees: 15,
-    image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400&h=200&fit=crop",
     isInterested: true,
   },
   {
-    id: 4,
-    title: "Language Exchange Cafe",
-    category: "Language",
-    date: "Apr 15, 2026",
+    id: 2,
+    title: "Vietnamese-Japanese Language Exchange Cafe",
+    category: "Language Exchange",
+    date: "Apr 8, 2026",
     time: "3:00 PM",
-    location: "Tranquil Books & Coffee",
+    location: "Tranquil Books & Coffee, Hoan Kiem",
     attendees: 18,
     maxAttendees: 25,
     image: "https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=400&h=200&fit=crop",
     isInterested: false,
   },
   {
-    id: 5,
-    title: "Anime & Manga Meetup",
-    category: "Entertainment",
-    date: "Apr 18, 2026",
-    time: "4:00 PM",
-    location: "Comic City, Cau Giay",
-    attendees: 32,
-    maxAttendees: 40,
-    image: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400&h=200&fit=crop",
-    isInterested: false,
-  },
-  {
-    id: 6,
-    title: "Traditional Tea Ceremony",
-    category: "Cultural",
-    date: "Apr 22, 2026",
+    id: 3,
+    title: "Japanese Traditional Tea Ceremony Workshop",
+    category: "Cultural Exchange",
+    date: "Apr 12, 2026",
     time: "10:00 AM",
     location: "Zen Garden Cafe, Ba Dinh",
     attendees: 8,
@@ -80,9 +44,69 @@ const events = [
     image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=200&fit=crop",
     isInterested: true,
   },
+  {
+    id: 4,
+    title: "VN-JP Photography Club Meetup",
+    category: "Photography",
+    date: "Apr 15, 2026",
+    time: "8:00 AM",
+    location: "West Lake, Tay Ho",
+    attendees: 22,
+    maxAttendees: 30,
+    image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=400&h=200&fit=crop",
+    isInterested: false,
+  },
+  {
+    id: 5,
+    title: "Japanese Cooking Class - Sushi & Ramen",
+    category: "Culinary Exchange",
+    date: "Apr 18, 2026",
+    time: "2:00 PM",
+    location: "Cooking Studio, Tay Ho",
+    attendees: 12,
+    maxAttendees: 15,
+    image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400&h=200&fit=crop",
+    isInterested: false,
+  },
+  {
+    id: 6,
+    title: "VN-JP Anime & Manga Fan Meetup",
+    category: "Pop Culture",
+    date: "Apr 22, 2026",
+    time: "4:00 PM",
+    location: "Comic City, Cau Giay",
+    attendees: 35,
+    maxAttendees: 50,
+    image: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400&h=200&fit=crop",
+    isInterested: true,
+  },
+  {
+    id: 7,
+    title: "Vietnamese Ao Dai & Japanese Kimono Festival",
+    category: "Cultural Exchange",
+    date: "Apr 26, 2026",
+    time: "9:00 AM",
+    location: "Temple of Literature, Dong Da",
+    attendees: 80,
+    maxAttendees: 100,
+    image: "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=400&h=200&fit=crop",
+    isInterested: false,
+  },
+  {
+    id: 8,
+    title: "VN-JP Business Networking Night",
+    category: "Networking",
+    date: "Apr 29, 2026",
+    time: "6:00 PM",
+    location: "Lotte Hotel, Ba Dinh",
+    attendees: 55,
+    maxAttendees: 80,
+    image: "https://images.unsplash.com/photo-1515169067868-5387ec356754?w=400&h=200&fit=crop",
+    isInterested: false,
+  },
 ]
 
-const categories = ["All", "Cultural", "Language", "Food", "Photography", "Entertainment"]
+const categories = ["All", "Cultural Exchange", "Language Exchange", "Photography", "Culinary Exchange", "Pop Culture", "Networking"]
 
 interface EventListProps {
   selectedEventId: number | null
@@ -103,16 +127,18 @@ export function EventList({ selectedEventId, onSelectEvent }: EventListProps) {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case "Cultural":
-        return "bg-purple-100 text-purple-700 border-purple-200"
-      case "Language":
+      case "Cultural Exchange":
+        return "bg-emerald-100 text-emerald-700 border-emerald-200"
+      case "Language Exchange":
         return "bg-blue-100 text-blue-700 border-blue-200"
-      case "Food":
-        return "bg-orange-100 text-orange-700 border-orange-200"
       case "Photography":
         return "bg-pink-100 text-pink-700 border-pink-200"
-      case "Entertainment":
-        return "bg-cyan-100 text-cyan-700 border-cyan-200"
+      case "Culinary Exchange":
+        return "bg-orange-100 text-orange-700 border-orange-200"
+      case "Pop Culture":
+        return "bg-purple-100 text-purple-700 border-purple-200"
+      case "Networking":
+        return "bg-slate-100 text-slate-700 border-slate-200"
       default:
         return "bg-muted text-muted-foreground"
     }
@@ -122,7 +148,7 @@ export function EventList({ selectedEventId, onSelectEvent }: EventListProps) {
     <div className="w-96 border-r border-border flex flex-col bg-card">
       <div className="p-4 border-b border-border space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-foreground">Events</h2>
+          <h2 className="text-xl font-semibold text-foreground">VN-JP Events</h2>
           <Button 
             variant="outline" 
             size="sm"
