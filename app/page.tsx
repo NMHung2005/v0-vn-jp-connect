@@ -1,15 +1,13 @@
 import { Header } from "@/components/landing/header"
 import { HeroSection } from "@/components/landing/hero-section"
-import { ProfilePreviewSection } from "@/components/landing/profile-preview-section"
 import { Footer } from "@/components/landing/footer"
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      <main>
+      <main className="flex-1">
         <HeroSection />
-        <ProfilePreviewSection />
       </main>
       <Footer />
     </div>
