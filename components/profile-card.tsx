@@ -34,6 +34,7 @@ export function ProfileCard({ profile, onLike, onPass, onSuperLike }: ProfileCar
             alt={profile.name}
             fill
             className="object-cover"
+            priority
           />
           
           {/* Positive rating badge */}
