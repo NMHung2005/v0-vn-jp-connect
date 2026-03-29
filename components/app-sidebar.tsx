@@ -10,10 +10,10 @@ interface AppSidebarProps {
 }
 
 const menuItems = [
-  { id: "discover", label: "Discover", icon: Heart },
-  { id: "messages", label: "Messages", icon: MessageCircle, badge: 3 },
-  { id: "events", label: "Events", icon: Calendar },
-  { id: "profile", label: "Profile", icon: User },
+  { id: "discover", label: "Discover", icon: Heart, href: "/home" },
+  { id: "messages", label: "Messages", icon: MessageCircle, badge: 3, href: "/home/messages" },
+  { id: "events", label: "Events", icon: Calendar, href: "/home/events" },
+  { id: "profile", label: "Profile", icon: User, href: "/home/profile" },
 ]
 
 export function AppSidebar({ activeTab, onTabChange }: AppSidebarProps) {
@@ -44,8 +44,9 @@ export function AppSidebar({ activeTab, onTabChange }: AppSidebarProps) {
           const Icon = item.icon
           const isActive = activeTab === item.id
           return (
-            <button
+            <Link
               key={item.id}
+              href={item.href}
               onClick={() => onTabChange(item.id)}
               className={cn(
                 "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left",
@@ -64,7 +65,7 @@ export function AppSidebar({ activeTab, onTabChange }: AppSidebarProps) {
                   {item.badge}
                 </span>
               )}
-            </button>
+            </Link>
           )
         })}
       </nav>
