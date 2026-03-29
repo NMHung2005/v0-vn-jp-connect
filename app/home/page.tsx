@@ -80,14 +80,14 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
       <AppSidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden">
+      <main className="flex-1 flex flex-col min-h-screen">
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-card">
+        <header className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-border bg-card">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Discover</h1>
             <p className="text-sm text-muted-foreground">Find new connections</p>
@@ -104,7 +104,7 @@ export default function HomePage() {
         {/* Content Area */}
         <div className="flex-1 flex">
           {/* Profile Area */}
-          <div className="flex-1 flex items-center justify-center p-6 overflow-y-auto">
+          <div className="flex-1 flex items-start justify-center p-6 py-8 overflow-y-auto">
             <ProfileCard
               profile={currentProfile}
               onLike={handleNext}

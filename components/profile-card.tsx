@@ -24,9 +24,9 @@ interface ProfileCardProps {
 
 export function ProfileCard({ profile, onLike, onPass, onSuperLike }: ProfileCardProps) {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-full max-w-md pb-4">
       {/* Main Card */}
-      <div className="relative w-full max-w-md bg-card rounded-3xl shadow-xl overflow-hidden">
+      <div className="relative w-full bg-card rounded-3xl shadow-xl overflow-hidden">
         {/* Image */}
         <div className="relative aspect-[3/4] w-full">
           <Image
@@ -35,6 +35,7 @@ export function ProfileCard({ profile, onLike, onPass, onSuperLike }: ProfileCar
             fill
             className="object-cover"
             priority
+            loading="eager"
           />
           
           {/* Positive rating badge */}
@@ -94,25 +95,37 @@ export function ProfileCard({ profile, onLike, onPass, onSuperLike }: ProfileCar
       </div>
 
       {/* Action buttons */}
-      <div className="flex items-center justify-center gap-4 mt-6">
-        <button
-          onClick={onPass}
-          className="w-14 h-14 bg-card border-2 border-border rounded-full flex items-center justify-center text-muted-foreground hover:border-destructive hover:text-destructive hover:scale-110 transition-all shadow-lg"
-        >
-          <X className="w-7 h-7" />
-        </button>
-        <button
-          onClick={onLike}
-          className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-primary-foreground hover:scale-110 transition-all shadow-lg shadow-primary/30"
-        >
-          <Heart className="w-8 h-8 fill-current" />
-        </button>
-        <button
-          onClick={onSuperLike}
-          className="w-14 h-14 bg-card border-2 border-border rounded-full flex items-center justify-center text-amber-500 hover:border-amber-500 hover:scale-110 transition-all shadow-lg"
-        >
-          <Sparkles className="w-7 h-7" />
-        </button>
+      <div className="flex items-center justify-center gap-6 mt-6">
+        <div className="flex flex-col items-center gap-2">
+          <button
+            onClick={onPass}
+            className="w-14 h-14 bg-card border-2 border-border rounded-full flex items-center justify-center text-muted-foreground hover:border-destructive hover:text-destructive hover:bg-destructive/10 hover:scale-110 transition-all shadow-lg"
+            aria-label="Pass"
+          >
+            <X className="w-7 h-7" />
+          </button>
+          <span className="text-xs text-muted-foreground font-medium">Pass</span>
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <button
+            onClick={onLike}
+            className="w-18 h-18 bg-primary rounded-full flex items-center justify-center text-primary-foreground hover:scale-110 transition-all shadow-lg shadow-primary/30 p-5"
+            aria-label="Like"
+          >
+            <Heart className="w-9 h-9 fill-current" />
+          </button>
+          <span className="text-xs text-primary font-semibold">Like</span>
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <button
+            onClick={onSuperLike}
+            className="w-14 h-14 bg-card border-2 border-border rounded-full flex items-center justify-center text-amber-500 hover:border-amber-500 hover:bg-amber-500/10 hover:scale-110 transition-all shadow-lg"
+            aria-label="Super Like"
+          >
+            <Sparkles className="w-7 h-7" />
+          </button>
+          <span className="text-xs text-amber-500 font-medium">Super</span>
+        </div>
       </div>
     </div>
   )
