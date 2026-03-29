@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { MapPin, CheckCircle2, ThumbsUp, X, Heart, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -45,13 +46,10 @@ export function ProfilePreviewSection() {
   }
 
   return (
-    <section id="how-it-works" className="py-20 px-4 sm:px-6 lg:px-8">
+    <section className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <span className="text-sm font-medium text-primary uppercase tracking-wider">
-            How It Works
-          </span>
-          <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-foreground tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">
             Discover amazing people
           </h2>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -151,49 +149,31 @@ export function ProfilePreviewSection() {
             </div>
           </div>
 
-          <div className="flex-1 space-y-6">
+          <div className="flex-1 flex flex-col justify-center space-y-8">
             <div className="space-y-4">
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
-                  1
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-foreground">
-                    Create Your Profile
-                  </h3>
-                  <p className="text-muted-foreground mt-1">
-                    Share your interests, language goals, and what you are looking for in a connection.
-                  </p>
-                </div>
-              </div>
+              <h3 className="text-2xl font-bold text-foreground">
+                The Mission
+              </h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Redefining how two distinct cultures collaborate. Connect VN-JP serves as the digital bridge for professionals, students, and visionaries seeking authentic partnerships between Vietnam and Japan. We focus on clarity, efficiency, and cultural synergy.
+              </p>
+            </div>
+            
+            <div className="space-y-4">
+              <h3 className="text-2xl font-bold text-foreground">
+                Direct Connection
+              </h3>
+              <p className="text-muted-foreground leading-relaxed">
+                No intermediaries. No barriers. Just direct human potential scaled through technology. Connect with verified users, see their positive rating percentage, and build meaningful relationships.
+              </p>
+            </div>
 
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
-                  2
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-foreground">
-                    Discover People
-                  </h3>
-                  <p className="text-muted-foreground mt-1">
-                    Browse profiles filtered by nationality, interests, and proximity. See positive ratings from other users.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
-                  3
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-foreground">
-                    Connect Safely
-                  </h3>
-                  <p className="text-muted-foreground mt-1">
-                    Chat online first, then meet at verified community events or public places with peace of mind.
-                  </p>
-                </div>
-              </div>
+            <div className="pt-4">
+              <Button size="lg" asChild>
+                <Link href="/register">
+                  Start Connecting Today
+                </Link>
+              </Button>
             </div>
           </div>
         </div>

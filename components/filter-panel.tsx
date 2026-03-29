@@ -17,10 +17,10 @@ interface FilterPanelProps {
 }
 
 const allInterests = [
-  "Du lịch", "Anime", "Ẩm thực", "Nhiếp ảnh", "Học ngoại ngữ", "Yoga",
-  "Cà phê", "Văn học", "Công nghệ", "Game", "Lập trình", "Manga",
-  "Giáo dục", "Âm nhạc", "Nấu ăn", "Nghệ thuật", "Trà đạo", "Karaoke",
-  "Thể thao", "Điện ảnh"
+  "Travel", "Anime", "Food", "Photography", "Language Learning", "Yoga",
+  "Coffee", "Literature", "Technology", "Gaming", "Programming", "Manga",
+  "Education", "Music", "Cooking", "Art", "Tea Ceremony", "Karaoke",
+  "Sports", "Movies"
 ]
 
 export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: FilterPanelProps) {
@@ -60,7 +60,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
     <div className="w-80 bg-card border-l border-border h-screen overflow-y-auto">
       {/* Header */}
       <div className="sticky top-0 bg-card z-10 p-4 border-b border-border flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-foreground">Tiêu chí tìm kiếm</h2>
+        <h2 className="text-lg font-semibold text-foreground">Search Filters</h2>
         <button
           onClick={onClose}
           className="p-1.5 hover:bg-muted rounded-lg transition-colors"
@@ -73,7 +73,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
         {/* Age Range */}
         <div className="space-y-3">
           <label className="text-sm font-medium text-foreground">
-            Độ tuổi: {filters.ageRange[0]} - {filters.ageRange[1]} tuổi
+            Age: {filters.ageRange[0]} - {filters.ageRange[1]} years
           </label>
           <div className="space-y-2">
             <input
@@ -98,7 +98,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
         {/* Distance */}
         <div className="space-y-3">
           <label className="text-sm font-medium text-foreground">
-            Khoảng cách: {filters.distance} km
+            Distance: {filters.distance} km
           </label>
           <input
             type="range"
@@ -112,7 +112,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
 
         {/* Nationality */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-foreground">Quốc tịch</label>
+          <label className="text-sm font-medium text-foreground">Nationality</label>
           <div className="space-y-2">
             <label className="flex items-center gap-3 cursor-pointer">
               <div className={cn(
@@ -123,7 +123,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
               )}>
                 {filters.nationality.length === 2 && <Check className="w-3 h-3 text-primary-foreground" />}
               </div>
-              <span className="text-foreground">Tất cả</span>
+              <span className="text-foreground">All</span>
             </label>
             <label className="flex items-center gap-3 cursor-pointer pl-4">
               <div className={cn(
@@ -136,7 +136,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
               >
                 {filters.nationality.includes("VN") && <Check className="w-3 h-3 text-primary-foreground" />}
               </div>
-              <span className="text-muted-foreground">🇻🇳 Việt Nam</span>
+              <span className="text-muted-foreground">Vietnam</span>
             </label>
             <label className="flex items-center gap-3 cursor-pointer pl-4">
               <div className={cn(
@@ -149,7 +149,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
               >
                 {filters.nationality.includes("JP") && <Check className="w-3 h-3 text-primary-foreground" />}
               </div>
-              <span className="text-muted-foreground">🇯🇵 Nhật Bản</span>
+              <span className="text-muted-foreground">Japan</span>
             </label>
           </div>
         </div>
@@ -163,18 +163,18 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
             <div className={cn(
               "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors",
               filters.verifiedOnly 
-                ? "bg-blue-500 border-blue-500" 
+                ? "bg-primary border-primary" 
                 : "border-border"
             )}>
-              {filters.verifiedOnly && <Check className="w-3 h-3 text-white" />}
+              {filters.verifiedOnly && <Check className="w-3 h-3 text-primary-foreground" />}
             </div>
-            <span className="text-foreground">Chỉ hiển thị tài khoản đã xác minh</span>
+            <span className="text-foreground">Verified accounts only</span>
           </label>
         </div>
 
         {/* Interests */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-foreground">Sở thích</label>
+          <label className="text-sm font-medium text-foreground">Interests</label>
           <div className="flex flex-wrap gap-2">
             {allInterests.map((interest) => (
               <button
@@ -198,7 +198,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
           onClick={resetFilters}
           className="w-full py-3 border border-border rounded-xl text-foreground font-medium hover:bg-muted transition-colors"
         >
-          Đặt lại bộ lọc
+          Reset Filters
         </button>
       </div>
     </div>

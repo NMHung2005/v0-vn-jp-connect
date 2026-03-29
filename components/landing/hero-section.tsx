@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Users, Shield, MessageCircle } from "lucide-react"
 
@@ -21,13 +22,13 @@ export function HeroSection() {
 
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Button size="lg" className="w-full sm:w-auto gap-2" asChild>
-            <a href="#register">
+            <Link href="/register">
               Get Started
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </Link>
           </Button>
           <Button variant="outline" size="lg" className="w-full sm:w-auto" asChild>
-            <a href="#how-it-works">Learn More</a>
+            <Link href="/login">Sign In</Link>
           </Button>
         </div>
 

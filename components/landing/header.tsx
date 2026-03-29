@@ -14,33 +14,12 @@ export function Header() {
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
-            <Link
-              href="#features"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Features
-            </Link>
-            <Link
-              href="#how-it-works"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              How it Works
-            </Link>
-            <Link
-              href="#safety"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Safety
-            </Link>
-          </nav>
-
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="sm" asChild>
-              <Link href="#login">Login</Link>
+              <Link href="/login">Login</Link>
             </Button>
             <Button size="sm" asChild>
-              <Link href="#register">Register</Link>
+              <Link href="/register">Register</Link>
             </Button>
           </div>
         </div>

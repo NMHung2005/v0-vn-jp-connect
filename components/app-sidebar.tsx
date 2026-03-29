@@ -1,6 +1,7 @@
 "use client"
 
-import { Heart, MessageCircle, Calendar, User, Settings, Sun } from "lucide-react"
+import Link from "next/link"
+import { Heart, MessageCircle, Calendar, User, Settings, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface AppSidebarProps {
@@ -9,10 +10,10 @@ interface AppSidebarProps {
 }
 
 const menuItems = [
-  { id: "discover", label: "Khám phá", icon: Heart },
-  { id: "messages", label: "Tin nhắn", icon: MessageCircle, badge: 3 },
-  { id: "events", label: "Sự kiện", icon: Calendar },
-  { id: "profile", label: "Cá nhân", icon: User },
+  { id: "discover", label: "Discover", icon: Heart },
+  { id: "messages", label: "Messages", icon: MessageCircle, badge: 3 },
+  { id: "events", label: "Events", icon: Calendar },
+  { id: "profile", label: "Profile", icon: User },
 ]
 
 export function AppSidebar({ activeTab, onTabChange }: AppSidebarProps) {
@@ -21,15 +22,9 @@ export function AppSidebar({ activeTab, onTabChange }: AppSidebarProps) {
       {/* Logo */}
       <div className="p-4 border-b border-border">
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 text-xl font-bold">
-            <span className="text-foreground">VN</span>
-            <span className="text-primary">❤️</span>
-            <span className="text-foreground">JP</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-primary font-semibold text-sm">VietJapan</span>
-            <span className="text-muted-foreground text-xs">Connect</span>
-          </div>
+          <span className="text-xl font-bold text-foreground tracking-tight">
+            Connect VN-JP
+          </span>
           <div className="ml-auto relative">
             <button className="p-2 hover:bg-muted rounded-full transition-colors">
               <svg className="w-5 h-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -77,13 +72,16 @@ export function AppSidebar({ activeTab, onTabChange }: AppSidebarProps) {
       {/* Bottom actions */}
       <div className="p-3 border-t border-border space-y-1">
         <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-all">
-          <Sun className="w-5 h-5" />
-          <span className="font-medium">Chế độ sáng</span>
-        </button>
-        <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-all">
           <Settings className="w-5 h-5" />
-          <span className="font-medium">Cài đặt</span>
+          <span className="font-medium">Settings</span>
         </button>
+        <Link 
+          href="/"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-all"
+        >
+          <LogOut className="w-5 h-5" />
+          <span className="font-medium">Log out</span>
+        </Link>
       </div>
     </aside>
   )

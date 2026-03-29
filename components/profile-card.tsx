@@ -1,6 +1,6 @@
 "use client"
 
-import { MapPin, Star, BadgeCheck, X, Heart, Sparkles } from "lucide-react"
+import { MapPin, ThumbsUp, BadgeCheck, X, Heart, Sparkles } from "lucide-react"
 import Image from "next/image"
 
 interface ProfileCardProps {
@@ -10,7 +10,7 @@ interface ProfileCardProps {
     age: number
     location: string
     distance: string
-    rating: number
+    positiveRating: number
     verified: boolean
     image: string
     bio: string
@@ -36,10 +36,10 @@ export function ProfileCard({ profile, onLike, onPass, onSuperLike }: ProfileCar
             className="object-cover"
           />
           
-          {/* Rating badge */}
-          <div className="absolute top-4 right-4 bg-amber-400 text-amber-900 px-2.5 py-1 rounded-full flex items-center gap-1 text-sm font-semibold">
-            <Star className="w-4 h-4 fill-current" />
-            {profile.rating}
+          {/* Positive rating badge */}
+          <div className="absolute top-4 right-4 bg-card/90 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5 text-sm font-semibold">
+            <ThumbsUp className="w-3.5 h-3.5 text-primary" />
+            <span className="text-foreground">{profile.positiveRating}%</span>
           </div>
 
           {/* Gradient overlay */}
@@ -50,13 +50,13 @@ export function ProfileCard({ profile, onLike, onPass, onSuperLike }: ProfileCar
             <div className="flex items-center gap-2 mb-1">
               <h2 className="text-2xl font-bold">{profile.name}, {profile.age}</h2>
               {profile.verified && (
-                <BadgeCheck className="w-6 h-6 text-blue-400 fill-blue-400" />
+                <BadgeCheck className="w-6 h-6 text-primary fill-primary/20" />
               )}
             </div>
             <div className="flex items-center gap-2 text-white/80 text-sm">
               <MapPin className="w-4 h-4" />
               <span>{profile.location}</span>
-              <span>•</span>
+              <span>|</span>
               <span>{profile.distance}</span>
             </div>
           </div>
@@ -68,7 +68,6 @@ export function ProfileCard({ profile, onLike, onPass, onSuperLike }: ProfileCar
 
           {/* Languages */}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-muted-foreground text-sm">🌐</span>
             {profile.languages.map((lang) => (
               <span
                 key={lang}
