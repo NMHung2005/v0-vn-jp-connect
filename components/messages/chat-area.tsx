@@ -18,6 +18,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { FeedbackDialog } from "./feedback-dialog"
+import { ChatProfilePanel } from "./chat-profile-panel"
 
 // Message threshold to trigger feedback popup
 const FEEDBACK_THRESHOLD = 10
@@ -110,6 +111,7 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
   const [messageCount, setMessageCount] = useState(0)
   const [feedbackGiven, setFeedbackGiven] = useState<Record<string, boolean>>({})
   const [messages, setMessages] = useState<Message[]>([])
+  const [showProfilePanel, setShowProfilePanel] = useState(false)
 
   // Initialize messages and check for feedback trigger
   useEffect(() => {
@@ -197,10 +199,15 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-background">
+    <div className="flex-1 flex bg-background">
+      {/* Main Chat Area */}
+      <div className="flex-1 flex flex-col min-w-0">
       {/* Chat Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-card">
-        <div className="flex items-center gap-3">
+        <button 
+          onClick={() => setShowProfilePanel(!showProfilePanel)}
+          className="flex items-center gap-3 hover:bg-muted/50 rounded-lg px-2 py-1 -ml-2 transition-colors"
+        >
           <div className="relative">
             <img
               src={user.avatar}
@@ -211,7 +218,7 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
               <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-card rounded-full" />
             )}
           </div>
-          <div>
+          <div className="text-left">
             <div className="flex items-center gap-2">
               <h2 className="font-semibold text-foreground">{user.name}</h2>
               <span className={cn(
@@ -222,10 +229,10 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              {user.online ? "Online" : "Offline"}
+              {user.online ? "Online - Click to view profile" : "Offline - Click to view profile"}
             </p>
           </div>
-        </div>
+        </button>
         <div className="flex items-center gap-2">
           <button className="p-2 hover:bg-muted rounded-full transition-colors">
             <Phone className="w-5 h-5 text-muted-foreground" />
@@ -233,8 +240,14 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
           <button className="p-2 hover:bg-muted rounded-full transition-colors">
             <Video className="w-5 h-5 text-muted-foreground" />
           </button>
-          <button className="p-2 hover:bg-muted rounded-full transition-colors">
-            <MoreVertical className="w-5 h-5 text-muted-foreground" />
+          <button 
+            onClick={() => setShowProfilePanel(!showProfilePanel)}
+            className={cn(
+              "p-2 rounded-full transition-colors",
+              showProfilePanel ? "bg-primary text-primary-foreground" : "hover:bg-muted"
+            )}
+          >
+            <MoreVertical className={cn("w-5 h-5", !showProfilePanel && "text-muted-foreground")} />
           </button>
         </div>
       </header>
@@ -495,12 +508,20 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
       </div>
 
       {/* Feedback Dialog */}
-      <FeedbackDialog
-        isOpen={showFeedbackDialog}
-        onClose={() => setShowFeedbackDialog(false)}
-        onSubmit={handleFeedbackSubmit}
-        userName={user.name}
-        messageCount={messageCount}
+        <FeedbackDialog
+          isOpen={showFeedbackDialog}
+          onClose={() => setShowFeedbackDialog(false)}
+          onSubmit={handleFeedbackSubmit}
+          userName={user.name}
+          messageCount={messageCount}
+        />
+      </div>
+
+      {/* Profile Panel */}
+      <ChatProfilePanel
+        isOpen={showProfilePanel}
+        onClose={() => setShowProfilePanel(false)}
+        user={user}
       />
     </div>
   )
