@@ -54,7 +54,7 @@ export function OverviewChart() {
         </div>
       </div>
       <div className="p-6">
-        <ChartContainer config={chartConfig} className="h-[300px] w-full">
+        <ChartContainer config={chartConfig} className="min-h-[300px] w-full aspect-auto">
           <BarChart data={chartData} barGap={4}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-border" />
             <XAxis

@@ -5,30 +5,20 @@ import { usePathname } from "next/navigation"
 import {
   LayoutDashboard,
   Users,
-  FileText,
-  Calendar,
-  MessageSquare,
   Settings,
   LogOut,
   Shield,
-  BarChart3,
-  Bell,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const menuItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/admin" },
-  { id: "users", label: "Users", icon: Users, href: "/admin/users" },
-  { id: "posts", label: "Posts", icon: FileText, href: "/admin/posts" },
-  { id: "events", label: "Events", icon: Calendar, href: "/admin/events" },
-  { id: "messages", label: "Messages", icon: MessageSquare, href: "/admin/messages" },
-  { id: "analytics", label: "Analytics", icon: BarChart3, href: "/admin/analytics" },
-  { id: "reports", label: "Reports", icon: Shield, href: "/admin/reports" },
+  { id: "users", label: "Quản lý người dùng", icon: Users, href: "/admin/users" },
+  { id: "organizers", label: "Cấp quyền sự kiện", icon: Shield, href: "/admin/organizers" },
 ]
 
 const bottomItems = [
-  { id: "notifications", label: "Notifications", icon: Bell, href: "/admin/notifications", badge: 5 },
-  { id: "settings", label: "Settings", icon: Settings, href: "/admin/settings" },
+  { id: "settings", label: "Cài đặt", icon: Settings, href: "/admin/settings" },
 ]
 
 export function AdminSidebar() {
@@ -104,11 +94,6 @@ export function AdminSidebar() {
             >
               <Icon className="w-5 h-5" />
               <span className="font-medium">{item.label}</span>
-              {item.badge && (
-                <span className="ml-auto w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-xs flex items-center justify-center">
-                  {item.badge}
-                </span>
-              )}
             </Link>
           )
         })}
