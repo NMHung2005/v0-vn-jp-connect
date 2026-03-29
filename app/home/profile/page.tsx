@@ -3,12 +3,7 @@
 import { useState } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { ProfileHeader } from "@/components/profile/profile-header"
-import { ProfileTabs } from "@/components/profile/profile-tabs"
-import { PersonalInfoTab } from "@/components/profile/personal-info-tab"
-import { LanguageSkillsTab } from "@/components/profile/language-skills-tab"
-import { InterestsTab } from "@/components/profile/interests-tab"
-import { PhotosTab } from "@/components/profile/photos-tab"
-import { SettingsTab } from "@/components/profile/settings-tab"
+import { ProfileContent } from "@/components/profile/profile-content"
 
 const currentUser = {
   id: 1,
@@ -54,7 +49,6 @@ const currentUser = {
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState("profile")
-  const [currentTab, setCurrentTab] = useState("personal")
   const [userData, setUserData] = useState(currentUser)
 
   const handleUpdateProfile = (updates: Partial<typeof currentUser>) => {
@@ -80,27 +74,8 @@ export default function ProfilePage() {
             {/* Profile Header */}
             <ProfileHeader user={userData} onUpdate={handleUpdateProfile} />
 
-            {/* Tabs */}
-            <ProfileTabs currentTab={currentTab} onTabChange={setCurrentTab} />
-
-            {/* Tab Content */}
-            <div className="bg-card rounded-xl border border-border">
-              {currentTab === "personal" && (
-                <PersonalInfoTab user={userData} onUpdate={handleUpdateProfile} />
-              )}
-              {currentTab === "languages" && (
-                <LanguageSkillsTab user={userData} onUpdate={handleUpdateProfile} />
-              )}
-              {currentTab === "interests" && (
-                <InterestsTab user={userData} onUpdate={handleUpdateProfile} />
-              )}
-              {currentTab === "photos" && (
-                <PhotosTab user={userData} onUpdate={handleUpdateProfile} />
-              )}
-              {currentTab === "settings" && (
-                <SettingsTab user={userData} onUpdate={handleUpdateProfile} />
-              )}
-            </div>
+            {/* Profile Content - All info in one view */}
+            <ProfileContent user={userData} onUpdate={handleUpdateProfile} />
           </div>
         </div>
       </main>
