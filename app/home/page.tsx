@@ -66,10 +66,11 @@ export default function HomePage() {
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0)
   const [showFilters, setShowFilters] = useState(false)
   const [filters, setFilters] = useState({
-    ageRange: [18, 50] as [number, number],
-    distance: 100,
+    ageRange: [18, 35] as [number, number],
+    distance: 50,
     nationality: ["VN", "JP"],
-    verifiedOnly: false,
+    gender: "all",
+    japaneseLevel: [] as string[],
     interests: [] as string[],
   })
 
@@ -97,20 +98,21 @@ export default function HomePage() {
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted hover:bg-muted/80 text-foreground transition-colors"
           >
             <SlidersHorizontal className="w-4 h-4" />
-            <span className="font-medium">Filters</span>
+            <span className="font-medium text-sm">Filters</span>
           </button>
         </header>
 
         {/* Content Area */}
-        <div className="flex-1 flex">
+        <div className="flex-1 flex overflow-hidden">
           {/* Profile Area */}
-          <div className="flex-1 flex items-center justify-center p-6 overflow-y-auto">
-            <ProfileCard
-              profile={currentProfile}
-              onLike={handleNext}
-              onPass={handleNext}
-              onSuperLike={handleNext}
-            />
+          <div className="flex-1 flex items-center justify-center p-4 md:p-12 bg-muted/50 overflow-y-auto">
+            <div className="w-full max-w-5xl my-auto">
+              <ProfileCard
+                profile={currentProfile}
+                onLike={handleNext}
+                onPass={handleNext}
+              />
+            </div>
           </div>
 
           {/* Filter Panel */}

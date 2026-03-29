@@ -244,9 +244,6 @@ export default function UsersPage() {
                             <CheckCircle className="w-4 h-4 text-emerald-600" />
                           </button>
                         )}
-                        <button className="p-2 hover:bg-muted rounded-lg transition-colors">
-                          <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
-                        </button>
                       </div>
                     </td>
                   </tr>

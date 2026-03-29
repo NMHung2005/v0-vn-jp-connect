@@ -10,7 +10,8 @@ interface FilterPanelProps {
     ageRange: [number, number]
     distance: number
     nationality: string[]
-    verifiedOnly: boolean
+    gender: string
+    japaneseLevel: string[]
     interests: string[]
   }
   onFiltersChange: (filters: FilterPanelProps["filters"]) => void
@@ -23,10 +24,20 @@ const allInterests = [
   "Sports", "Movies"
 ]
 
+const japaneseLevels = ["N1", "N2", "N3", "N4", "N5", "Basic", "Native"]
+
 export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: FilterPanelProps) {
   const handleAgeChange = (index: 0 | 1, value: number) => {
     const newRange: [number, number] = [...filters.ageRange] as [number, number]
     newRange[index] = value
+    
+    // Ensure min <= max
+    if (index === 0 && newRange[0] > newRange[1]) {
+      newRange[1] = newRange[0]
+    } else if (index === 1 && newRange[1] < newRange[0]) {
+      newRange[0] = newRange[1]
+    }
+    
     onFiltersChange({ ...filters, ageRange: newRange })
   }
 
@@ -35,6 +46,13 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
       ? filters.nationality.filter(n => n !== nat)
       : [...filters.nationality, nat]
     onFiltersChange({ ...filters, nationality: newNationality })
+  }
+
+  const handleJapaneseLevelToggle = (level: string) => {
+    const newLevels = filters.japaneseLevel.includes(level)
+      ? filters.japaneseLevel.filter(l => l !== level)
+      : [...filters.japaneseLevel, level]
+    onFiltersChange({ ...filters, japaneseLevel: newLevels })
   }
 
   const handleInterestToggle = (interest: string) => {
@@ -46,10 +64,11 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
 
   const resetFilters = () => {
     onFiltersChange({
-      ageRange: [18, 50],
-      distance: 100,
+      ageRange: [18, 35],
+      distance: 50,
       nationality: ["VN", "JP"],
-      verifiedOnly: false,
+      gender: "all",
+      japaneseLevel: [],
       interests: []
     })
   }
@@ -60,7 +79,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
     <div className="w-80 bg-card border-l border-border h-screen overflow-y-auto">
       {/* Header */}
       <div className="sticky top-0 bg-card z-10 p-4 border-b border-border flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-foreground">Search Filters</h2>
+        <h2 className="text-lg font-semibold text-foreground">Filters</h2>
         <button
           onClick={onClose}
           className="p-1.5 hover:bg-muted rounded-lg transition-colors"
@@ -70,118 +89,128 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
       </div>
 
       <div className="p-4 space-y-6">
+        {/* Gender */}
+        <div className="space-y-3">
+          <label className="text-sm font-medium text-foreground">Gender</label>
+          <div className="grid grid-cols-3 gap-2">
+            {["all", "male", "female"].map((g) => (
+              <button
+                key={g}
+                onClick={() => onFiltersChange({ ...filters, gender: g })}
+                className={cn(
+                  "px-2 py-1.5 rounded-lg text-xs font-medium capitalize transition-colors border",
+                  filters.gender === g
+                    ? "bg-primary border-primary text-primary-foreground"
+                    : "bg-card border-border text-muted-foreground hover:bg-muted"
+                )}
+              >
+                {g}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Age Range */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-foreground">
-            Age: {filters.ageRange[0]} - {filters.ageRange[1]} years
-          </label>
-          <div className="space-y-2">
-            <input
-              type="range"
-              min={18}
-              max={60}
-              value={filters.ageRange[0]}
-              onChange={(e) => handleAgeChange(0, parseInt(e.target.value))}
-              className="w-full h-2 bg-muted rounded-full appearance-none cursor-pointer accent-primary"
-            />
-            <input
-              type="range"
-              min={18}
-              max={60}
-              value={filters.ageRange[1]}
-              onChange={(e) => handleAgeChange(1, parseInt(e.target.value))}
-              className="w-full h-2 bg-muted rounded-full appearance-none cursor-pointer accent-primary"
-            />
+          <div className="flex justify-between items-center">
+            <label className="text-sm font-medium text-foreground">Age Range</label>
+            <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+              {filters.ageRange[0]} - {filters.ageRange[1]}
+            </span>
+          </div>
+          <div className="space-y-4 pt-2">
+            <div className="relative h-1.5 bg-muted rounded-full">
+              <input
+                type="range"
+                min={18}
+                max={60}
+                value={filters.ageRange[0]}
+                onChange={(e) => handleAgeChange(0, parseInt(e.target.value))}
+                className="absolute w-full h-1.5 appearance-none bg-transparent cursor-pointer accent-primary pointer-events-auto"
+              />
+              <input
+                type="range"
+                min={18}
+                max={60}
+                value={filters.ageRange[1]}
+                onChange={(e) => handleAgeChange(1, parseInt(e.target.value))}
+                className="absolute w-full h-1.5 appearance-none bg-transparent cursor-pointer accent-primary pointer-events-auto"
+              />
+            </div>
           </div>
         </div>
 
         {/* Distance */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-foreground">
-            Distance: {filters.distance} km
-          </label>
+          <div className="flex justify-between items-center">
+            <label className="text-sm font-medium text-foreground">Distance</label>
+            <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+              {filters.distance} km
+            </span>
+          </div>
           <input
             type="range"
             min={1}
             max={500}
             value={filters.distance}
             onChange={(e) => onFiltersChange({ ...filters, distance: parseInt(e.target.value) })}
-            className="w-full h-2 bg-muted rounded-full appearance-none cursor-pointer accent-primary"
+            className="w-full h-1.5 bg-muted rounded-full appearance-none cursor-pointer accent-primary"
           />
+        </div>
+
+        {/* Japanese Level */}
+        <div className="space-y-3">
+          <label className="text-sm font-medium text-foreground">Japanese Level</label>
+          <div className="flex flex-wrap gap-2">
+            {japaneseLevels.map((level) => (
+              <button
+                key={level}
+                onClick={() => handleJapaneseLevelToggle(level)}
+                className={cn(
+                  "px-2.5 py-1 rounded-full text-xs font-medium transition-colors border",
+                  filters.japaneseLevel.includes(level)
+                    ? "bg-primary border-primary text-primary-foreground"
+                    : "bg-muted border-transparent text-muted-foreground hover:bg-muted/80"
+                )}
+              >
+                {level}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Nationality */}
         <div className="space-y-3">
           <label className="text-sm font-medium text-foreground">Nationality</label>
-          <div className="space-y-2">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <div className={cn(
-                "w-5 h-5 rounded border-2 flex items-center justify-center transition-colors",
-                filters.nationality.length === 2 
-                  ? "bg-primary border-primary" 
-                  : "border-border"
-              )}>
-                {filters.nationality.length === 2 && <Check className="w-3 h-3 text-primary-foreground" />}
-              </div>
-              <span className="text-foreground">All</span>
-            </label>
-            <label className="flex items-center gap-3 cursor-pointer pl-4">
-              <div className={cn(
-                "w-5 h-5 rounded border-2 flex items-center justify-center transition-colors",
-                filters.nationality.includes("VN") 
-                  ? "bg-primary border-primary" 
-                  : "border-border"
-              )}
-              onClick={() => handleNationalityToggle("VN")}
+          <div className="flex gap-2">
+            {["VN", "JP"].map((nat) => (
+              <button
+                key={nat}
+                onClick={() => handleNationalityToggle(nat)}
+                className={cn(
+                  "flex-1 px-3 py-2 rounded-xl text-sm font-medium transition-all border flex items-center justify-center gap-2",
+                  filters.nationality.includes(nat)
+                    ? "bg-primary border-primary text-primary-foreground"
+                    : "bg-card border-border text-muted-foreground hover:bg-muted"
+                )}
               >
-                {filters.nationality.includes("VN") && <Check className="w-3 h-3 text-primary-foreground" />}
-              </div>
-              <span className="text-muted-foreground">Vietnam</span>
-            </label>
-            <label className="flex items-center gap-3 cursor-pointer pl-4">
-              <div className={cn(
-                "w-5 h-5 rounded border-2 flex items-center justify-center transition-colors",
-                filters.nationality.includes("JP") 
-                  ? "bg-primary border-primary" 
-                  : "border-border"
-              )}
-              onClick={() => handleNationalityToggle("JP")}
-              >
-                {filters.nationality.includes("JP") && <Check className="w-3 h-3 text-primary-foreground" />}
-              </div>
-              <span className="text-muted-foreground">Japan</span>
-            </label>
+                {filters.nationality.includes(nat) && <Check className="w-4 h-4" />}
+                {nat === "VN" ? "Vietnam" : "Japan"}
+              </button>
+            ))}
           </div>
-        </div>
-
-        {/* Verified Only */}
-        <div className="space-y-3">
-          <label 
-            className="flex items-center gap-3 cursor-pointer"
-            onClick={() => onFiltersChange({ ...filters, verifiedOnly: !filters.verifiedOnly })}
-          >
-            <div className={cn(
-              "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors",
-              filters.verifiedOnly 
-                ? "bg-primary border-primary" 
-                : "border-border"
-            )}>
-              {filters.verifiedOnly && <Check className="w-3 h-3 text-primary-foreground" />}
-            </div>
-            <span className="text-foreground">Verified accounts only</span>
-          </label>
         </div>
 
         {/* Interests */}
         <div className="space-y-3">
           <label className="text-sm font-medium text-foreground">Interests</label>
           <div className="flex flex-wrap gap-2">
-            {allInterests.map((interest) => (
+            {allInterests.slice(0, 12).map((interest) => (
               <button
                 key={interest}
                 onClick={() => handleInterestToggle(interest)}
                 className={cn(
-                  "px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
+                  "px-2.5 py-1 rounded-md text-xs font-medium transition-colors",
                   filters.interests.includes(interest)
                     ? "bg-primary text-primary-foreground"
                     : "bg-muted text-muted-foreground hover:bg-muted/80"
@@ -196,7 +225,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
         {/* Reset Button */}
         <button
           onClick={resetFilters}
-          className="w-full py-3 border border-border rounded-xl text-foreground font-medium hover:bg-muted transition-colors"
+          className="w-full py-2.5 bg-muted text-muted-foreground rounded-xl text-sm font-medium hover:bg-muted/80 transition-colors mt-4"
         >
           Reset Filters
         </button>
