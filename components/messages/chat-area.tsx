@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { 
   Send, 
   Smile, 
@@ -14,7 +14,11 @@ import {
   CheckCircle2,
   Copy,
   Volume2,
-  User
+  User,
+  Heart,
+  X,
+  ThumbsUp,
+  ThumbsDown
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
