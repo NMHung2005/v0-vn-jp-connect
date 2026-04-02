@@ -5,6 +5,7 @@ import { Plus, X, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 interface InterestsTabProps {
   user: {
@@ -23,6 +24,9 @@ const suggestedInterests = [
 ]
 
 export function InterestsTab({ user, onUpdate }: InterestsTabProps) {
+  const t = useTranslations("Profile")
+  const tr = useTranslations("Register")
+  
   const [newInterest, setNewInterest] = useState("")
   const [isAddingCustom, setIsAddingCustom] = useState(false)
 
@@ -50,23 +54,23 @@ export function InterestsTab({ user, onUpdate }: InterestsTabProps) {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-foreground">Interests & Hobbies</h3>
+          <h3 className="text-lg font-semibold text-foreground">{t("interestsTitle")}</h3>
           <p className="text-sm text-muted-foreground">
-            Select your interests to find like-minded connections
+            {t("interestsDesc")}
           </p>
         </div>
       </div>
 
       {/* Selected Interests */}
       <div className="mb-8">
-        <h4 className="text-sm font-medium text-foreground mb-3">Your Interests ({user.interests.length})</h4>
+        <h4 className="text-sm font-medium text-foreground mb-3">{t("yourInterests")} ({user.interests.length})</h4>
         <div className="flex flex-wrap gap-2">
           {user.interests.map((interest) => (
             <span
               key={interest}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary text-primary-foreground rounded-full text-sm font-medium"
             >
-              {interest}
+              {tr(`interests.${interest}`) || interest}
               <button
                 onClick={() => handleRemoveInterest(interest)}
                 className="p-0.5 hover:bg-primary-foreground/20 rounded-full transition-colors"
@@ -80,7 +84,7 @@ export function InterestsTab({ user, onUpdate }: InterestsTabProps) {
               <Input
                 value={newInterest}
                 onChange={(e) => setNewInterest(e.target.value)}
-                placeholder="Enter interest"
+                placeholder={t("enterInterest")}
                 className="h-8 w-40"
                 onKeyDown={(e) => e.key === "Enter" && handleAddCustomInterest()}
                 autoFocus
@@ -106,7 +110,7 @@ export function InterestsTab({ user, onUpdate }: InterestsTabProps) {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-muted hover:bg-muted/80 text-muted-foreground rounded-full text-sm font-medium transition-colors"
             >
               <Plus className="w-4 h-4" />
-              Add Custom
+              {t("addCustom")}
             </button>
           )}
         </div>
@@ -114,12 +118,12 @@ export function InterestsTab({ user, onUpdate }: InterestsTabProps) {
 
       {/* Suggested Interests */}
       <div className="space-y-6">
-        <h4 className="text-sm font-medium text-foreground">Suggested Interests</h4>
+        <h4 className="text-sm font-medium text-foreground">{t("suggestedInterests")}</h4>
         
         {suggestedInterests.map((category) => (
           <div key={category.category}>
             <h5 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-              {category.category}
+              {t(`interestCategories.${category.category}`) || category.category}
             </h5>
             <div className="flex flex-wrap gap-2">
               {category.items.map((interest) => {
@@ -136,7 +140,7 @@ export function InterestsTab({ user, onUpdate }: InterestsTabProps) {
                     )}
                   >
                     {isSelected && <Check className="w-3 h-3" />}
-                    {interest}
+                    {tr(`interests.${interest}`) || interest}
                   </button>
                 )
               })}

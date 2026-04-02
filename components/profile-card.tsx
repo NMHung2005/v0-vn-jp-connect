@@ -3,6 +3,7 @@
 import { MapPin, ThumbsUp, X, Heart, User } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useTranslations, useLocale } from "next-intl"
 
 interface ProfileCardProps {
   profile: {
@@ -23,6 +24,9 @@ interface ProfileCardProps {
 }
 
 export function ProfileCard({ profile, onLike, onPass }: ProfileCardProps) {
+  const t = useTranslations("ProfileCard")
+  const locale = useLocale()
+
   return (
     <div className="w-full max-w-5xl mx-auto">
       {/* Horizontal Rectangle Card */}
@@ -66,7 +70,7 @@ export function ProfileCard({ profile, onLike, onPass }: ProfileCardProps) {
 
             {/* About Section */}
             <div className="space-y-3">
-              <h3 className="text-xs font-bold text-primary uppercase tracking-[0.2em]">The Vibe</h3>
+              <h3 className="text-xs font-bold text-primary uppercase tracking-[0.2em]">{t("theVibe")}</h3>
               <p className="text-xl text-foreground leading-relaxed font-medium italic">
                 "{profile.bio}"
               </p>
@@ -75,7 +79,7 @@ export function ProfileCard({ profile, onLike, onPass }: ProfileCardProps) {
             {/* Tags Section (Grid for horizontal spread) */}
             <div className="grid grid-cols-2 gap-10">
               <div className="space-y-4">
-                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">Speaks</h3>
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">{t("speaks")}</h3>
                 <div className="flex flex-wrap gap-2">
                   {profile.languages.map((lang) => (
                     <span key={lang} className="px-3 py-1.5 bg-muted/80 text-foreground rounded-lg text-sm font-semibold">
@@ -85,10 +89,10 @@ export function ProfileCard({ profile, onLike, onPass }: ProfileCardProps) {
                 </div>
               </div>
               <div className="space-y-4">
-                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">Into</h3>
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">{t("into")}</h3>
                 <div className="flex flex-wrap gap-2">
                   {profile.interests.map((interest) => (
-                    <span key={interest} className="px-3 py-1.5 bg-primary/5 text-primary rounded-lg text-sm font-semibold border border-primary/10">
+                    <span key={interest} className="px-3 py-1.5 bg-primary/5 text-primary rounded-lg text-sm font-semibold border border-primary/10 break-words whitespace-normal text-left">
                       {interest}
                     </span>
                   ))}
@@ -104,21 +108,21 @@ export function ProfileCard({ profile, onLike, onPass }: ProfileCardProps) {
               className="px-6 py-4 bg-muted/50 hover:bg-destructive/10 hover:text-destructive text-foreground rounded-2xl flex items-center justify-center gap-2 font-bold transition-all border border-transparent hover:border-destructive/20"
             >
               <X className="w-5 h-5" />
-              <span>Skip</span>
+              <span>{t("skip")}</span>
             </button>
             <Link
-              href={`/home/user/${profile.id}`}
+              href={`/${locale}/home/user/${profile.id}`}
               className="px-6 py-4 bg-muted hover:bg-muted/80 text-foreground rounded-2xl flex items-center justify-center gap-2 font-bold transition-all border border-border"
             >
               <User className="w-5 h-5" />
-              <span>Profile</span>
+              <span>{t("viewProfile")}</span>
             </Link>
             <button
               onClick={onLike}
               className="flex-1 py-4 bg-primary text-primary-foreground rounded-2xl flex items-center justify-center gap-3 font-bold hover:shadow-2xl hover:shadow-primary/40 hover:-translate-y-0.5 transition-all shadow-lg shadow-primary/20"
             >
               <Heart className="w-6 h-6 fill-current" />
-              <span>Connect with {profile.name.split(' ')[0]}</span>
+              <span>{t("connectWith", { name: profile.name.split(' ')[0] })}</span>
             </button>
           </div>
         </div>

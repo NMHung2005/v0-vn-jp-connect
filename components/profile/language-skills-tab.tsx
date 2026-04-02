@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 interface Language {
   language: string
@@ -46,16 +47,19 @@ const languageOptions = [
 ]
 
 const levelOptions = [
-  { value: "Native", label: "Native", color: "bg-emerald-500" },
-  { value: "Fluent", label: "Fluent", color: "bg-blue-500" },
-  { value: "Advanced", label: "Advanced", color: "bg-violet-500" },
-  { value: "Intermediate", label: "Intermediate", color: "bg-amber-500" },
-  { value: "Basic", label: "Basic", color: "bg-gray-400" },
+  { value: "native", label: "Native", color: "bg-emerald-500" },
+  { value: "fluent", label: "Fluent", color: "bg-blue-500" },
+  { value: "advanced", label: "Advanced", color: "bg-violet-500" },
+  { value: "intermediate", label: "Intermediate", color: "bg-amber-500" },
+  { value: "basic", label: "Basic", color: "bg-gray-400" },
 ]
 
 const jlptLevels = ["N1", "N2", "N3", "N4", "N5"]
 
 export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
+  const t = useTranslations("Profile")
+  const tr = useTranslations("Register")
+  
   const [isAddingLanguage, setIsAddingLanguage] = useState(false)
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
   const [newLanguage, setNewLanguage] = useState<Language>({
@@ -86,17 +90,19 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
   }
 
   const getLevelColor = (level: string) => {
-    const levelOption = levelOptions.find((l) => l.value === level || level.includes(l.value))
+    const levelLower = level.toLowerCase()
+    const levelOption = levelOptions.find((l) => levelLower.includes(l.value))
     return levelOption?.color || "bg-gray-400"
   }
 
   const getLevelProgress = (level: string) => {
-    if (level === "Native") return 100
-    if (level === "Fluent" || level === "N1") return 90
-    if (level === "Advanced" || level === "N2") return 75
-    if (level === "Intermediate" || level === "N3") return 55
-    if (level.includes("N4")) return 35
-    if (level === "Basic" || level.includes("N5")) return 20
+    const l = level.toLowerCase()
+    if (l.includes("native")) return 100
+    if (l.includes("fluent") || l.includes("n1")) return 90
+    if (l.includes("advanced") || l.includes("n2")) return 75
+    if (l.includes("intermediate") || l.includes("n3")) return 55
+    if (l.includes("n4") || l.includes("elementary")) return 35
+    if (l.includes("basic") || l.includes("n5")) return 20
     return 50
   }
 
@@ -104,14 +110,14 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-foreground">Language Skills</h3>
+          <h3 className="text-lg font-semibold text-foreground">{t("tabs.languageSkills")}</h3>
           <p className="text-sm text-muted-foreground">
-            Showcase your language abilities and certifications
+            {tr("section4")}
           </p>
         </div>
         <Button onClick={() => setIsAddingLanguage(true)} size="sm">
           <Plus className="w-4 h-4 mr-1" />
-          Add Language
+          {t("addLanguage")}
         </Button>
       </div>
 
@@ -128,14 +134,14 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
 
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <h4 className="font-semibold text-foreground">{lang.language}</h4>
+                <h4 className="font-semibold text-foreground">{tr(`languages.${lang.language}`) || lang.language}</h4>
                 <span
                   className={cn(
                     "px-2 py-0.5 text-xs font-medium text-white rounded-full",
                     getLevelColor(lang.level)
                   )}
                 >
-                  {lang.level}
+                  {tr(`levels.${lang.level.toLowerCase()}`) || lang.level}
                 </span>
               </div>
 
@@ -181,18 +187,18 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
       <div className="mt-8 p-4 rounded-xl bg-gradient-to-r from-primary/5 to-accent/5 border border-primary/10">
         <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
           <Award className="w-5 h-5 text-primary" />
-          JLPT Certification Levels
+          {t("jlptTitle") || "JLPT Certification Levels"}
         </h4>
         <div className="grid grid-cols-5 gap-2 text-center text-sm">
           {jlptLevels.map((level) => (
             <div key={level} className="p-2 bg-background rounded-lg">
               <span className="font-bold text-foreground">{level}</span>
               <p className="text-xs text-muted-foreground mt-1">
-                {level === "N1" && "Advanced"}
-                {level === "N2" && "Upper-Int"}
-                {level === "N3" && "Intermediate"}
-                {level === "N4" && "Elementary"}
-                {level === "N5" && "Basic"}
+                {level === "N1" && (tr("levels.advanced") || "Advanced")}
+                {level === "N2" && (tr("levels.n2")?.split(" - ")[1] || "Upper-Int")}
+                {level === "N3" && (tr("levels.n3")?.split(" - ")[1] || "Intermediate")}
+                {level === "N4" && (tr("levels.n4")?.split(" - ")[1] || "Elementary")}
+                {level === "N5" && (tr("levels.n5")?.split(" - ")[1] || "Basic")}
               </p>
             </div>
           ))}
@@ -203,11 +209,11 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
       <Dialog open={isAddingLanguage} onOpenChange={setIsAddingLanguage}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add Language</DialogTitle>
+            <DialogTitle>{t("addLanguage")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Language</Label>
+              <Label>{t("language")}</Label>
               <Select
                 value={newLanguage.language}
                 onValueChange={(value) =>
@@ -215,12 +221,12 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select language" />
+                  <SelectValue placeholder={tr("selectLevel") || "Select language"} />
                 </SelectTrigger>
                 <SelectContent>
                   {languageOptions.map((lang) => (
                     <SelectItem key={lang} value={lang}>
-                      {lang}
+                      {tr(`languages.${lang}`) || lang}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -228,7 +234,7 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
             </div>
 
             <div className="space-y-2">
-              <Label>Proficiency Level</Label>
+              <Label>{t("level")}</Label>
               <Select
                 value={newLanguage.level}
                 onValueChange={(value) =>
@@ -236,12 +242,12 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select level" />
+                  <SelectValue placeholder={t("selectLevel") || "Select level"} />
                 </SelectTrigger>
                 <SelectContent>
                   {levelOptions.map((level) => (
                     <SelectItem key={level.value} value={level.value}>
-                      {level.label}
+                      {tr(`levels.${level.value.toLowerCase()}`) || level.label}
                     </SelectItem>
                   ))}
                   {newLanguage.language === "Japanese" &&
@@ -255,7 +261,7 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
             </div>
 
             <div className="space-y-2">
-              <Label>Certificate (Optional)</Label>
+              <Label>{t("certificate")}</Label>
               <Input
                 value={newLanguage.certificate || ""}
                 onChange={(e) =>
@@ -267,9 +273,9 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsAddingLanguage(false)}>
-              Cancel
+              {t("cancel")}
             </Button>
-            <Button onClick={handleAddLanguage}>Add Language</Button>
+            <Button onClick={handleAddLanguage}>{t("addLanguage")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -279,11 +285,11 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
         <Dialog open={editingIndex !== null} onOpenChange={() => setEditingIndex(null)}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Edit Language</DialogTitle>
+              <DialogTitle>{t("editProfile")}</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label>Language</Label>
+                <Label>{t("language")}</Label>
                 <Select
                   value={user.languages[editingIndex]?.language}
                   onValueChange={(value) => handleUpdateLanguage(editingIndex, { language: value })}
@@ -294,7 +300,7 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
                   <SelectContent>
                     {languageOptions.map((lang) => (
                       <SelectItem key={lang} value={lang}>
-                        {lang}
+                        {tr(`languages.${lang}`) || lang}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -302,7 +308,7 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
               </div>
 
               <div className="space-y-2">
-                <Label>Proficiency Level</Label>
+                <Label>{t("level")}</Label>
                 <Select
                   value={user.languages[editingIndex]?.level}
                   onValueChange={(value) => handleUpdateLanguage(editingIndex, { level: value })}
@@ -313,7 +319,7 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
                   <SelectContent>
                     {levelOptions.map((level) => (
                       <SelectItem key={level.value} value={level.value}>
-                        {level.label}
+                        {tr(`levels.${level.value.toLowerCase()}`) || level.label}
                       </SelectItem>
                     ))}
                     {jlptLevels.map((level) => (
@@ -326,7 +332,7 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
               </div>
 
               <div className="space-y-2">
-                <Label>Certificate (Optional)</Label>
+                <Label>{t("certificate")}</Label>
                 <Input
                   value={user.languages[editingIndex]?.certificate || ""}
                   onChange={(e) =>
@@ -338,7 +344,7 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setEditingIndex(null)}>
-                Close
+                {t("cancel")}
               </Button>
             </DialogFooter>
           </DialogContent>

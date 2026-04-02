@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 const events = [
   {
@@ -144,11 +145,14 @@ export function EventList({ selectedEventId, onSelectEvent }: EventListProps) {
     }
   }
 
+  const t = useTranslations("Events")
+  const tf = useTranslations("Filters")
+
   return (
     <div className="w-96 border-r border-border flex flex-col bg-card">
       <div className="p-4 border-b border-border space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-foreground">VN-JP Events</h2>
+          <h2 className="text-xl font-semibold text-foreground">{t("title")}</h2>
           <Button 
             variant="outline" 
             size="sm"
@@ -156,7 +160,7 @@ export function EventList({ selectedEventId, onSelectEvent }: EventListProps) {
             className="gap-2"
           >
             <Filter className="w-4 h-4" />
-            Filter
+            {tf("title")}
             <ChevronDown className={cn("w-4 h-4 transition-transform", showFilters && "rotate-180")} />
           </Button>
         </div>
@@ -164,7 +168,7 @@ export function EventList({ selectedEventId, onSelectEvent }: EventListProps) {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Search events..."
+            placeholder={t("searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -184,7 +188,7 @@ export function EventList({ selectedEventId, onSelectEvent }: EventListProps) {
                     : "bg-card text-muted-foreground border-border hover:border-primary/50"
                 )}
               >
-                {category}
+                {t("categories." + category)}
               </button>
             ))}
           </div>
@@ -193,61 +197,67 @@ export function EventList({ selectedEventId, onSelectEvent }: EventListProps) {
 
       <div className="flex-1 overflow-y-auto">
         {filteredEvents.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-40 text-muted-foreground">
+          <div className="flex flex-col items-center justify-center h-40 text-muted-foreground text-center px-4">
             <Calendar className="w-8 h-8 mb-2 opacity-50" />
-            <p>No events found</p>
+            <p>{t("noEventsFound")}</p>
           </div>
         ) : (
           <div className="p-3 space-y-3">
-            {filteredEvents.map((event) => (
-              <button
-                key={event.id}
-                onClick={() => onSelectEvent(event.id)}
-                className={cn(
-                  "w-full text-left rounded-xl overflow-hidden border transition-all",
-                  selectedEventId === event.id
-                    ? "border-primary shadow-md ring-1 ring-primary/20"
-                    : "border-border hover:border-primary/50 hover:shadow-sm"
-                )}
-              >
-                <div className="relative h-28">
-                  <img
-                    src={event.image}
-                    alt={event.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-2 left-2">
-                    <Badge className={cn("text-xs", getCategoryColor(event.category))}>
-                      {event.category}
-                    </Badge>
-                  </div>
-                  {event.isInterested && (
-                    <div className="absolute top-2 right-2">
-                      <Badge className="bg-primary text-primary-foreground text-xs">
-                        Interested
+            {filteredEvents.map((event, index) => {
+              const eventIndex = events.findIndex(e => e.id === event.id)
+              const translatedTitle = t(`eventList.${eventIndex}.title`)
+              const translatedLocation = t(`eventList.${eventIndex}.location`)
+              
+              return (
+                <button
+                  key={event.id}
+                  onClick={() => onSelectEvent(event.id)}
+                  className={cn(
+                    "w-full text-left rounded-xl overflow-hidden border transition-all",
+                    selectedEventId === event.id
+                      ? "border-primary shadow-md ring-1 ring-primary/20"
+                      : "border-border hover:border-primary/50 hover:shadow-sm"
+                  )}
+                >
+                  <div className="relative h-28">
+                    <img
+                      src={event.image}
+                      alt={translatedTitle}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-2 left-2">
+                      <Badge className={cn("text-xs", getCategoryColor(event.category))}>
+                        {t("categories." + event.category)}
                       </Badge>
                     </div>
-                  )}
-                </div>
-                <div className="p-3 bg-card">
-                  <h3 className="font-semibold text-foreground line-clamp-1">{event.title}</h3>
-                  <div className="mt-2 space-y-1">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Calendar className="w-3.5 h-3.5" />
-                      <span>{event.date} at {event.time}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <MapPin className="w-3.5 h-3.5" />
-                      <span className="line-clamp-1">{event.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Users className="w-3.5 h-3.5" />
-                      <span>{event.attendees}/{event.maxAttendees} attending</span>
+                    {event.isInterested && (
+                      <div className="absolute top-2 right-2">
+                        <Badge className="bg-primary text-primary-foreground text-xs">
+                          ★
+                        </Badge>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3 bg-card">
+                    <h3 className="font-semibold text-foreground line-clamp-1">{translatedTitle}</h3>
+                    <div className="mt-2 space-y-1">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Calendar className="w-3.5 h-3.5" />
+                        <span>{event.date} {t("at")} {event.time}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <MapPin className="w-3.5 h-3.5" />
+                        <span className="line-clamp-1">{translatedLocation}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Users className="w-3.5 h-3.5" />
+                        <span>{event.attendees}/{event.maxAttendees}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </button>
-            ))}
+                </button>
+              )
+            })}
           </div>
         )}
       </div>

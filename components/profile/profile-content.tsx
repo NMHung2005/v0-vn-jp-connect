@@ -39,6 +39,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 interface Language {
   language: string
@@ -109,6 +110,7 @@ const suggestedInterests = [
 ]
 
 export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
+  const t = useTranslations("Profile")
   const [isEditingPersonal, setIsEditingPersonal] = useState(false)
   const [isAddingLanguage, setIsAddingLanguage] = useState(false)
   const [newInterest, setNewInterest] = useState("")
@@ -277,37 +279,37 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <User className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Personal Information</h3>
+            <h3 className="text-lg font-semibold text-foreground">{t("tabs.personalInfo")}</h3>
           </div>
           {isEditingPersonal ? (
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={handleCancelPersonal}>
                 <X className="w-4 h-4 mr-1" />
-                Cancel
+                {t("cancel")}
               </Button>
               <Button size="sm" onClick={handleSavePersonal}>
                 <Save className="w-4 h-4 mr-1" />
-                Save
+                {t("saveChanges")}
               </Button>
             </div>
           ) : (
             <Button variant="outline" size="sm" onClick={() => setIsEditingPersonal(true)}>
               <Edit2 className="w-4 h-4 mr-1" />
-              Edit
+              {t("edit")}
             </Button>
           )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          <InfoItem icon={User} label="Full Name" value={user.name} field="name" />
-          <InfoItem icon={Mail} label="Email" value={user.email} field="email" type="email" />
-          <InfoItem icon={Calendar} label="Age" value={user.age} field="age" type="number" />
+          <InfoItem icon={User} label={t("name")} value={user.name} field="name" />
+          <InfoItem icon={Mail} label={t("email")} value={user.email} field="email" type="email" />
+          <InfoItem icon={Calendar} label={t("age")} value={user.age} field="age" type="number" />
           <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
             <div className="p-2 bg-primary/10 rounded-lg shrink-0">
               <User className="w-4 h-4 text-primary" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-muted-foreground">Gender</p>
+              <p className="text-xs text-muted-foreground">{t("gender")}</p>
               {isEditingPersonal ? (
                 <Select
                   value={formData.gender}
@@ -317,9 +319,9 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Male">Male</SelectItem>
-                    <SelectItem value="Female">Female</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
+                    <SelectItem value="男性">男性</SelectItem>
+                    <SelectItem value="女性">女性</SelectItem>
+                    <SelectItem value="その他">その他</SelectItem>
                   </SelectContent>
                 </Select>
               ) : (
@@ -327,10 +329,10 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
               )}
             </div>
           </div>
-          <InfoItem icon={Flag} label="Nationality" value={user.nationality} field="nationality" />
-          <InfoItem icon={MapPin} label="Location" value={user.location} field="location" />
-          <InfoItem icon={Briefcase} label="Occupation" value={user.occupation} field="occupation" />
-          <InfoItem icon={GraduationCap} label="Education" value={user.education} field="education" />
+          <InfoItem icon={Flag} label={t("nationality")} value={user.nationality} field="nationality" />
+          <InfoItem icon={MapPin} label={t("location")} value={user.location} field="location" />
+          <InfoItem icon={Briefcase} label={t("occupation")} value={user.occupation} field="occupation" />
+          <InfoItem icon={GraduationCap} label={t("education")} value={user.education} field="education" />
         </div>
 
         {/* Social Links */}
@@ -343,7 +345,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
                 <Input
                   value={formData.instagram}
                   onChange={(e) => setFormData((prev) => ({ ...prev, instagram: e.target.value }))}
-                  placeholder="@username"
+                  placeholder="@ユーザー名"
                   className="mt-1 h-8"
                 />
               ) : (
@@ -356,7 +358,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
                 <Input
                   value={formData.facebook}
                   onChange={(e) => setFormData((prev) => ({ ...prev, facebook: e.target.value }))}
-                  placeholder="Username"
+                  placeholder="ユーザー名"
                   className="mt-1 h-8"
                 />
               ) : (
@@ -385,11 +387,11 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Languages className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Language Skills</h3>
+            <h3 className="text-lg font-semibold text-foreground">{t("tabs.languageSkills")}</h3>
           </div>
           <Button onClick={() => setIsAddingLanguage(true)} size="sm">
             <Plus className="w-4 h-4 mr-1" />
-            Add
+            追加
           </Button>
         </div>
 
@@ -437,11 +439,11 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
         <Dialog open={isAddingLanguage} onOpenChange={setIsAddingLanguage}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Add Language</DialogTitle>
+              <DialogTitle>{t("addLanguage")}</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label>Language</Label>
+                <Label>{t("language")}</Label>
                 <Select
                   value={newLanguage.language}
                   onValueChange={(value) =>
@@ -449,7 +451,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
                   }
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select language" />
+                    <SelectValue placeholder="言語を選択" />
                   </SelectTrigger>
                   <SelectContent>
                     {languageOptions.map((lang) => (
@@ -462,7 +464,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
               </div>
 
               <div className="space-y-2">
-                <Label>Proficiency Level</Label>
+                <Label>{t("level")}</Label>
                 <Select
                   value={newLanguage.level}
                   onValueChange={(value) =>
@@ -470,7 +472,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
                   }
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select level" />
+                    <SelectValue placeholder="レベルを選択" />
                   </SelectTrigger>
                   <SelectContent>
                     {levelOptions.map((level) => (
@@ -489,7 +491,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
               </div>
 
               <div className="space-y-2">
-                <Label>Certificate (Optional)</Label>
+                <Label>{t("certificate")}</Label>
                 <Input
                   value={newLanguage.certificate || ""}
                   onChange={(e) =>
@@ -501,9 +503,9 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsAddingLanguage(false)}>
-                Cancel
+                {t("cancel")}
               </Button>
-              <Button onClick={handleAddLanguage}>Add Language</Button>
+              <Button onClick={handleAddLanguage}>{t("addLanguage")}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -512,12 +514,12 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
       {/* Interests */}
       <div className="bg-card rounded-xl border border-border p-6">
         <div className="flex items-center gap-2 mb-4">
-          <span className="text-lg">Interests & Hobbies</span>
+          <span className="text-lg">{t("tabs.interests")}</span>
         </div>
 
         {/* Selected Interests */}
         <div className="mb-4">
-          <p className="text-sm text-muted-foreground mb-3">Your Interests ({user.interests.length})</p>
+          <p className="text-sm text-muted-foreground mb-3">選択されている興味 ({user.interests.length})</p>
           <div className="flex flex-wrap gap-2">
             {user.interests.map((interest) => (
               <span
@@ -564,7 +566,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-muted hover:bg-muted/80 text-muted-foreground rounded-full text-sm font-medium transition-colors"
               >
                 <Plus className="w-4 h-4" />
-                Add Custom
+                追加
               </button>
             )}
           </div>
@@ -572,7 +574,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
 
         {/* Suggested Interests */}
         <div>
-          <p className="text-sm text-muted-foreground mb-3">Suggested</p>
+          <p className="text-sm text-muted-foreground mb-3">おすすめ</p>
           <div className="flex flex-wrap gap-2">
             {suggestedInterests
               .filter((interest) => !user.interests.includes(interest))
@@ -595,12 +597,12 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
       <div className="bg-card rounded-xl border border-border p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <h3 className="text-lg font-semibold text-foreground">Photos</h3>
+            <h3 className="text-lg font-semibold text-foreground">{t("tabs.photos")}</h3>
             <span className="text-sm text-muted-foreground">({user.photos.length}/9)</span>
           </div>
           <Button onClick={handleAddPhoto} size="sm" disabled={user.photos.length >= 9}>
             <Plus className="w-4 h-4 mr-1" />
-            Add
+            追加
           </Button>
         </div>
 
@@ -620,7 +622,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
               {photo === user.avatar && (
                 <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-primary text-primary-foreground text-xs font-medium rounded-full flex items-center gap-0.5">
                   <Star className="w-2.5 h-2.5 fill-current" />
-                  Main
+                  メイン
                 </div>
               )}
 
@@ -637,7 +639,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
                     }}
                   >
                     <Star className="w-3 h-3 mr-1" />
-                    Main
+                    メイン
                   </Button>
                 )}
                 <Button
@@ -662,7 +664,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
               className="aspect-square rounded-xl border-2 border-dashed border-border hover:border-primary/50 flex flex-col items-center justify-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
             >
               <Upload className="w-5 h-5" />
-              <span className="text-xs font-medium">Upload</span>
+              <span className="text-xs font-medium">{t("uploadPhoto")}</span>
             </button>
           )}
         </div>

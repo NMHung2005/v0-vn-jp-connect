@@ -2,6 +2,7 @@
 
 import { X, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 interface FilterPanelProps {
   isOpen: boolean
@@ -27,6 +28,9 @@ const allInterests = [
 const japaneseLevels = ["N1", "N2", "N3", "N4", "N5", "Basic", "Native"]
 
 export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: FilterPanelProps) {
+  const t = useTranslations("Filters")
+  const r = useTranslations("Register")
+
   const handleAgeChange = (index: 0 | 1, value: number) => {
     const newRange: [number, number] = [...filters.ageRange] as [number, number]
     newRange[index] = value
@@ -79,7 +83,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
     <div className="w-80 bg-card border-l border-border h-screen overflow-y-auto">
       {/* Header */}
       <div className="sticky top-0 bg-card z-10 p-4 border-b border-border flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-foreground">Filters</h2>
+        <h2 className="text-lg font-semibold text-foreground">{t("title")}</h2>
         <button
           onClick={onClose}
           className="p-1.5 hover:bg-muted rounded-lg transition-colors"
@@ -91,7 +95,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
       <div className="p-4 space-y-6">
         {/* Gender */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-foreground">Gender</label>
+          <label className="text-sm font-medium text-foreground">{t("gender")}</label>
           <div className="grid grid-cols-3 gap-2">
             {["all", "male", "female"].map((g) => (
               <button
@@ -104,7 +108,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
                     : "bg-card border-border text-muted-foreground hover:bg-muted"
                 )}
               >
-                {g}
+                {t("genders." + g)}
               </button>
             ))}
           </div>
@@ -113,7 +117,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
         {/* Age Range */}
         <div className="space-y-3">
           <div className="flex justify-between items-center">
-            <label className="text-sm font-medium text-foreground">Age Range</label>
+            <label className="text-sm font-medium text-foreground">{t("ageRange")}</label>
             <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
               {filters.ageRange[0]} - {filters.ageRange[1]}
             </span>
@@ -143,7 +147,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
         {/* Distance */}
         <div className="space-y-3">
           <div className="flex justify-between items-center">
-            <label className="text-sm font-medium text-foreground">Distance</label>
+            <label className="text-sm font-medium text-foreground">{t("distance")}</label>
             <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
               {filters.distance} km
             </span>
@@ -160,7 +164,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
 
         {/* Japanese Level */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-foreground">Japanese Level</label>
+          <label className="text-sm font-medium text-foreground">{t("japaneseLevel")}</label>
           <div className="flex flex-wrap gap-2">
             {japaneseLevels.map((level) => (
               <button
@@ -173,7 +177,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
                     : "bg-muted border-transparent text-muted-foreground hover:bg-muted/80"
                 )}
               >
-                {level}
+                {level.toLowerCase() === "basic" ? r("levels.none") : level.toLowerCase() === "native" ? r("levels.native") : level}
               </button>
             ))}
           </div>
@@ -181,7 +185,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
 
         {/* Nationality */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-foreground">Nationality</label>
+          <label className="text-sm font-medium text-foreground">{t("nationality")}</label>
           <div className="flex gap-2">
             {["VN", "JP"].map((nat) => (
               <button
@@ -195,7 +199,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
                 )}
               >
                 {filters.nationality.includes(nat) && <Check className="w-4 h-4" />}
-                {nat === "VN" ? "Vietnam" : "Japan"}
+                {t("nationalities." + nat)}
               </button>
             ))}
           </div>
@@ -203,22 +207,27 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
 
         {/* Interests */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-foreground">Interests</label>
+          <label className="text-sm font-medium text-foreground">{t("interests")}</label>
           <div className="flex flex-wrap gap-2">
-            {allInterests.slice(0, 12).map((interest) => (
-              <button
-                key={interest}
-                onClick={() => handleInterestToggle(interest)}
-                className={cn(
-                  "px-2.5 py-1 rounded-md text-xs font-medium transition-colors",
-                  filters.interests.includes(interest)
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground hover:bg-muted/80"
-                )}
-              >
-                {interest}
-              </button>
-            ))}
+            {allInterests.slice(0, 12).map((interest) => {
+              const displayName = r("interests." + interest)
+              const finalName = displayName?.includes("interests.") ? interest : displayName
+              
+              return (
+                <button
+                  key={interest}
+                  onClick={() => handleInterestToggle(interest)}
+                  className={cn(
+                    "px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors text-left flex-auto min-w-0 max-w-full break-words whitespace-normal",
+                    filters.interests.includes(interest)
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  )}
+                >
+                  {finalName}
+                </button>
+              )
+            })}
           </div>
         </div>
 
@@ -227,7 +236,7 @@ export function FilterPanel({ isOpen, onClose, filters, onFiltersChange }: Filte
           onClick={resetFilters}
           className="w-full py-2.5 bg-muted text-muted-foreground rounded-xl text-sm font-medium hover:bg-muted/80 transition-colors mt-4"
         >
-          Reset Filters
+          {t("reset")}
         </button>
       </div>
     </div>

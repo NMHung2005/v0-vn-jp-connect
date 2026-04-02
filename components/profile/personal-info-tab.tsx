@@ -33,6 +33,8 @@ interface PersonalInfoTabProps {
 }
 
 export function PersonalInfoTab({ user, onUpdate }: PersonalInfoTabProps) {
+  const t = useTranslations("Profile")
+  const tr = useTranslations("Register")
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
     name: user.name,
@@ -125,37 +127,37 @@ export function PersonalInfoTab({ user, onUpdate }: PersonalInfoTabProps) {
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-foreground">Personal Information</h3>
+        <h3 className="text-lg font-semibold text-foreground">{t("personalInformation")}</h3>
         {isEditing ? (
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={handleCancel}>
               <X className="w-4 h-4 mr-1" />
-              Cancel
+              {t("cancel")}
             </Button>
             <Button size="sm" onClick={handleSave}>
               <Save className="w-4 h-4 mr-1" />
-              Save
+              {t("save")}
             </Button>
           </div>
         ) : (
           <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
             <Edit2 className="w-4 h-4 mr-1" />
-            Edit
+            {t("edit")}
           </Button>
         )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <InfoItem icon={User} label="Full Name" value={user.name} field="name" />
-        <InfoItem icon={Mail} label="Email Address" value={user.email} field="email" type="email" />
-        <InfoItem icon={Calendar} label="Age" value={user.age} field="age" type="number" />
+        <InfoItem icon={User} label={t("fullName")} value={user.name} field="name" />
+        <InfoItem icon={Mail} label={t("emailAddress")} value={user.email} field="email" type="email" />
+        <InfoItem icon={Calendar} label={t("age")} value={user.age} field="age" type="number" />
         
         <div className="flex items-start gap-4 p-4 rounded-lg bg-muted/50">
           <div className="p-2 bg-primary/10 rounded-lg shrink-0">
             <User className="w-5 h-5 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm text-muted-foreground mb-1">Gender</p>
+            <p className="text-sm text-muted-foreground mb-1">{t("gender")}</p>
             {isEditing ? (
               <Select
                 value={formData.gender}
@@ -165,10 +167,10 @@ export function PersonalInfoTab({ user, onUpdate }: PersonalInfoTabProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Male">Male</SelectItem>
-                  <SelectItem value="Female">Female</SelectItem>
-                  <SelectItem value="Other">Other</SelectItem>
-                  <SelectItem value="Prefer not to say">Prefer not to say</SelectItem>
+                  <SelectItem value="Male">{tr("genders.Male")}</SelectItem>
+                  <SelectItem value="Female">{tr("genders.Female")}</SelectItem>
+                  <SelectItem value="Other">{tr("genders.Other")}</SelectItem>
+                  <SelectItem value="Prefer not to say">{tr("genders.Prefer not to say")}</SelectItem>
                 </SelectContent>
               </Select>
             ) : (
@@ -177,15 +179,15 @@ export function PersonalInfoTab({ user, onUpdate }: PersonalInfoTabProps) {
           </div>
         </div>
 
-        <InfoItem icon={Flag} label="Nationality" value={user.nationality} field="nationality" />
-        <InfoItem icon={MapPin} label="Location" value={user.location} field="location" />
-        <InfoItem icon={Briefcase} label="Occupation" value={user.occupation} field="occupation" />
-        <InfoItem icon={GraduationCap} label="Education" value={user.education} field="education" />
+        <InfoItem icon={Flag} label={t("nationality")} value={user.nationality} field="nationality" />
+        <InfoItem icon={MapPin} label={t("location")} value={user.location} field="location" />
+        <InfoItem icon={Briefcase} label={t("occupation")} value={user.occupation} field="occupation" />
+        <InfoItem icon={GraduationCap} label={t("education")} value={user.education} field="education" />
       </div>
 
       {/* Social Links */}
       <div className="mt-8">
-        <h4 className="text-md font-semibold text-foreground mb-4">Social Links</h4>
+        <h4 className="text-md font-semibold text-foreground mb-4">{t("socialLinks")}</h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 rounded-lg bg-muted/50">
             <Label className="text-sm text-muted-foreground">Instagram</Label>

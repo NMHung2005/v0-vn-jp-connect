@@ -1,6 +1,6 @@
 "use client"
 
-import { User, Languages, Heart, Image, Settings } from "lucide-react"
+import { User, Languages, Heart, Image } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface ProfileTabsProps {
@@ -13,7 +13,6 @@ const tabs = [
   { id: "languages", label: "Language Skills", icon: Languages },
   { id: "interests", label: "Interests", icon: Heart },
   { id: "photos", label: "Photos", icon: Image },
-  { id: "settings", label: "Settings", icon: Settings },
 ]
 
 export function ProfileTabs({ currentTab, onTabChange }: ProfileTabsProps) {

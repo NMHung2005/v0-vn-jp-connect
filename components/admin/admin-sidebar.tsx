@@ -2,10 +2,10 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useLocale } from "next-intl"
 import {
   LayoutDashboard,
   Users,
-  Settings,
   LogOut,
   Shield,
   CalendarPlus,
@@ -18,12 +18,11 @@ const menuItems = [
   { id: "events", label: "Create Event", icon: CalendarPlus, href: "/admin/organizers" },
 ]
 
-const bottomItems = [
-  { id: "settings", label: "Settings", icon: Settings, href: "/admin/settings" },
-]
+const bottomItems: any[] = []
 
 export function AdminSidebar() {
   const pathname = usePathname()
+  const locale = useLocale()
 
   const isActive = (href: string) => {
     if (href === "/admin") {
@@ -62,7 +61,7 @@ export function AdminSidebar() {
           return (
             <Link
               key={item.id}
-              href={item.href}
+              href={`/${locale}${item.href}`}
               className={cn(
                 "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all text-sm",
                 active
@@ -85,7 +84,7 @@ export function AdminSidebar() {
           return (
             <Link
               key={item.id}
-              href={item.href}
+              href={`/${locale}${item.href}`}
               className={cn(
                 "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all text-sm",
                 active
@@ -99,7 +98,7 @@ export function AdminSidebar() {
           )
         })}
         <Link
-          href="/"
+          href={`/${locale}/`}
           className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent transition-all text-sm"
         >
           <LogOut className="w-5 h-5" />

@@ -77,11 +77,6 @@ export default function UserProfilePage() {
     router.push(`/home/chat?user=${user.id}`)
   }
 
-  const handleConnect = () => {
-    // Send connection request
-    console.log("Connect request sent to:", user.name)
-  }
-
   const handleReport = (report: { reason: string; description: string; evidence: File[] }) => {
     // Submit report to API
     console.log("Report submitted:", {
@@ -92,12 +87,14 @@ export default function UserProfilePage() {
   }
 
   return (
-    <div className="flex h-screen bg-background">
-      <AppSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+    <div className="flex min-h-screen bg-background">
+      <div className="sticky top-0 h-screen">
+        <AppSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      </div>
 
-      <main className="flex-1 flex flex-col overflow-hidden">
+      <main className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="flex items-center gap-4 px-6 py-4 border-b border-border bg-card">
+        <header className="flex items-center gap-4 px-6 py-4 border-b border-border bg-card sticky top-0 z-10">
           <Button variant="ghost" size="icon" onClick={() => router.back()}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
@@ -108,12 +105,11 @@ export default function UserProfilePage() {
         </header>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="max-w-4xl mx-auto p-6">
+        <div className="p-6">
+          <div className="max-w-4xl mx-auto">
             <UserProfileView
               user={user}
               onMessage={handleMessage}
-              onConnect={handleConnect}
               onReport={handleReport}
             />
           </div>

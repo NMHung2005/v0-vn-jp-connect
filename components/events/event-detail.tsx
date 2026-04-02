@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 const eventsData: Record<number, EventDetails> = {
   1: {
@@ -244,13 +245,29 @@ interface EventDetailProps {
 }
 
 export function EventDetail({ eventId }: EventDetailProps) {
-  const event = eventsData[eventId]
+  const t = useTranslations("Events")
+  let event = eventsData[eventId]
+  
+  // Override with translated data if it's the first event
+  if (eventId === 1) {
+    event = {
+      ...event,
+      title: t("eventDetail1.title"),
+      date: t("eventDetail1.date"),
+      time: t("eventDetail1.time"),
+      location: t("eventDetail1.location"),
+      address: t("eventDetail1.address"),
+      description: t("eventDetail1.description"),
+      highlights: t.raw("eventDetail1.highlights")
+    }
+  }
+
   const [isInterested, setIsInterested] = useState(event?.isInterested || false)
 
   if (!event) {
     return (
       <div className="flex-1 flex items-center justify-center bg-muted/30">
-        <p className="text-muted-foreground">Event not found</p>
+        <p className="text-muted-foreground">{t("selectEventMessage")}</p>
       </div>
     )
   }
@@ -268,7 +285,7 @@ export function EventDetail({ eventId }: EventDetailProps) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute bottom-6 left-6 right-6">
-          <Badge className="mb-3 bg-primary text-primary-foreground">{event.category}</Badge>
+          <Badge className="mb-3 bg-primary text-primary-foreground">{t("categories." + event.category)}</Badge>
           <h1 className="text-2xl md:text-3xl font-bold text-white">{event.title}</h1>
         </div>
       </div>
@@ -287,18 +304,18 @@ export function EventDetail({ eventId }: EventDetailProps) {
             {isInterested ? (
               <>
                 <CheckCircle2 className="w-5 h-5" />
-                Interested
+                {t("leaveEvent")}
               </>
             ) : (
               <>
                 <Heart className="w-5 h-5" />
-                Mark as Interested
+                {t("joinEvent")}
               </>
             )}
           </Button>
           <Button size="lg" variant="outline" className="gap-2">
             <Share2 className="w-5 h-5" />
-            Share
+            {t("share")}
           </Button>
         </div>
 
@@ -306,7 +323,7 @@ export function EventDetail({ eventId }: EventDetailProps) {
           <div className="space-y-4 p-5 rounded-xl bg-card border border-border">
             <h3 className="font-semibold text-foreground flex items-center gap-2">
               <Calendar className="w-5 h-5 text-primary" />
-              Date & Time
+              {t("dateAndTime")}
             </h3>
             <div className="space-y-2 pl-7">
               <p className="text-foreground font-medium">{event.date}</p>
@@ -320,7 +337,7 @@ export function EventDetail({ eventId }: EventDetailProps) {
           <div className="space-y-4 p-5 rounded-xl bg-card border border-border">
             <h3 className="font-semibold text-foreground flex items-center gap-2">
               <MapPin className="w-5 h-5 text-primary" />
-              Location
+              {t("location")}
             </h3>
             <div className="space-y-2 pl-7">
               <p className="text-foreground font-medium">{event.location}</p>
@@ -333,7 +350,7 @@ export function EventDetail({ eventId }: EventDetailProps) {
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-foreground flex items-center gap-2">
               <Users className="w-5 h-5 text-primary" />
-              Attendees
+              {t("participants")}
             </h3>
             <span className={cn(
               "text-sm font-medium px-3 py-1 rounded-full",
@@ -343,7 +360,7 @@ export function EventDetail({ eventId }: EventDetailProps) {
                   ? "bg-orange-100 text-orange-700"
                   : "bg-primary/10 text-primary"
             )}>
-              {isFull ? "Full" : `${spotsLeft} spots left`}
+              {isFull ? "満席" : `残り ${spotsLeft} 枠`}
             </span>
           </div>
           <div className="flex items-center gap-4">
@@ -361,18 +378,18 @@ export function EventDetail({ eventId }: EventDetailProps) {
               )}
             </div>
             <span className="text-muted-foreground text-sm">
-              {event.attendees} of {event.maxAttendees} attending
+              {event.attendees} / {event.maxAttendees} {t("participating")}
             </span>
           </div>
         </div>
 
         <div className="space-y-4">
-          <h3 className="font-semibold text-foreground text-lg">About this event</h3>
+          <h3 className="font-semibold text-foreground text-lg">{t("aboutEvent")}</h3>
           <p className="text-muted-foreground leading-relaxed">{event.description}</p>
         </div>
 
         <div className="space-y-4">
-          <h3 className="font-semibold text-foreground text-lg">What to expect</h3>
+          <h3 className="font-semibold text-foreground text-lg">{eventId === 1 ? t("eventDetail1.highlightsTitle") : "期待できること"}</h3>
           <ul className="space-y-3">
             {event.highlights.map((highlight, index) => (
               <li key={index} className="flex items-start gap-3">

@@ -65,7 +65,6 @@ interface UserProfile {
 interface UserProfileViewProps {
   user: UserProfile
   onMessage?: () => void
-  onConnect?: () => void
   onReport?: (report: ReportData) => void
 }
 
@@ -92,7 +91,7 @@ const levelOptions = [
   { value: "Basic", color: "bg-gray-400" },
 ]
 
-export function UserProfileView({ user, onMessage, onConnect, onReport }: UserProfileViewProps) {
+export function UserProfileView({ user, onMessage, onReport }: UserProfileViewProps) {
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false)
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null)
   const [reportReason, setReportReason] = useState("")
@@ -224,10 +223,6 @@ export function UserProfileView({ user, onMessage, onConnect, onReport }: UserPr
                 <Button onClick={onMessage} className="gap-2">
                   <MessageCircle className="w-4 h-4" />
                   Message
-                </Button>
-                <Button variant="outline" onClick={onConnect} className="gap-2">
-                  <UserPlus className="w-4 h-4" />
-                  Connect
                 </Button>
                 <Button 
                   variant="ghost" 

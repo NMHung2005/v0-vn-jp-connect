@@ -124,20 +124,12 @@ export default function AdminDashboard() {
             </h4>
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 bg-muted/50 rounded-lg">
-                <p className="text-2xl font-bold text-foreground">45</p>
-                <p className="text-sm text-muted-foreground">Pending Approval</p>
-              </div>
-              <div className="p-4 bg-muted/50 rounded-lg">
-                <p className="text-2xl font-bold text-foreground">83</p>
-                <p className="text-sm text-muted-foreground">Completed Events</p>
+                <p className="text-2xl font-bold text-foreground">128</p>
+                <p className="text-sm text-muted-foreground">Total Events</p>
               </div>
               <div className="p-4 bg-muted/50 rounded-lg">
                 <p className="text-2xl font-bold text-foreground">1,247</p>
-                <p className="text-sm text-muted-foreground">Total Participants</p>
-              </div>
-              <div className="p-4 bg-muted/50 rounded-lg">
-                <p className="text-2xl font-bold text-foreground">24</p>
-                <p className="text-sm text-muted-foreground">Partner Organizations</p>
+                <p className="text-sm text-muted-foreground">Interested People</p>
               </div>
             </div>
           </div>

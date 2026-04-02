@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { useTranslations } from "next-intl"
 
 interface ProfileHeaderProps {
   user: {
@@ -34,6 +35,7 @@ interface ProfileHeaderProps {
 export function ProfileHeader({ user, onUpdate }: ProfileHeaderProps) {
   const [isEditingBio, setIsEditingBio] = useState(false)
   const [editedBio, setEditedBio] = useState(user.bio)
+  const t = useTranslations("Profile")
 
   const handleSaveBio = () => {
     onUpdate({ bio: editedBio })
@@ -104,13 +106,13 @@ export function ProfileHeader({ user, onUpdate }: ProfileHeaderProps) {
                 </span>
                 <span className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
-                  Joined {formatDate(user.joinDate)}
+                  {t("joined")} {formatDate(user.joinDate)}
                 </span>
               </div>
             </div>
             <Button variant="outline" size="sm" className="gap-2">
               <Edit2 className="w-4 h-4" />
-              Edit Profile
+              {t("editProfile")}
             </Button>
           </div>
 
@@ -122,7 +124,7 @@ export function ProfileHeader({ user, onUpdate }: ProfileHeaderProps) {
               </div>
               <div>
                 <p className="text-lg font-bold text-foreground">{user.positiveRating}%</p>
-                <p className="text-xs text-muted-foreground">Positive Rating</p>
+                <p className="text-xs text-muted-foreground">{t("positiveRating")}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -131,7 +133,7 @@ export function ProfileHeader({ user, onUpdate }: ProfileHeaderProps) {
               </div>
               <div>
                 <p className="text-lg font-bold text-foreground">{user.connections}</p>
-                <p className="text-xs text-muted-foreground">Connections</p>
+                <p className="text-xs text-muted-foreground">{t("connections")}</p>
               </div>
             </div>
           </div>
@@ -139,12 +141,12 @@ export function ProfileHeader({ user, onUpdate }: ProfileHeaderProps) {
           {/* Bio */}
           <div className="mt-6">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">About</h3>
+              <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">{t("about")}</h3>
               <button
                 onClick={() => setIsEditingBio(true)}
                 className="text-sm text-primary hover:underline"
               >
-                Edit
+                {t("edit")}
               </button>
             </div>
             <p className="text-muted-foreground leading-relaxed">{user.bio}</p>
@@ -156,16 +158,16 @@ export function ProfileHeader({ user, onUpdate }: ProfileHeaderProps) {
       <Dialog open={isEditingBio} onOpenChange={setIsEditingBio}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit Bio</DialogTitle>
+            <DialogTitle>{t("editBio")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="bio">About You</Label>
+              <Label htmlFor="bio">{t("aboutYou")}</Label>
               <Textarea
                 id="bio"
                 value={editedBio}
                 onChange={(e) => setEditedBio(e.target.value)}
-                placeholder="Tell others about yourself..."
+                placeholder={t("tellOthers")}
                 rows={4}
               />
               <p className="text-xs text-muted-foreground">{editedBio.length}/500 characters</p>
@@ -173,9 +175,9 @@ export function ProfileHeader({ user, onUpdate }: ProfileHeaderProps) {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsEditingBio(false)}>
-              Cancel
+              {t("cancel")}
             </Button>
-            <Button onClick={handleSaveBio}>Save Changes</Button>
+            <Button onClick={handleSaveBio}>{t("saveChanges")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
