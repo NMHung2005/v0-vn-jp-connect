@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useState, useEffect } from "react"
 import { 
   Send, 
   Smile, 
@@ -15,11 +14,9 @@ import {
   Copy,
   Volume2,
   User,
-  ThumbsUp
-  User,
+  ThumbsUp,
   Heart,
   X,
-  ThumbsUp,
   ThumbsDown
 } from "lucide-react"
 import { cn } from "@/lib/utils"

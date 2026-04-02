@@ -25,12 +25,12 @@ export function LanguageSwitcher() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon">
           <Languages className="h-4 w-4" />
-          <span className="sr-only">Switch language</span>
+          <span className="sr-only">言語を切り替える</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => switchLanguage("vi")}>
-          Tiếng Việt {locale === "vi" && "✓"}
+          ベトナム語 {locale === "vi" && "✓"}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => switchLanguage("ja")}>
           日本語 {locale === "ja" && "✓"}

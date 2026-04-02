@@ -13,12 +13,12 @@ const sampleUsers = [
     id: 1,
     name: "Tanaka Yuki",
     age: 24,
-    gender: "Female",
-    nationality: "Japanese",
-    location: "Tokyo, Japan",
-    bio: "Love learning Vietnamese! I enjoy cooking, traveling, and watching K-dramas. Looking for language exchange partners to practice Vietnamese and share Japanese culture.",
-    occupation: "Marketing Specialist",
-    education: "Waseda University",
+    gender: "女性",
+    nationality: "日本",
+    location: "東京、日本",
+    bio: "ベトナム語の学習が大好きです。料理、旅行、ドラマ鑑賞を楽しんでいます。ベトナム語を練習しながら、日本文化も共有できる言語交換パートナーを探しています。",
+    occupation: "マーケティング担当",
+    education: "早稲田大学",
     avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
     coverImage: "https://images.unsplash.com/photo-1480796927426-f609979314bd?w=1200&h=400&fit=crop",
     verified: true,
@@ -26,11 +26,11 @@ const sampleUsers = [
     connections: 256,
     joinDate: "2023-08-20",
     languages: [
-      { language: "Japanese", level: "Native", certificate: null },
-      { language: "Vietnamese", level: "Intermediate", certificate: null },
-      { language: "English", level: "Fluent", certificate: "TOEIC 920" },
+      { language: "日本語", level: "母語", certificate: null },
+      { language: "ベトナム語", level: "中級", certificate: null },
+      { language: "英語", level: "流暢", certificate: "TOEIC 920" },
     ],
-    interests: ["Language Exchange", "Cooking", "Travel", "K-Drama", "Photography", "Music"],
+    interests: ["言語交換", "料理", "旅行", "ドラマ", "写真", "音楽"],
     photos: [
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=face",
@@ -40,12 +40,12 @@ const sampleUsers = [
     id: 2,
     name: "Sato Hiroshi",
     age: 28,
-    gender: "Male",
-    nationality: "Japanese",
-    location: "Osaka, Japan",
-    bio: "Software engineer interested in Vietnamese tech scene. I love gaming, anime, and exploring new cultures. Want to make friends from Vietnam!",
-    occupation: "Software Engineer",
-    education: "Kyoto University",
+    gender: "男性",
+    nationality: "日本",
+    location: "大阪、日本",
+    bio: "ベトナムのテック業界に興味があるソフトウェアエンジニアです。ゲーム、アニメ、新しい文化の探求が好きで、ベトナムの友人を作りたいです。",
+    occupation: "ソフトウェアエンジニア",
+    education: "京都大学",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
     coverImage: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200&h=400&fit=crop",
     verified: true,
@@ -53,11 +53,11 @@ const sampleUsers = [
     connections: 189,
     joinDate: "2023-11-15",
     languages: [
-      { language: "Japanese", level: "Native", certificate: null },
-      { language: "Vietnamese", level: "Basic", certificate: null },
-      { language: "English", level: "Advanced", certificate: "IELTS 7.5" },
+      { language: "日本語", level: "母語", certificate: null },
+      { language: "ベトナム語", level: "初級", certificate: null },
+      { language: "英語", level: "上級", certificate: "IELTS 7.5" },
     ],
-    interests: ["Gaming", "Anime", "Technology", "Coffee", "Cycling", "Music"],
+    interests: ["ゲーム", "アニメ", "テクノロジー", "コーヒー", "サイクリング", "音楽"],
     photos: [
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
     ],
@@ -100,7 +100,7 @@ export default function UserProfilePage() {
           </Button>
           <div>
             <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
-            <p className="text-sm text-muted-foreground">View profile</p>
+            <p className="text-sm text-muted-foreground">プロフィールを見る</p>
           </div>
         </header>
 

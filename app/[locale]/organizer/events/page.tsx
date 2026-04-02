@@ -108,17 +108,17 @@ const mockEvents: Event[] = [
 ]
 
 const statusConfig = {
-  draft: { label: "Draft", color: "bg-muted text-muted-foreground" },
-  pending: { label: "Pending Review", color: "bg-amber-100 text-amber-700" },
-  published: { label: "Published", color: "bg-emerald-100 text-emerald-700" },
-  completed: { label: "Completed", color: "bg-blue-100 text-blue-700" },
-  cancelled: { label: "Cancelled", color: "bg-red-100 text-red-700" },
+  draft: { label: "下書き", color: "bg-muted text-muted-foreground" },
+  pending: { label: "審査中", color: "bg-amber-100 text-amber-700" },
+  published: { label: "公開中", color: "bg-emerald-100 text-emerald-700" },
+  completed: { label: "完了", color: "bg-blue-100 text-blue-700" },
+  cancelled: { label: "中止", color: "bg-red-100 text-red-700" },
 }
 
 const eventTypeConfig = {
-  online: { label: "Online", color: "bg-blue-100 text-blue-700" },
-  offline: { label: "In-Person", color: "bg-emerald-100 text-emerald-700" },
-  hybrid: { label: "Hybrid", color: "bg-purple-100 text-purple-700" },
+  online: { label: "オンライン", color: "bg-blue-100 text-blue-700" },
+  offline: { label: "オフライン", color: "bg-emerald-100 text-emerald-700" },
+  hybrid: { label: "ハイブリッド", color: "bg-purple-100 text-purple-700" },
 }
 
 export default function OrganizerEventsPage() {
@@ -145,15 +145,15 @@ export default function OrganizerEventsPage() {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-foreground">My Events</h1>
-              <p className="text-muted-foreground mt-1">Manage and create events for the VN-JP community</p>
+              <h1 className="text-2xl font-bold text-foreground">マイイベント</h1>
+              <p className="text-muted-foreground mt-1">VN-JPコミュニティ向けイベントの管理と作成</p>
             </div>
             <Link
               href="/organizer/events/create"
               className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2 font-medium"
             >
               <Plus className="w-5 h-5" />
-              Create Event
+              イベント作成
             </Link>
           </div>
         </div>
@@ -169,7 +169,7 @@ export default function OrganizerEventsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{stats.total}</p>
-                <p className="text-sm text-muted-foreground">Total Events</p>
+                <p className="text-sm text-muted-foreground">総イベント数</p>
               </div>
             </div>
           </div>
@@ -180,7 +180,7 @@ export default function OrganizerEventsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{stats.published}</p>
-                <p className="text-sm text-muted-foreground">Published</p>
+                <p className="text-sm text-muted-foreground">公開中</p>
               </div>
             </div>
           </div>
@@ -191,7 +191,7 @@ export default function OrganizerEventsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{stats.pending}</p>
-                <p className="text-sm text-muted-foreground">Pending Review</p>
+                <p className="text-sm text-muted-foreground">審査中</p>
               </div>
             </div>
           </div>
@@ -202,7 +202,7 @@ export default function OrganizerEventsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{stats.draft}</p>
-                <p className="text-sm text-muted-foreground">Drafts</p>
+                <p className="text-sm text-muted-foreground">下書き</p>
               </div>
             </div>
           </div>
@@ -214,7 +214,7 @@ export default function OrganizerEventsPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Search events..."
+              placeholder="イベントを検索..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring"
@@ -227,12 +227,12 @@ export default function OrganizerEventsPage() {
               onChange={(e) => setStatusFilter(e.target.value as EventStatus | "all")}
               className="px-3 py-2 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             >
-              <option value="all">All Status</option>
-              <option value="draft">Draft</option>
-              <option value="pending">Pending Review</option>
-              <option value="published">Published</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
+              <option value="all">すべてのステータス</option>
+              <option value="draft">下書き</option>
+              <option value="pending">審査中</option>
+              <option value="published">公開中</option>
+              <option value="completed">完了</option>
+              <option value="cancelled">中止</option>
             </select>
           </div>
         </div>
@@ -287,7 +287,7 @@ export default function OrganizerEventsPage() {
                     </span>
                     <span className="flex items-center gap-1">
                       <Users className="w-4 h-4" />
-                      {event.participants}{event.maxParticipants ? `/${event.maxParticipants}` : ""} participants
+                      {event.participants}{event.maxParticipants ? `/${event.maxParticipants}` : ""}名参加
                     </span>
                   </div>
                 </div>
@@ -297,20 +297,20 @@ export default function OrganizerEventsPage() {
                   <Link
                     href={`/organizer/events/${event.id}`}
                     className="p-2 hover:bg-muted rounded-lg transition-colors"
-                    title="View"
+                    title="表示"
                   >
                     <Eye className="w-5 h-5 text-muted-foreground" />
                   </Link>
                   <Link
                     href={`/organizer/events/${event.id}/edit`}
                     className="p-2 hover:bg-muted rounded-lg transition-colors"
-                    title="Edit"
+                    title="編集"
                   >
                     <Edit className="w-5 h-5 text-muted-foreground" />
                   </Link>
                   <button
                     className="p-2 hover:bg-red-100 rounded-lg transition-colors"
-                    title="Delete"
+                    title="削除"
                   >
                     <Trash2 className="w-5 h-5 text-red-600" />
                   </button>
@@ -326,18 +326,18 @@ export default function OrganizerEventsPage() {
         {filteredEvents.length === 0 && (
           <div className="text-center py-12">
             <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-foreground mb-2">No events found</h3>
+            <h3 className="text-lg font-semibold text-foreground mb-2">イベントが見つかりません</h3>
             <p className="text-muted-foreground mb-4">
               {searchQuery || statusFilter !== "all" 
-                ? "Try adjusting your search or filter criteria" 
-                : "Get started by creating your first event"}
+                ? "検索条件またはフィルターを調整してください" 
+                : "最初のイベントを作成して始めましょう"}
             </p>
             <Link
               href="/organizer/events/create"
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
             >
               <Plus className="w-5 h-5" />
-              Create Event
+              イベント作成
             </Link>
           </div>
         )}

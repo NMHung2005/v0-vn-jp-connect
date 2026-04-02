@@ -191,7 +191,7 @@ export default function CreateEventPage() {
   }
 
   const handleDelete = (eventId: string) => {
-    if (confirm("Are you sure you want to delete this event?")) {
+    if (confirm("このイベントを削除してもよろしいですか？")) {
       setEvents(prev => prev.filter(ev => ev.id !== eventId))
     }
   }
@@ -212,7 +212,7 @@ export default function CreateEventPage() {
       {showSuccess && (
         <div className="fixed top-4 right-4 z-50 bg-emerald-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-in slide-in-from-top">
           <CheckCircle className="w-5 h-5" />
-          <span>Event saved successfully!</span>
+          <span>イベントを保存しました。</span>
         </div>
       )}
 
@@ -220,10 +220,10 @@ export default function CreateEventPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground tracking-tight">
-            Create Event
+            イベント作成
           </h1>
           <p className="text-muted-foreground mt-1">
-            Create and manage events for users to view and join
+            ユーザーが閲覧・参加できるイベントを作成・管理
           </p>
         </div>
         {!showForm && (
@@ -232,7 +232,7 @@ export default function CreateEventPage() {
             className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2 font-medium"
           >
             <Plus className="w-5 h-5" />
-            Create New Event
+            新規イベント作成
           </button>
         )}
       </div>
@@ -242,7 +242,7 @@ export default function CreateEventPage() {
           {/* Form Header */}
           <div className="flex items-center justify-between bg-card border border-border rounded-xl p-4">
             <h2 className="text-lg font-semibold text-foreground">
-              {editingEventId ? "Edit Event" : "New Event"}
+              {editingEventId ? "イベント編集" : "新規イベント"}
             </h2>
             <div className="flex items-center gap-3">
               <button
@@ -250,26 +250,26 @@ export default function CreateEventPage() {
                 className="px-4 py-2 text-sm font-medium border border-border rounded-lg hover:bg-muted transition-colors flex items-center gap-2"
               >
                 <Eye className="w-4 h-4" />
-                {isPreview ? "Edit" : "Preview"}
+                {isPreview ? "編集" : "プレビュー"}
               </button>
               <button
                 onClick={handleCancel}
                 className="px-4 py-2 text-sm font-medium bg-muted text-muted-foreground rounded-lg hover:bg-muted/80 transition-colors"
               >
-                Cancel
+                キャンセル
               </button>
               <button
                 onClick={(e) => handleSubmit(e, true)}
                 className="px-4 py-2 text-sm font-medium bg-muted text-muted-foreground rounded-lg hover:bg-muted/80 transition-colors"
               >
-                Save Draft
+                下書き保存
               </button>
               <button
                 onClick={(e) => handleSubmit(e, false)}
                 className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2"
               >
                 <Save className="w-4 h-4" />
-                Publish Event
+                公開する
               </button>
             </div>
           </div>
@@ -592,7 +592,7 @@ export default function CreateEventPage() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-foreground">{publishedCount}</p>
-                  <p className="text-sm text-muted-foreground">Published</p>
+                  <p className="text-sm text-muted-foreground">公開中</p>
                 </div>
               </div>
             </div>
@@ -603,7 +603,7 @@ export default function CreateEventPage() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-foreground">{draftCount}</p>
-                  <p className="text-sm text-muted-foreground">Drafts</p>
+                  <p className="text-sm text-muted-foreground">下書き</p>
                 </div>
               </div>
             </div>
@@ -611,18 +611,18 @@ export default function CreateEventPage() {
 
           {/* Events List */}
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-foreground">All Events</h2>
+            <h2 className="text-lg font-semibold text-foreground">すべてのイベント</h2>
             {events.length === 0 ? (
               <div className="bg-card border border-border rounded-xl p-12 text-center">
                 <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-foreground mb-2">No events yet</h3>
-                <p className="text-muted-foreground mb-4">Create your first event to get started</p>
+                <h3 className="text-lg font-medium text-foreground mb-2">イベントはまだありません</h3>
+                <p className="text-muted-foreground mb-4">最初のイベントを作成して始めましょう</p>
                 <button
                   onClick={() => setShowForm(true)}
                   className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors inline-flex items-center gap-2"
                 >
                   <Plus className="w-4 h-4" />
-                  Create Event
+                  イベント作成
                 </button>
               </div>
             ) : (
@@ -648,7 +648,7 @@ export default function CreateEventPage() {
                               "px-2 py-0.5 text-xs rounded-full font-medium",
                               event.status === "published" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
                             )}>
-                              {event.status === "published" ? "Published" : "Draft"}
+                              {event.status === "published" ? "公開中" : "下書き"}
                             </span>
                             <span className={cn(
                               "px-2 py-0.5 text-xs rounded-full font-medium",
@@ -656,7 +656,7 @@ export default function CreateEventPage() {
                               event.eventType === "offline" ? "bg-emerald-100 text-emerald-700" :
                               "bg-purple-100 text-purple-700"
                             )}>
-                              {event.eventType === "online" ? "Online" : event.eventType === "offline" ? "In-Person" : "Hybrid"}
+                              {event.eventType === "online" ? "オンライン" : event.eventType === "offline" ? "オフライン" : "ハイブリッド"}
                             </span>
                             <span className="px-2 py-0.5 text-xs rounded-full bg-muted text-muted-foreground">
                               {event.category}
@@ -674,7 +674,7 @@ export default function CreateEventPage() {
                             </span>
                             <span className="flex items-center gap-1">
                               <MapPin className="w-4 h-4" />
-                              {event.location || event.onlineLink || "TBA"}
+                              {event.location || event.onlineLink || "未定"}
                             </span>
                           </div>
                         </div>
@@ -682,14 +682,14 @@ export default function CreateEventPage() {
                           <button
                             onClick={() => handleEdit(event)}
                             className="p-2 hover:bg-muted rounded-lg transition-colors"
-                            title="Edit"
+                            title="編集"
                           >
                             <Edit2 className="w-5 h-5 text-muted-foreground" />
                           </button>
                           <button
                             onClick={() => handleDelete(event.id)}
                             className="p-2 hover:bg-red-100 rounded-lg transition-colors"
-                            title="Delete"
+                            title="削除"
                           >
                             <Trash2 className="w-5 h-5 text-red-600" />
                           </button>
