@@ -4,8 +4,10 @@ import { useState } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { EventList } from "@/components/events/event-list"
 import { EventDetail } from "@/components/events/event-detail"
+import { useTranslations } from "next-intl"
 
 export default function EventsPage() {
+  const t = useTranslations("Events")
   const [activeTab, setActiveTab] = useState("events")
   const [selectedEventId, setSelectedEventId] = useState<number | null>(1)
 
@@ -23,7 +25,7 @@ export default function EventsPage() {
           <EventDetail eventId={selectedEventId} />
         ) : (
           <div className="flex-1 flex items-center justify-center bg-muted/30">
-            <p className="text-muted-foreground">Select an event to view details</p>
+            <p className="text-muted-foreground">{t("selectEventMessage")}</p>
           </div>
         )}
       </div>

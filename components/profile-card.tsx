@@ -1,7 +1,9 @@
 "use client"
 
-import { MapPin, ThumbsUp, BadgeCheck, X, Heart, Sparkles } from "lucide-react"
+import { MapPin, ThumbsUp, X, Heart, User } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
+import { useTranslations, useLocale } from "next-intl"
 
 interface ProfileCardProps {
   profile: {
@@ -19,100 +21,113 @@ interface ProfileCardProps {
   }
   onLike: () => void
   onPass: () => void
-  onSuperLike: () => void
 }
 
-export function ProfileCard({ profile, onLike, onPass, onSuperLike }: ProfileCardProps) {
+export function ProfileCard({ profile, onLike, onPass }: ProfileCardProps) {
+  const t = useTranslations("ProfileCard")
+  const locale = useLocale()
+
   return (
-    <div className="flex flex-col items-center">
-      {/* Main Card */}
-      <div className="relative w-full max-w-md bg-card rounded-3xl shadow-xl overflow-hidden">
-        {/* Image */}
-        <div className="relative aspect-[3/4] w-full">
+    <div className="w-full max-w-5xl mx-auto">
+      {/* Horizontal Rectangle Card */}
+      <div className="flex flex-col md:flex-row w-full bg-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-border min-h-[450px]">
+        {/* Left Side: Image (Proper Rectangle) */}
+        <div className="relative w-full md:w-[350px] lg:w-[400px] shrink-0 min-h-[300px] md:min-h-0">
           <Image
             src={profile.image}
             alt={profile.name}
             fill
+            sizes="(max-width: 768px) 100vw, 400px"
             className="object-cover"
+            priority
           />
           
-          {/* Positive rating badge */}
-          <div className="absolute top-4 right-4 bg-card/90 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5 text-sm font-semibold">
-            <ThumbsUp className="w-3.5 h-3.5 text-primary" />
+          {/* Rating Badge */}
+          <div className="absolute top-6 left-6 bg-card/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 text-sm font-semibold shadow-sm">
+            <ThumbsUp className="w-4 h-4 text-primary" />
             <span className="text-foreground">{profile.positiveRating}%</span>
           </div>
 
-          {/* Gradient overlay */}
-          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-
-          {/* Profile info overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
-            <div className="flex items-center gap-2 mb-1">
-              <h2 className="text-2xl font-bold">{profile.name}, {profile.age}</h2>
-              {profile.verified && (
-                <BadgeCheck className="w-6 h-6 text-primary fill-primary/20" />
-              )}
-            </div>
-            <div className="flex items-center gap-2 text-white/80 text-sm">
-              <MapPin className="w-4 h-4" />
-              <span>{profile.location}</span>
-              <span>|</span>
-              <span>{profile.distance}</span>
-            </div>
+          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent md:hidden" />
+          <div className="absolute bottom-6 left-6 text-white md:hidden">
+            <h2 className="text-3xl font-bold">{profile.name}, {profile.age}</h2>
           </div>
         </div>
 
-        {/* Bio and details */}
-        <div className="p-5 space-y-4">
-          <p className="text-foreground leading-relaxed">{profile.bio}</p>
+        {/* Right Side: Information (Spreading out to fill width) */}
+        <div className="flex-1 p-8 md:p-12 flex flex-col justify-between">
+          <div className="space-y-10">
+            {/* Header Section */}
+            <div className="hidden md:flex justify-between items-start">
+              <div>
+                <h2 className="text-4xl font-extrabold text-foreground tracking-tight">{profile.name}, {profile.age}</h2>
+                <div className="flex items-center gap-2 text-muted-foreground mt-2">
+                  <MapPin className="w-5 h-5 text-primary" />
+                  <span className="text-lg font-medium">{profile.location} • {profile.distance}</span>
+                </div>
+              </div>
+            </div>
 
-          {/* Languages */}
-          <div className="flex items-center gap-2 flex-wrap">
-            {profile.languages.map((lang) => (
-              <span
-                key={lang}
-                className="px-3 py-1 bg-muted text-muted-foreground rounded-full text-sm"
-              >
-                {lang}
-              </span>
-            ))}
+            {/* About Section */}
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold text-primary uppercase tracking-[0.2em]">{t("theVibe")}</h3>
+              <p className="text-xl text-foreground leading-relaxed font-medium italic">
+                "{profile.bio}"
+              </p>
+            </div>
+
+            {/* Tags Section (Grid for horizontal spread) */}
+            <div className="grid grid-cols-2 gap-10">
+              <div className="space-y-4">
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">{t("speaks")}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {profile.languages.map((lang) => (
+                    <span key={lang} className="px-3 py-1.5 bg-muted/80 text-foreground rounded-lg text-sm font-semibold">
+                      {lang}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">{t("into")}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {profile.interests.map((interest) => (
+                    <span key={interest} className="px-3 py-1.5 bg-primary/5 text-primary rounded-lg text-sm font-semibold border border-primary/10 break-words whitespace-normal text-left">
+                      {interest}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Interests */}
-          <div className="flex flex-wrap gap-2">
-            {profile.interests.map((interest) => (
-              <span
-                key={interest}
-                className="px-3 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium"
-              >
-                {interest}
-              </span>
-            ))}
+          {/* Action Footer */}
+          <div className="flex items-center gap-4 mt-12">
+            <button
+              onClick={onPass}
+              className="px-6 py-4 bg-muted/50 hover:bg-destructive/10 hover:text-destructive text-foreground rounded-2xl flex items-center justify-center gap-2 font-bold transition-all border border-transparent hover:border-destructive/20"
+            >
+              <X className="w-5 h-5" />
+              <span>{t("skip")}</span>
+            </button>
+            <Link
+              href={`/${locale}/home/user/${profile.id}`}
+              className="px-6 py-4 bg-muted hover:bg-muted/80 text-foreground rounded-2xl flex items-center justify-center gap-2 font-bold transition-all border border-border"
+            >
+              <User className="w-5 h-5" />
+              <span>{t("viewProfile")}</span>
+            </Link>
+            <button
+              onClick={onLike}
+              className="flex-1 py-4 bg-primary text-primary-foreground rounded-2xl flex items-center justify-center gap-3 font-bold hover:shadow-2xl hover:shadow-primary/40 hover:-translate-y-0.5 transition-all shadow-lg shadow-primary/20"
+            >
+              <Heart className="w-6 h-6 fill-current" />
+              <span>{t("connectWith", { name: profile.name.split(' ')[0] })}</span>
+            </button>
           </div>
         </div>
-      </div>
-
-      {/* Action buttons */}
-      <div className="flex items-center justify-center gap-4 mt-6">
-        <button
-          onClick={onPass}
-          className="w-14 h-14 bg-card border-2 border-border rounded-full flex items-center justify-center text-muted-foreground hover:border-destructive hover:text-destructive hover:scale-110 transition-all shadow-lg"
-        >
-          <X className="w-7 h-7" />
-        </button>
-        <button
-          onClick={onLike}
-          className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-primary-foreground hover:scale-110 transition-all shadow-lg shadow-primary/30"
-        >
-          <Heart className="w-8 h-8 fill-current" />
-        </button>
-        <button
-          onClick={onSuperLike}
-          className="w-14 h-14 bg-card border-2 border-border rounded-full flex items-center justify-center text-amber-500 hover:border-amber-500 hover:scale-110 transition-all shadow-lg"
-        >
-          <Sparkles className="w-7 h-7" />
-        </button>
       </div>
     </div>
   )
 }
+

@@ -1,15 +1,18 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { Link, useRouter } from "@/i18n/routing"
 import { Eye, EyeOff, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useTranslations } from "next-intl"
+import { LanguageSwitcher } from "@/components/language-switcher"
 
 export default function LoginPage() {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
+  const t = useTranslations("Login")
+  const h = useTranslations("Header")
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,12 +26,13 @@ export default function LoginPage() {
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
               <ArrowLeft className="w-4 h-4" />
-              <span className="text-sm">Back</span>
+              <span className="text-sm">{t("back")}</span>
             </Link>
             <div className="flex items-center gap-3">
-              <span className="text-sm text-muted-foreground">New here?</span>
+              <LanguageSwitcher />
+              <span className="text-sm text-muted-foreground">{t("newHere")}</span>
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/register">Register</Link>
+                <Link href="/register">{h("register")}</Link>
               </Button>
             </div>
           </div>
@@ -43,26 +47,26 @@ export default function LoginPage() {
                 VN-JP Connect
               </span>
               <h1 className="mt-2 text-2xl font-bold text-foreground">
-                Welcome Back
+                {t("welcomeBack")}
               </h1>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
                 <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Email or Phone Number
+                  {t("emailOrPhone")}
                 </label>
                 <Input placeholder="name@example.com" type="email" />
               </div>
 
               <div className="space-y-2">
                 <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Password
+                  {t("password")}
                 </label>
                 <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
+                    placeholder={t("passwordPlaceholder")}
                   />
                   <button
                     type="button"
@@ -79,7 +83,7 @@ export default function LoginPage() {
               </div>
 
               <Button type="submit" className="w-full" size="lg">
-                Log in
+                {t("loginButton")}
               </Button>
 
               <div className="text-center">
@@ -87,18 +91,18 @@ export default function LoginPage() {
                   href="#"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Forgot your password?
+                  {t("forgotPassword")}
                 </Link>
               </div>
 
               <div className="border-t border-border pt-5">
                 <p className="text-center text-sm text-muted-foreground">
-                  Don&apos;t have an account?{" "}
+                  {t("dontHaveAccount")}{" "}
                   <Link
                     href="/register"
                     className="font-semibold text-foreground hover:text-primary transition-colors"
                   >
-                    Register
+                    {t("register")}
                   </Link>
                 </p>
               </div>
@@ -109,7 +113,7 @@ export default function LoginPage() {
 
       <footer className="py-6">
         <p className="text-center text-sm text-muted-foreground">
-          © 2026 VN-JP Connect. Safe and Direct.
+          {t("copyright")}
         </p>
       </footer>
     </div>

@@ -1,22 +1,39 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { 
   Send, 
   Smile, 
   Paperclip, 
-  MoreVertical, 
   Phone, 
   Video,
   Languages,
   Lightbulb,
   ChevronDown,
-  ChevronUp,
   CheckCircle2,
   Copy,
-  Volume2
+  Volume2,
+  User,
+  ThumbsUp
+  User,
+  Heart,
+  X,
+  ThumbsUp,
+  ThumbsDown
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import Link from "next/link"
+import { useTranslations, useLocale } from "next-intl"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog"
 
 interface Message {
   id: string
@@ -32,12 +49,13 @@ interface ChatAreaProps {
 }
 
 const conversationData: Record<string, {
-  user: { name: string; avatar: string; online: boolean; nationality: "VN" | "JP" }
+  user: { id: number; nameKey: string; avatar: string; online: boolean; nationality: "VN" | "JP" }
   messages: Message[]
 }> = {
   "1": {
     user: {
-      name: "Yuki Tanaka",
+      id: 1,
+      nameKey: "yuki",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face",
       online: true,
       nationality: "JP",
@@ -47,7 +65,7 @@ const conversationData: Record<string, {
         id: "1",
         senderId: "yuki",
         text: "こんにちは！はじめまして。",
-        translatedText: "Hello! Nice to meet you.",
+        translatedText: "Xin chào! Rất vui được gặp bạn.",
         time: "10:30 AM",
         isOwn: false,
       },
@@ -63,21 +81,21 @@ const conversationData: Record<string, {
         id: "3",
         senderId: "yuki",
         text: "ベトナム語を勉強しています。手伝ってもらえますか？",
-        translatedText: "I am studying Vietnamese. Can you help me?",
+        translatedText: "Tôi đang học tiếng Việt. Bạn có thể giúp tôi không?",
         time: "10:33 AM",
         isOwn: false,
       },
       {
         id: "4",
         senderId: "me",
-        text: "Of course! I can help you practice Vietnamese. And you can help me with Japanese!",
+        text: "もちろん！ベトナム語の練習を手伝いますよ。日本語を教えてくれませんか？",
         time: "10:35 AM",
         isOwn: true,
       },
       {
         id: "5",
         senderId: "yuki",
-        text: "That sounds great! Let's meet at the coffee shop.",
+        text: "いいですね！喫茶店で会いましょう。",
         time: "10:36 AM",
         isOwn: false,
       },
@@ -86,22 +104,37 @@ const conversationData: Record<string, {
 }
 
 const topicSuggestions = [
-  { icon: "🎌", text: "Ask about Japanese culture" },
-  { icon: "🍜", text: "Discuss favorite foods" },
-  { icon: "📚", text: "Share language learning tips" },
-  { icon: "🎬", text: "Talk about movies or anime" },
-  { icon: "✈️", text: "Ask about travel experiences" },
-  { icon: "🎵", text: "Discuss music preferences" },
+  { icon: "🎌", text: "日本の文化について聞く" },
+  { icon: "🍜", text: "好きな食べ物について話す" },
+  { icon: "📚", text: "語学学習のコツを共有する" },
+  { icon: "🎬", text: "映画やアニメについて話す" },
+  { icon: "✈️", text: "旅行の経験について聞く" },
+  { icon: "🎵", text: "好きな音楽について話し合う" },
 ]
 
 export function ChatArea({ conversationId }: ChatAreaProps) {
-  const [message, setMessage] = useState("")
+  const [messageInput, setMessageInput] = useState("")
+  const [messages, setMessages] = useState<Message[]>([])
   const [showTranslation, setShowTranslation] = useState<Record<string, boolean>>({})
   const [showTopicSuggestions, setShowTopicSuggestions] = useState(false)
   const [translateMode, setTranslateMode] = useState<"vi-jp" | "jp-vi">("vi-jp")
   const [showTranslatePanel, setShowTranslatePanel] = useState(false)
   const [textToTranslate, setTextToTranslate] = useState("")
   const [translatedResult, setTranslatedResult] = useState("")
+  
+  const [showLikePopup, setShowLikePopup] = useState(false)
+  const [hasShownPopup, setHasShownPopup] = useState(false)
+
+  useEffect(() => {
+    if (conversationId && conversationData[conversationId]) {
+      setMessages(conversationData[conversationId].messages)
+      setHasShownPopup(false)
+    } else {
+      setMessages([])
+    }
+  }, [conversationId])
+
+  const t = useTranslations("Messages")
 
   if (!conversationId || !conversationData[conversationId]) {
     return (
@@ -110,14 +143,15 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
           <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
             <Send className="w-8 h-8 text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-semibold text-foreground mb-1">Your Messages</h3>
-          <p className="text-sm text-muted-foreground">Select a conversation to start chatting</p>
+          <h3 className="text-lg font-semibold text-foreground mb-1">{t("yourMessages")}</h3>
+          <p className="text-sm text-muted-foreground">{t("selectToChat")}</p>
         </div>
       </div>
     )
   }
 
-  const { user, messages } = conversationData[conversationId]
+  const { user } = conversationData[conversationId]
+  const userName = t(`users.${user.nameKey}`)
 
   const toggleTranslation = (messageId: string) => {
     setShowTranslation(prev => ({ ...prev, [messageId]: !prev[messageId] }))
@@ -133,19 +167,43 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
   }
 
   const handleTopicClick = (topic: string) => {
-    setMessage(topic)
+    setMessageInput(topic)
     setShowTopicSuggestions(false)
   }
 
+  const locale = useLocale()
+
+  const handleSendMessage = () => {
+    if (!messageInput.trim()) return
+
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      senderId: "me",
+      text: messageInput,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      isOwn: true,
+    }
+
+    const updatedMessages = [...messages, newMessage]
+    setMessages(updatedMessages)
+    setMessageInput("")
+
+    // Check for 10 messages
+    if (updatedMessages.length >= 10 && !hasShownPopup) {
+      setShowLikePopup(true)
+      setHasShownPopup(true)
+    }
+  }
+
   return (
-    <div className="flex-1 flex flex-col bg-background">
+    <div className="flex-1 flex flex-col bg-background relative">
       {/* Chat Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-card">
         <div className="flex items-center gap-3">
           <div className="relative">
             <img
               src={user.avatar}
-              alt={user.name}
+              alt={userName}
               className="w-10 h-10 rounded-full object-cover"
             />
             {user.online && (
@@ -154,7 +212,7 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="font-semibold text-foreground">{user.name}</h2>
+              <h2 className="font-semibold text-foreground">{userName}</h2>
               <span className={cn(
                 "px-1.5 py-0.5 rounded text-[10px] font-bold text-white",
                 user.nationality === "JP" ? "bg-red-500" : "bg-yellow-500"
@@ -163,19 +221,23 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              {user.online ? "Online" : "Offline"}
+              {user.online ? t("online") : t("offline")}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Link
+            href={`/${locale}/home/user/${user.id}`}
+            className="flex items-center gap-2 px-3 py-1.5 bg-muted hover:bg-muted/80 rounded-full text-sm font-medium text-foreground transition-colors"
+          >
+            <User className="w-4 h-4" />
+            <span>{t("viewProfile")}</span>
+          </Link>
           <button className="p-2 hover:bg-muted rounded-full transition-colors">
             <Phone className="w-5 h-5 text-muted-foreground" />
           </button>
           <button className="p-2 hover:bg-muted rounded-full transition-colors">
             <Video className="w-5 h-5 text-muted-foreground" />
-          </button>
-          <button className="p-2 hover:bg-muted rounded-full transition-colors">
-            <MoreVertical className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>
       </header>
@@ -221,7 +283,7 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
                     className="text-xs text-primary hover:underline flex items-center gap-1"
                   >
                     <Languages className="w-3 h-3" />
-                    {showTranslation[msg.id] ? "Hide" : "Translate"}
+                    {showTranslation[msg.id] ? t("hide") : t("translate")}
                   </button>
                 )}
                 <button className="p-1 hover:bg-muted rounded transition-colors">
@@ -242,7 +304,7 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2 text-sm font-medium text-foreground">
               <Lightbulb className="w-4 h-4 text-primary" />
-              Topic Suggestions
+              {t("topicSuggestions")}
             </div>
             <button
               onClick={() => setShowTopicSuggestions(false)}
@@ -272,7 +334,7 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2 text-sm font-medium text-foreground">
               <Languages className="w-4 h-4 text-primary" />
-              Translation Helper
+              {t("translationHelper")}
             </div>
             <button
               onClick={() => setShowTranslatePanel(false)}
@@ -293,7 +355,7 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
                   : "bg-muted text-muted-foreground hover:text-foreground"
               )}
             >
-              Vietnamese to Japanese
+              {t("vietnameseToJapanese")}
             </button>
             <button
               onClick={() => setTranslateMode("jp-vi")}
@@ -304,14 +366,14 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
                   : "bg-muted text-muted-foreground hover:text-foreground"
               )}
             >
-              Japanese to Vietnamese
+              {t("japaneseToVietnamese")}
             </button>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-xs font-medium text-muted-foreground mb-1 block">
-                {translateMode === "vi-jp" ? "Vietnamese" : "Japanese"}
+                {translateMode === "vi-jp" ? t("vietnamese") : t("japanese")}
               </label>
               <textarea
                 value={textToTranslate}
@@ -322,11 +384,11 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
             </div>
             <div>
               <label className="text-xs font-medium text-muted-foreground mb-1 block">
-                {translateMode === "vi-jp" ? "Japanese" : "Vietnamese"}
+                {translateMode === "vi-jp" ? t("japanese") : t("vietnamese")}
               </label>
               <div className="w-full h-24 p-3 bg-muted/50 rounded-lg text-sm text-foreground overflow-y-auto">
                 {translatedResult || (
-                  <span className="text-muted-foreground italic">Translation will appear here...</span>
+                  <span className="text-muted-foreground italic">{t("translationWillAppearHere")}</span>
                 )}
               </div>
             </div>
@@ -337,16 +399,16 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
               onClick={handleTranslate}
               className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
             >
-              Translate
+              {t("translateButton")}
             </button>
             {translatedResult && (
               <div className="flex items-center gap-2">
                 <button 
-                  onClick={() => setMessage(prev => prev + " " + translatedResult)}
+                  onClick={() => setMessageInput(prev => prev + " " + translatedResult)}
                   className="flex items-center gap-1 px-3 py-1.5 text-sm text-primary hover:bg-primary/10 rounded-lg transition-colors"
                 >
                   <CheckCircle2 className="w-4 h-4" />
-                  Use in message
+                  {t("useInMessage")}
                 </button>
                 <button className="p-2 hover:bg-muted rounded-lg transition-colors">
                   <Copy className="w-4 h-4 text-muted-foreground" />
@@ -377,7 +439,7 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
             )}
           >
             <Lightbulb className="w-4 h-4" />
-            Topic Ideas
+            {t("topicIdeas")}
           </button>
           <button
             onClick={() => {
@@ -392,7 +454,7 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
             )}
           >
             <Languages className="w-4 h-4" />
-            Translate
+            {t("translate")}
           </button>
         </div>
 
@@ -403,16 +465,16 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
           </button>
           <div className="flex-1 relative">
             <textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Type a message..."
+              value={messageInput}
+              onChange={(e) => setMessageInput(e.target.value)}
+              placeholder={t("typeMessage")}
               rows={1}
               className="w-full px-4 py-3 bg-muted rounded-2xl text-sm text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 max-h-32"
               style={{ minHeight: "44px" }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault()
-                  // Handle send
+                  handleSendMessage()
                 }
               }}
             />
@@ -421,9 +483,11 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
             <Smile className="w-5 h-5 text-muted-foreground" />
           </button>
           <button 
+            onClick={handleSendMessage}
+            disabled={!messageInput.trim()}
             className={cn(
               "p-3 rounded-full transition-colors flex-shrink-0",
-              message.trim() 
+              messageInput.trim() 
                 ? "bg-primary text-primary-foreground hover:bg-primary/90" 
                 : "bg-muted text-muted-foreground"
             )}
@@ -432,6 +496,35 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
           </button>
         </div>
       </div>
+
+      <Dialog open={showLikePopup} onOpenChange={setShowLikePopup}>
+        <DialogContent className="sm:max-w-[400px] text-center p-8">
+          <div className="flex flex-col items-center gap-6">
+            <div className="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center animate-bounce">
+              <ThumbsUp className="w-10 h-10 text-blue-600 fill-blue-600" />
+            </div>
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold text-center">{t("likePopupTitle")}</DialogTitle>
+              <DialogDescription className="text-base pt-2 text-center">
+                {t("likePopupDescription", { name: userName, count: messages.length })}
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="flex flex-col sm:flex-row gap-3 w-full pt-4">
+              <DialogClose asChild>
+                <button className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-blue-200">
+                  <ThumbsUp className="w-5 h-5 fill-white" />
+                  {t("likeButton")}
+                </button>
+              </DialogClose>
+              <DialogClose asChild>
+                <button className="flex-1 px-4 py-3 bg-muted text-muted-foreground rounded-xl font-semibold hover:bg-muted/80 transition-all active:scale-95">
+                  {t("maybeLater")}
+                </button>
+              </DialogClose>
+            </DialogFooter>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
