@@ -43,48 +43,48 @@ interface EventFormData {
 }
 
 const categories = [
-  "Cultural Exchange",
-  "Language Learning",
-  "Business Networking",
-  "Food & Cooking",
-  "Art & Music",
-  "Sports & Recreation",
-  "Education & Workshop",
-  "Community Meetup",
-  "Other"
+  "文化交流",
+  "語学学習",
+  "ビジネス交流",
+  "フード・料理",
+  "アート・音楽",
+  "スポーツ・レクリエーション",
+  "教育・ワークショップ",
+  "コミュニティ交流会",
+  "その他"
 ]
 
 const languages = [
-  "Vietnamese",
-  "Japanese",
-  "English",
-  "Vietnamese & Japanese",
-  "All Languages"
+  "ベトナム語",
+  "日本語",
+  "英語",
+  "ベトナム語・日本語",
+  "すべての言語"
 ]
 
 const mockEvents: Event[] = [
   {
     id: "1",
-    title: "Vietnamese-Japanese Language Exchange Meetup",
-    description: "A casual meetup for Vietnamese and Japanese speakers to practice each other's languages. All levels welcome!",
+    title: "日越言語交換ミートアップ",
+    description: "ベトナム語話者と日本語話者が互いの言語を練習するカジュアルな交流会です。レベルを問わず参加できます。",
     eventType: "offline",
     startDate: "2024-04-15",
     startTime: "14:00",
     endDate: "2024-04-15",
     endTime: "17:00",
-    location: "Hanoi Cultural Center, 123 Tran Hung Dao St.",
+    location: "ハノイ文化センター（Tran Hung Dao通り123）",
     onlineLink: "",
     maxParticipants: "30",
-    language: "Vietnamese & Japanese",
-    category: "Language Learning",
+    language: "ベトナム語・日本語",
+    category: "語学学習",
     coverImage: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=400&fit=crop",
     status: "published",
     createdAt: "2024-03-20"
   },
   {
     id: "2",
-    title: "Online Japanese Cooking Class",
-    description: "Learn to make authentic Japanese dishes with a professional chef. Ingredients list will be sent before the event.",
+    title: "オンライン日本料理教室",
+    description: "プロのシェフと一緒に本格的な日本料理を学びます。食材リストはイベント前に送付します。",
     eventType: "online",
     startDate: "2024-04-20",
     startTime: "19:00",
@@ -93,26 +93,26 @@ const mockEvents: Event[] = [
     location: "",
     onlineLink: "https://zoom.us/j/123456789",
     maxParticipants: "50",
-    language: "English",
-    category: "Food & Cooking",
+    language: "英語",
+    category: "フード・料理",
     coverImage: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&h=400&fit=crop",
     status: "published",
     createdAt: "2024-03-22"
   },
   {
     id: "3",
-    title: "VN-JP Business Networking Night",
-    description: "Connect with entrepreneurs and business professionals from Vietnam and Japan.",
+    title: "日越ビジネス交流ナイト",
+    description: "ベトナムと日本の起業家・ビジネス関係者とつながる交流イベントです。",
     eventType: "hybrid",
     startDate: "2024-04-25",
     startTime: "18:00",
     endDate: "2024-04-25",
     endTime: "21:00",
-    location: "Sakura Hotel, HCMC",
+    location: "サクラホテル（ホーチミン市）",
     onlineLink: "https://meet.google.com/abc-defg-hij",
     maxParticipants: "100",
-    language: "All Languages",
-    category: "Business Networking",
+    language: "すべての言語",
+    category: "ビジネス交流",
     coverImage: "https://images.unsplash.com/photo-1515169067868-5387ec356754?w=800&h=400&fit=crop",
     status: "draft",
     createdAt: "2024-03-25"
@@ -280,11 +280,11 @@ export default function CreateEventPage() {
               {/* Cover Image */}
               <div className="h-64 bg-muted flex items-center justify-center">
                 {formData.coverImage ? (
-                  <img src={formData.coverImage} alt="Event cover" className="w-full h-full object-cover" />
+                  <img src={formData.coverImage} alt="イベントカバー" className="w-full h-full object-cover" />
                 ) : (
                   <div className="text-center text-muted-foreground">
                     <ImageIcon className="w-12 h-12 mx-auto mb-2" />
-                    <p>No cover image</p>
+                    <p>カバー画像なし</p>
                   </div>
                 )}
               </div>
@@ -296,7 +296,7 @@ export default function CreateEventPage() {
                     formData.eventType === "offline" ? "bg-emerald-100 text-emerald-700" :
                     "bg-purple-100 text-purple-700"
                   )}>
-                    {formData.eventType === "online" ? "Online" : formData.eventType === "offline" ? "In-Person" : "Hybrid"}
+                    {formData.eventType === "online" ? "オンライン" : formData.eventType === "offline" ? "オフライン" : "ハイブリッド"}
                   </span>
                   {formData.category && (
                     <span className="px-3 py-1 text-sm rounded-full bg-muted text-muted-foreground">
@@ -305,7 +305,7 @@ export default function CreateEventPage() {
                   )}
                 </div>
                 <h2 className="text-3xl font-bold text-foreground mb-4">
-                  {formData.title || "Event Title"}
+                  {formData.title || "イベントタイトル"}
                 </h2>
                 <div className="grid grid-cols-2 gap-6 mb-6">
                   <div className="flex items-center gap-3 text-muted-foreground">
@@ -313,7 +313,7 @@ export default function CreateEventPage() {
                     <span>
                       {formData.startDate ? new Date(formData.startDate).toLocaleDateString("en-US", { 
                         weekday: "long", year: "numeric", month: "long", day: "numeric" 
-                      }) : "Date not set"}
+                      }) : "日付未設定"}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 text-muted-foreground">
@@ -322,17 +322,17 @@ export default function CreateEventPage() {
                   </div>
                   <div className="flex items-center gap-3 text-muted-foreground">
                     <MapPin className="w-5 h-5" />
-                    <span>{formData.location || formData.onlineLink || "Location not set"}</span>
+                    <span>{formData.location || formData.onlineLink || "場所未設定"}</span>
                   </div>
                   <div className="flex items-center gap-3 text-muted-foreground">
                     <Users className="w-5 h-5" />
-                    <span>{formData.maxParticipants || "Unlimited"} participants max</span>
+                    <span>最大{formData.maxParticipants || "無制限"}名</span>
                   </div>
                 </div>
                 <div className="border-t border-border pt-6">
-                  <h3 className="text-lg font-semibold text-foreground mb-3">About this event</h3>
+                  <h3 className="text-lg font-semibold text-foreground mb-3">イベント概要</h3>
                   <p className="text-muted-foreground whitespace-pre-wrap">
-                    {formData.description || "No description provided"}
+                    {formData.description || "説明はまだありません"}
                   </p>
                 </div>
               </div>
@@ -344,29 +344,29 @@ export default function CreateEventPage() {
               <div className="bg-card border border-border rounded-xl p-6">
                 <h2 className="text-lg font-semibold text-foreground mb-6 flex items-center gap-2">
                   <FileText className="w-5 h-5" />
-                  Basic Information
+                  基本情報
                 </h2>
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
-                      Event Title <span className="text-red-500">*</span>
+                      イベントタイトル <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       value={formData.title}
                       onChange={(e) => handleInputChange("title", e.target.value)}
-                      placeholder="Enter a compelling title for your event"
+                      placeholder="イベントのタイトルを入力してください"
                       className="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
-                      Description <span className="text-red-500">*</span>
+                      説明 <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       value={formData.description}
                       onChange={(e) => handleInputChange("description", e.target.value)}
-                      placeholder="Describe your event, what participants can expect, any requirements, etc."
+                      placeholder="イベント内容、参加者が期待できること、必要条件などを入力してください"
                       rows={5}
                       className="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none"
                     />
@@ -374,14 +374,14 @@ export default function CreateEventPage() {
                   <div className="grid grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        Category <span className="text-red-500">*</span>
+                        カテゴリ <span className="text-red-500">*</span>
                       </label>
                       <select
                         value={formData.category}
                         onChange={(e) => handleInputChange("category", e.target.value)}
                         className="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       >
-                        <option value="">Select a category</option>
+                        <option value="">カテゴリを選択</option>
                         {categories.map(cat => (
                           <option key={cat} value={cat}>{cat}</option>
                         ))}
@@ -389,14 +389,14 @@ export default function CreateEventPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        Language <span className="text-red-500">*</span>
+                        使用言語 <span className="text-red-500">*</span>
                       </label>
                       <select
                         value={formData.language}
                         onChange={(e) => handleInputChange("language", e.target.value)}
                         className="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       >
-                        <option value="">Select language</option>
+                        <option value="">言語を選択</option>
                         {languages.map(lang => (
                           <option key={lang} value={lang}>{lang}</option>
                         ))}
@@ -410,18 +410,18 @@ export default function CreateEventPage() {
               <div className="bg-card border border-border rounded-xl p-6">
                 <h2 className="text-lg font-semibold text-foreground mb-6 flex items-center gap-2">
                   <Globe className="w-5 h-5" />
-                  Event Type & Location
+                  開催形式と場所
                 </h2>
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-3">
-                      Event Type <span className="text-red-500">*</span>
+                      開催形式 <span className="text-red-500">*</span>
                     </label>
                     <div className="flex gap-4">
                       {[
-                        { value: "offline", label: "In-Person", icon: MapPin },
-                        { value: "online", label: "Online", icon: Globe },
-                        { value: "hybrid", label: "Hybrid", icon: Users }
+                        { value: "offline", label: "オフライン", icon: MapPin },
+                        { value: "online", label: "オンライン", icon: Globe },
+                        { value: "hybrid", label: "ハイブリッド", icon: Users }
                       ].map(type => (
                         <button
                           key={type.value}
@@ -444,13 +444,13 @@ export default function CreateEventPage() {
                   {(formData.eventType === "offline" || formData.eventType === "hybrid") && (
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        Physical Location <span className="text-red-500">*</span>
+                        開催場所 <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
                         value={formData.location}
                         onChange={(e) => handleInputChange("location", e.target.value)}
-                        placeholder="Enter the venue address"
+                        placeholder="会場住所を入力してください"
                         className="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       />
                     </div>
@@ -459,13 +459,13 @@ export default function CreateEventPage() {
                   {(formData.eventType === "online" || formData.eventType === "hybrid") && (
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        Online Meeting Link <span className="text-red-500">*</span>
+                        オンライン会議リンク <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="url"
                         value={formData.onlineLink}
                         onChange={(e) => handleInputChange("onlineLink", e.target.value)}
-                        placeholder="Zoom, Google Meet, or other meeting link"
+                        placeholder="Zoom、Google Meetなどのリンクを入力"
                         className="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       />
                     </div>
@@ -477,12 +477,12 @@ export default function CreateEventPage() {
               <div className="bg-card border border-border rounded-xl p-6">
                 <h2 className="text-lg font-semibold text-foreground mb-6 flex items-center gap-2">
                   <Calendar className="w-5 h-5" />
-                  Date & Time
+                  日時
                 </h2>
                 <div className="grid grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
-                      Start Date <span className="text-red-500">*</span>
+                      開始日 <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="date"
@@ -493,7 +493,7 @@ export default function CreateEventPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
-                      Start Time <span className="text-red-500">*</span>
+                      開始時刻 <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="time"
@@ -504,7 +504,7 @@ export default function CreateEventPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
-                      End Date <span className="text-red-500">*</span>
+                      終了日 <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="date"
@@ -515,7 +515,7 @@ export default function CreateEventPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
-                      End Time <span className="text-red-500">*</span>
+                      終了時刻 <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="time"
@@ -531,28 +531,28 @@ export default function CreateEventPage() {
               <div className="bg-card border border-border rounded-xl p-6">
                 <h2 className="text-lg font-semibold text-foreground mb-6 flex items-center gap-2">
                   <Users className="w-5 h-5" />
-                  Capacity & Media
+                  定員とメディア
                 </h2>
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
-                      Maximum Participants
+                      最大参加人数
                     </label>
                     <input
                       type="number"
                       value={formData.maxParticipants}
                       onChange={(e) => handleInputChange("maxParticipants", e.target.value)}
-                      placeholder="Leave empty for unlimited"
+                      placeholder="無制限の場合は空欄"
                       min="1"
                       className="w-full max-w-xs px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                     />
                     <p className="text-sm text-muted-foreground mt-1">
-                      Set a limit on how many people can register for this event
+                      このイベントに登録できる人数の上限を設定します
                     </p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
-                      Cover Image URL
+                      カバー画像URL
                     </label>
                     <input
                       type="url"
@@ -562,7 +562,7 @@ export default function CreateEventPage() {
                       className="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                     />
                     <p className="text-sm text-muted-foreground mt-1">
-                      Enter a URL for the event cover image (recommended: 1920x1080)
+                      イベントカバー画像のURLを入力してください（推奨: 1920x1080）
                     </p>
                   </div>
                 </div>
@@ -581,7 +581,7 @@ export default function CreateEventPage() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-foreground">{events.length}</p>
-                  <p className="text-sm text-muted-foreground">Total Events</p>
+                  <p className="text-sm text-muted-foreground">総イベント数</p>
                 </div>
               </div>
             </div>

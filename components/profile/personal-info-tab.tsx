@@ -195,7 +195,7 @@ export function PersonalInfoTab({ user, onUpdate }: PersonalInfoTabProps) {
               <Input
                 value={formData.instagram}
                 onChange={(e) => setFormData((prev) => ({ ...prev, instagram: e.target.value }))}
-                placeholder="@username"
+                placeholder="@ユーザー名"
                 className="mt-1 h-9"
               />
             ) : (
@@ -208,7 +208,7 @@ export function PersonalInfoTab({ user, onUpdate }: PersonalInfoTabProps) {
               <Input
                 value={formData.facebook}
                 onChange={(e) => setFormData((prev) => ({ ...prev, facebook: e.target.value }))}
-                placeholder="Username"
+                placeholder="ユーザー名"
                 className="mt-1 h-9"
               />
             ) : (

@@ -48,22 +48,22 @@ export function SettingsTab({ user, onUpdate }: SettingsTabProps) {
 
   return (
     <div className="p-6">
-      <h3 className="text-lg font-semibold text-foreground mb-6">Account Settings</h3>
+      <h3 className="text-lg font-semibold text-foreground mb-6">アカウント設定</h3>
 
       {/* Privacy Settings */}
       <div className="space-y-6">
         <div>
           <h4 className="text-sm font-medium text-foreground mb-4 flex items-center gap-2">
             <Shield className="w-4 h-4 text-primary" />
-            Privacy Settings
+            プライバシー設定
           </h4>
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 rounded-lg bg-muted/50">
               <div className="flex items-center gap-3">
                 <Eye className="w-5 h-5 text-muted-foreground" />
                 <div>
-                  <p className="font-medium text-foreground">Show Age</p>
-                  <p className="text-sm text-muted-foreground">Display your age on your profile</p>
+                  <p className="font-medium text-foreground">年齢を表示</p>
+                  <p className="text-sm text-muted-foreground">プロフィールに年齢を表示します</p>
                 </div>
               </div>
               <Switch
@@ -76,8 +76,8 @@ export function SettingsTab({ user, onUpdate }: SettingsTabProps) {
               <div className="flex items-center gap-3">
                 <Globe className="w-5 h-5 text-muted-foreground" />
                 <div>
-                  <p className="font-medium text-foreground">Show Location</p>
-                  <p className="text-sm text-muted-foreground">Display your location on your profile</p>
+                  <p className="font-medium text-foreground">居住地を表示</p>
+                  <p className="text-sm text-muted-foreground">プロフィールに居住地を表示します</p>
                 </div>
               </div>
               <Switch
@@ -90,8 +90,8 @@ export function SettingsTab({ user, onUpdate }: SettingsTabProps) {
               <div className="flex items-center gap-3">
                 <Eye className="w-5 h-5 text-muted-foreground" />
                 <div>
-                  <p className="font-medium text-foreground">Profile Visibility</p>
-                  <p className="text-sm text-muted-foreground">Who can see your profile</p>
+                  <p className="font-medium text-foreground">プロフィール公開範囲</p>
+                  <p className="text-sm text-muted-foreground">プロフィールを閲覧できる対象</p>
                 </div>
               </div>
               <Select
@@ -102,9 +102,9 @@ export function SettingsTab({ user, onUpdate }: SettingsTabProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="public">Everyone</SelectItem>
-                  <SelectItem value="connections">Connections Only</SelectItem>
-                  <SelectItem value="private">Private</SelectItem>
+                  <SelectItem value="public">全員</SelectItem>
+                  <SelectItem value="connections">つながりのみ</SelectItem>
+                  <SelectItem value="private">非公開</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -115,15 +115,15 @@ export function SettingsTab({ user, onUpdate }: SettingsTabProps) {
         <div>
           <h4 className="text-sm font-medium text-foreground mb-4 flex items-center gap-2">
             <Bell className="w-4 h-4 text-primary" />
-            Notification Settings
+            通知設定
           </h4>
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 rounded-lg bg-muted/50">
               <div className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-muted-foreground" />
                 <div>
-                  <p className="font-medium text-foreground">Email Notifications</p>
-                  <p className="text-sm text-muted-foreground">Receive updates via email</p>
+                  <p className="font-medium text-foreground">メール通知</p>
+                  <p className="text-sm text-muted-foreground">更新情報をメールで受け取る</p>
                 </div>
               </div>
               <Switch
@@ -136,8 +136,8 @@ export function SettingsTab({ user, onUpdate }: SettingsTabProps) {
               <div className="flex items-center gap-3">
                 <Bell className="w-5 h-5 text-muted-foreground" />
                 <div>
-                  <p className="font-medium text-foreground">Push Notifications</p>
-                  <p className="text-sm text-muted-foreground">Receive push notifications</p>
+                  <p className="font-medium text-foreground">プッシュ通知</p>
+                  <p className="text-sm text-muted-foreground">プッシュ通知を受け取る</p>
                 </div>
               </div>
               <Switch
@@ -152,18 +152,18 @@ export function SettingsTab({ user, onUpdate }: SettingsTabProps) {
         <div>
           <h4 className="text-sm font-medium text-destructive mb-4 flex items-center gap-2">
             <Trash2 className="w-4 h-4" />
-            Danger Zone
+            注意が必要な操作
           </h4>
           <div className="p-4 rounded-lg border border-destructive/30 bg-destructive/5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium text-foreground">Delete Account</p>
+                <p className="font-medium text-foreground">アカウント削除</p>
                 <p className="text-sm text-muted-foreground">
-                  Permanently delete your account and all data
+                  アカウントとすべてのデータを完全に削除します
                 </p>
               </div>
               <Button variant="destructive" size="sm" onClick={() => setShowDeleteDialog(true)}>
-                Delete Account
+                アカウント削除
               </Button>
             </div>
           </div>
@@ -174,17 +174,17 @@ export function SettingsTab({ user, onUpdate }: SettingsTabProps) {
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Account</DialogTitle>
+            <DialogTitle>アカウント削除</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete your account? This action cannot be undone.
-              All your data, connections, and messages will be permanently removed.
+              本当にアカウントを削除しますか？この操作は取り消せません。
+              すべてのデータ、つながり、メッセージが完全に削除されます。
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
-              Cancel
+              キャンセル
             </Button>
-            <Button variant="destructive">Delete My Account</Button>
+            <Button variant="destructive">削除を実行</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

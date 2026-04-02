@@ -23,20 +23,20 @@ export function OverviewChart() {
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-lg font-semibold text-card-foreground">
-              User Growth
+              ユーザー増加
             </h3>
             <p className="text-sm text-muted-foreground">
-              New registrations by country
+              国別新規登録数
             </p>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-red-500" />
-              <span className="text-sm text-muted-foreground">Vietnam</span>
+              <span className="text-sm text-muted-foreground">ベトナム</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-pink-400" />
-              <span className="text-sm text-muted-foreground">Japan</span>
+              <span className="text-sm text-muted-foreground">日本</span>
             </div>
           </div>
         </div>
@@ -63,13 +63,13 @@ export function OverviewChart() {
                 dataKey="vietnam"
                 fill={COLORS.vietnam}
                 radius={[4, 4, 0, 0]}
-                name="Vietnam"
+                name="ベトナム"
               />
               <Bar
                 dataKey="japan"
                 fill={COLORS.japan}
                 radius={[4, 4, 0, 0]}
-                name="Japan"
+                name="日本"
               />
             </BarChart>
           </ResponsiveContainer>

@@ -146,7 +146,7 @@ export default function OrganizerEventsPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-foreground">マイイベント</h1>
-              <p className="text-muted-foreground mt-1">VN-JPコミュニティ向けイベントの管理と作成</p>
+              <p className="text-muted-foreground mt-1">日越コミュニティ向けイベントの管理と作成</p>
             </div>
             <Link
               href="/organizer/events/create"
