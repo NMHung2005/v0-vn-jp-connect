@@ -43,10 +43,8 @@ export function ProfileHeader({ user, onUpdate }: ProfileHeaderProps) {
   }
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      month: "long",
-      year: "numeric",
-    })
+    const date = new Date(dateString)
+    return `${date.getFullYear()}年${date.getMonth() + 1}月`
   }
 
   return (
@@ -170,7 +168,7 @@ export function ProfileHeader({ user, onUpdate }: ProfileHeaderProps) {
                 placeholder={t("tellOthers")}
                 rows={4}
               />
-              <p className="text-xs text-muted-foreground">{editedBio.length}/500 characters</p>
+              <p className="text-xs text-muted-foreground">{editedBio.length}/500文字</p>
             </div>
           </div>
           <DialogFooter>

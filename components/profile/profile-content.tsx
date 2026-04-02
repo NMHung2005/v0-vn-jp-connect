@@ -92,21 +92,21 @@ const levelOptions = [
 const jlptLevels = ["N1", "N2", "N3", "N4", "N5"]
 
 const suggestedInterests = [
-  "Anime",
-  "Manga",
+  "アニメ",
+  "マンガ",
   "J-Pop",
   "K-Pop",
-  "Language Learning",
-  "Travel",
-  "Photography",
-  "Gaming",
-  "Cooking",
-  "Coffee",
-  "Technology",
-  "Music",
-  "Movies",
-  "Sports",
-  "Fitness",
+  "語学学習",
+  "旅行",
+  "写真",
+  "ゲーム",
+  "料理",
+  "コーヒー",
+  "テクノロジー",
+  "音楽",
+  "映画",
+  "スポーツ",
+  "フィットネス",
 ]
 
 export function ProfileContent({ user, onUpdate }: ProfileContentProps) {

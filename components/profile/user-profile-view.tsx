@@ -101,10 +101,8 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
   const [reportSubmitted, setReportSubmitted] = useState(false)
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("ja-JP", {
-      month: "long",
-      year: "numeric",
-    })
+    const date = new Date(dateString)
+    return `${date.getFullYear()}年${date.getMonth() + 1}月`
   }
 
   const getLevelColor = (level: string) => {
