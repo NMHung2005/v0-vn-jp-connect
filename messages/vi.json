@@ -19,6 +19,7 @@
     "passwordPlaceholder": "パスワードを入力してください",
     "loginButton": "ログイン",
     "forgotPassword": "パスワードを忘れましたか？",
+    "cancel": "キャンセル",
     "resetPasswordTitle": "パスワードを再設定",
     "resetPasswordDescription": "メールアドレスを入力し、OTPコードを確認して、新しいパスワードを設定してください。",
     "otpDemoNotice": "デモ用のOTPコードは 123456 です。実際のメール送信は行いません。",
