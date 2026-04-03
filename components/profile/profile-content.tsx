@@ -92,21 +92,21 @@ const levelOptions = [
 const jlptLevels = ["N1", "N2", "N3", "N4", "N5"]
 
 const suggestedInterests = [
-  "Anime",
-  "Manga",
+  "アニメ",
+  "マンガ",
   "J-Pop",
   "K-Pop",
-  "Language Learning",
-  "Travel",
-  "Photography",
-  "Gaming",
-  "Cooking",
-  "Coffee",
-  "Technology",
-  "Music",
-  "Movies",
-  "Sports",
-  "Fitness",
+  "語学学習",
+  "旅行",
+  "写真",
+  "ゲーム",
+  "料理",
+  "コーヒー",
+  "テクノロジー",
+  "音楽",
+  "映画",
+  "スポーツ",
+  "フィットネス",
 ]
 
 export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
@@ -337,7 +337,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
 
         {/* Social Links */}
         <div className="mt-6 pt-4 border-t border-border">
-          <h4 className="text-sm font-medium text-foreground mb-3">Social Links</h4>
+          <h4 className="text-sm font-medium text-foreground mb-3">SNSリンク</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div className="p-3 rounded-lg bg-muted/50">
               <Label className="text-xs text-muted-foreground">Instagram</Label>
@@ -480,7 +480,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
                         {level.label}
                       </SelectItem>
                     ))}
-                    {newLanguage.language === "Japanese" &&
+                    {newLanguage.language === "日本語" &&
                       jlptLevels.map((level) => (
                         <SelectItem key={level} value={level}>
                           JLPT {level}
@@ -497,7 +497,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
                   onChange={(e) =>
                     setNewLanguage((prev) => ({ ...prev, certificate: e.target.value || null }))
                   }
-                  placeholder="e.g., JLPT N2, IELTS 7.0"
+                  placeholder="例: JLPT N2, IELTS 7.0"
                 />
               </div>
             </div>
@@ -540,7 +540,7 @@ export function ProfileContent({ user, onUpdate }: ProfileContentProps) {
                 <Input
                   value={newInterest}
                   onChange={(e) => setNewInterest(e.target.value)}
-                  placeholder="Enter interest"
+                  placeholder="興味を入力"
                   className="h-8 w-36"
                   onKeyDown={(e) => e.key === "Enter" && handleAddCustomInterest()}
                   autoFocus

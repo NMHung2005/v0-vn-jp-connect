@@ -51,14 +51,14 @@ export function PhotosTab({ user, onUpdate }: PhotosTabProps) {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-foreground">Photos</h3>
+          <h3 className="text-lg font-semibold text-foreground">写真</h3>
           <p className="text-sm text-muted-foreground">
-            Add photos to show more about yourself (max 9 photos)
+            写真を追加してあなたの魅力を伝えましょう（最大9枚）
           </p>
         </div>
         <Button onClick={handleAddPhoto} size="sm" disabled={user.photos.length >= 9}>
           <Plus className="w-4 h-4 mr-1" />
-          Add Photo
+          写真を追加
         </Button>
       </div>
 
@@ -79,7 +79,7 @@ export function PhotosTab({ user, onUpdate }: PhotosTabProps) {
             {photo === user.avatar && (
               <div className="absolute top-2 left-2 px-2 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full flex items-center gap-1">
                 <Star className="w-3 h-3 fill-current" />
-                Main
+                メイン
               </div>
             )}
 
@@ -95,7 +95,7 @@ export function PhotosTab({ user, onUpdate }: PhotosTabProps) {
                   }}
                 >
                   <Star className="w-4 h-4 mr-1" />
-                  Set Main
+                  メインに設定
                 </Button>
               )}
               <Button
@@ -119,7 +119,7 @@ export function PhotosTab({ user, onUpdate }: PhotosTabProps) {
             className="aspect-square rounded-xl border-2 border-dashed border-border hover:border-primary/50 flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
           >
             <Upload className="w-8 h-8" />
-            <span className="text-sm font-medium">Upload</span>
+            <span className="text-sm font-medium">アップロード</span>
           </button>
         )}
       </div>
@@ -135,7 +135,7 @@ export function PhotosTab({ user, onUpdate }: PhotosTabProps) {
           </button>
           {selectedPhoto && (
             <div className="relative aspect-square">
-              <Image src={selectedPhoto} alt="Photo preview" fill className="object-cover" />
+              <Image src={selectedPhoto} alt="写真プレビュー" fill className="object-cover" />
             </div>
           )}
         </DialogContent>
@@ -143,12 +143,12 @@ export function PhotosTab({ user, onUpdate }: PhotosTabProps) {
 
       {/* Tips */}
       <div className="mt-8 p-4 rounded-xl bg-muted/50 border border-border">
-        <h4 className="font-semibold text-foreground mb-2">Photo Tips</h4>
+        <h4 className="font-semibold text-foreground mb-2">写真のヒント</h4>
         <ul className="text-sm text-muted-foreground space-y-1">
-          <li>Use clear, high-quality photos that show your face</li>
-          <li>Add variety - show your hobbies and interests</li>
-          <li>Avoid group photos where it is hard to identify you</li>
-          <li>Your main photo will be shown first to other users</li>
+          <li>顔がはっきり見える高画質の写真を使いましょう</li>
+          <li>趣味や関心が伝わる多様な写真を追加しましょう</li>
+          <li>あなたを判別しにくい集合写真は避けましょう</li>
+          <li>メイン写真は他のユーザーに最初に表示されます</li>
         </ul>
       </div>
     </div>

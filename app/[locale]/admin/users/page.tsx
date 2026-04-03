@@ -52,8 +52,8 @@ const mockReports: Report[] = [
     id: "r1", 
     reportedUser: mockUsers[2], 
     reportedBy: "Yamada Kenichi", 
-    reason: "Spam", 
-    description: "User repeatedly sends advertising messages", 
+    reason: "スパム", 
+    description: "ユーザーが広告メッセージを繰り返し送信している", 
     date: "2024-03-28", 
     status: "pending",
     evidence: [
@@ -65,8 +65,8 @@ const mockReports: Report[] = [
     id: "r2", 
     reportedUser: mockUsers[4], 
     reportedBy: "Nguyen Van An", 
-    reason: "Inappropriate Language", 
-    description: "Using offensive language in comments", 
+    reason: "不適切な言葉遣い", 
+    description: "コメントで攻撃的な言葉を使用している", 
     date: "2024-03-27", 
     status: "pending",
     evidence: [
@@ -78,8 +78,8 @@ const mockReports: Report[] = [
     id: "r3", 
     reportedUser: mockUsers[7], 
     reportedBy: "Sato Hanako", 
-    reason: "Harassment", 
-    description: "Sending harassing messages multiple times", 
+    reason: "ハラスメント", 
+    description: "嫌がらせメッセージを複数回送信している", 
     date: "2024-03-26", 
     status: "pending",
     evidence: [
@@ -92,8 +92,8 @@ const mockReports: Report[] = [
     id: "r4", 
     reportedUser: mockUsers[1], 
     reportedBy: "Tran Thi Binh", 
-    reason: "Fake Content", 
-    description: "Posting false information about events", 
+    reason: "虚偽コンテンツ", 
+    description: "イベントに関する誤情報を投稿している", 
     date: "2024-03-25", 
     status: "resolved",
     evidence: [
@@ -103,14 +103,14 @@ const mockReports: Report[] = [
 ]
 
 const statusConfig = {
-  active: { label: "Active", color: "bg-emerald-100 text-emerald-700" },
-  banned: { label: "Banned", color: "bg-red-100 text-red-700" },
+  active: { label: "有効", color: "bg-emerald-100 text-emerald-700" },
+  banned: { label: "停止", color: "bg-red-100 text-red-700" },
 }
 
 const reportStatusConfig = {
-  pending: { label: "Pending", color: "bg-amber-100 text-amber-700" },
-  resolved: { label: "Resolved", color: "bg-emerald-100 text-emerald-700" },
-  dismissed: { label: "Dismissed", color: "bg-muted text-muted-foreground" },
+  pending: { label: "対応待ち", color: "bg-amber-100 text-amber-700" },
+  resolved: { label: "解決済み", color: "bg-emerald-100 text-emerald-700" },
+  dismissed: { label: "却下", color: "bg-muted text-muted-foreground" },
 }
 
 export default function UsersPage() {
@@ -169,10 +169,10 @@ export default function UsersPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-foreground tracking-tight">
-          User Management
+          ユーザー管理
         </h1>
         <p className="text-muted-foreground mt-1">
-          Manage user accounts and handle violation reports
+          ユーザーアカウント管理と違反報告対応
         </p>
       </div>
 
@@ -187,7 +187,7 @@ export default function UsersPage() {
               : "border-transparent text-muted-foreground hover:text-foreground"
           )}
         >
-          All Users
+          すべてのユーザー
         </button>
         <button
           onClick={() => setActiveTab("reports")}
@@ -198,7 +198,7 @@ export default function UsersPage() {
               : "border-transparent text-muted-foreground hover:text-foreground"
           )}
         >
-          Violation Reports
+          違反報告
           {pendingReports.length > 0 && (
             <span className="px-2 py-0.5 text-xs rounded-full bg-destructive text-destructive-foreground">
               {pendingReports.length}
@@ -215,7 +215,7 @@ export default function UsersPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Search users..."
+                placeholder="ユーザーを検索..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring"
@@ -228,9 +228,9 @@ export default function UsersPage() {
                 onChange={(e) => setStatusFilter(e.target.value as UserStatus | "all")}
                 className="px-3 py-2 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring"
               >
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="banned">Banned</option>
+                <option value="all">すべての状態</option>
+                <option value="active">有効</option>
+                <option value="banned">停止</option>
               </select>
             </div>
           </div>
@@ -240,12 +240,12 @@ export default function UsersPage() {
             <table className="w-full">
               <thead className="bg-muted/50">
                 <tr>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">User</th>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">Country</th>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">Status</th>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">Join Date</th>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">Reports</th>
-                  <th className="text-right px-6 py-4 text-sm font-medium text-muted-foreground">Actions</th>
+                  <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">ユーザー</th>
+                  <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">国</th>
+                  <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">状態</th>
+                  <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">登録日</th>
+                  <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">報告件数</th>
+                  <th className="text-right px-6 py-4 text-sm font-medium text-muted-foreground">操作</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -267,7 +267,7 @@ export default function UsersPage() {
                         "px-2 py-1 text-xs rounded-full font-medium",
                         user.country === "VN" ? "bg-red-100 text-red-700" : "bg-rose-100 text-rose-700"
                       )}>
-                        {user.country === "VN" ? "Vietnam" : "Japan"}
+                        {user.country === "VN" ? "ベトナム" : "日本"}
                       </span>
                     </td>
                     <td className="px-6 py-4">
@@ -296,7 +296,7 @@ export default function UsersPage() {
                         <button
                           onClick={() => setSelectedUser(user)}
                           className="p-2 hover:bg-muted rounded-lg transition-colors"
-                          title="View Details"
+                          title="詳細を見る"
                         >
                           <Eye className="w-4 h-4 text-muted-foreground" />
                         </button>
@@ -304,7 +304,7 @@ export default function UsersPage() {
                           <button
                             onClick={() => handleBanClick(user)}
                             className="p-2 hover:bg-red-100 rounded-lg transition-colors"
-                            title="Ban Account"
+                            title="アカウント停止"
                           >
                             <Ban className="w-4 h-4 text-red-600" />
                           </button>
@@ -312,7 +312,7 @@ export default function UsersPage() {
                         {user.status === "banned" && (
                           <button
                             className="p-2 hover:bg-emerald-100 rounded-lg transition-colors"
-                            title="Unban"
+                            title="停止解除"
                           >
                             <CheckCircle className="w-4 h-4 text-emerald-600" />
                           </button>
@@ -349,10 +349,10 @@ export default function UsersPage() {
                       <p className="text-sm text-muted-foreground mb-3">{report.description}</p>
                       <div className="flex items-center gap-4 text-sm">
                         <span className="text-muted-foreground">
-                          Reported user: <span className="font-medium text-foreground">{report.reportedUser.name}</span>
+                          報告対象: <span className="font-medium text-foreground">{report.reportedUser.name}</span>
                         </span>
                         <span className="text-muted-foreground">
-                          Reported by: <span className="font-medium text-foreground">{report.reportedBy}</span>
+                          報告者: <span className="font-medium text-foreground">{report.reportedBy}</span>
                         </span>
                         <span className="text-muted-foreground">
                           {new Date(report.date).toLocaleDateString("en-US")}
@@ -365,7 +365,7 @@ export default function UsersPage() {
                           className="mt-3 flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
                         >
                           <FileImage className="w-4 h-4" />
-                          View Evidence ({report.evidence.length} files)
+                          証拠を表示 ({report.evidence.length}件)
                         </button>
                       )}
                     </div>
@@ -377,10 +377,10 @@ export default function UsersPage() {
                           onClick={() => handleBanClick(report.reportedUser)}
                           className="px-4 py-2 text-sm font-medium bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
                         >
-                          Ban Account
+                          アカウント停止
                         </button>
                         <button className="px-4 py-2 text-sm font-medium bg-muted text-muted-foreground rounded-lg hover:bg-muted/80 transition-colors">
-                          Dismiss
+                          却下
                         </button>
                       </>
                     )}
@@ -397,7 +397,7 @@ export default function UsersPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-card rounded-xl p-6 w-full max-w-lg mx-4">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-foreground">User Details</h2>
+              <h2 className="text-xl font-semibold text-foreground">ユーザー詳細</h2>
               <button
                 onClick={() => setSelectedUser(null)}
                 className="p-2 hover:bg-muted rounded-lg transition-colors"
@@ -416,21 +416,21 @@ export default function UsersPage() {
             </div>
             <div className="space-y-4">
               <div className="flex justify-between py-2 border-b border-border">
-                <span className="text-muted-foreground">Country</span>
-                <span className="font-medium">{selectedUser.country === "VN" ? "Vietnam" : "Japan"}</span>
+                <span className="text-muted-foreground">国</span>
+                <span className="font-medium">{selectedUser.country === "VN" ? "ベトナム" : "日本"}</span>
               </div>
               <div className="flex justify-between py-2 border-b border-border">
-                <span className="text-muted-foreground">Status</span>
+                <span className="text-muted-foreground">状態</span>
                 <span className={cn("px-2 py-0.5 text-xs rounded-full font-medium", statusConfig[selectedUser.status].color)}>
                   {statusConfig[selectedUser.status].label}
                 </span>
               </div>
               <div className="flex justify-between py-2 border-b border-border">
-                <span className="text-muted-foreground">Join Date</span>
+                <span className="text-muted-foreground">登録日</span>
                 <span className="font-medium">{new Date(selectedUser.joinDate).toLocaleDateString("en-US")}</span>
               </div>
               <div className="flex justify-between py-2">
-                <span className="text-muted-foreground">Times Reported</span>
+                <span className="text-muted-foreground">報告回数</span>
                 <span className="font-medium">{selectedUser.reports}</span>
               </div>
             </div>
@@ -439,7 +439,7 @@ export default function UsersPage() {
                 onClick={() => setSelectedUser(null)}
                 className="flex-1 px-4 py-2 bg-muted text-muted-foreground rounded-lg hover:bg-muted/80 transition-colors"
               >
-                Close
+                閉じる
               </button>
               {selectedUser.status !== "banned" && (
                 <button 
@@ -449,7 +449,7 @@ export default function UsersPage() {
                   }}
                   className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
                 >
-                  Ban Account
+                  アカウント停止
                 </button>
               )}
             </div>
@@ -462,7 +462,7 @@ export default function UsersPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-card rounded-xl p-6 w-full max-w-md mx-4">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-foreground">Ban User Account</h2>
+              <h2 className="text-xl font-semibold text-foreground">ユーザーアカウント停止</h2>
               <button
                 onClick={() => {
                   setShowBanModal(false)
@@ -475,17 +475,17 @@ export default function UsersPage() {
               </button>
             </div>
             <p className="text-muted-foreground mb-4">
-              You are about to ban <span className="font-medium text-foreground">{userToBan.name}</span>. 
-              Please provide a reason for this action.
+              <span className="font-medium text-foreground">{userToBan.name}</span> を停止しようとしています。
+              この操作の理由を入力してください。
             </p>
             <div className="mb-4">
               <label className="block text-sm font-medium text-foreground mb-2">
-                Ban Reason <span className="text-red-500">*</span>
+                停止理由 <span className="text-red-500">*</span>
               </label>
               <textarea
                 value={banReason}
                 onChange={(e) => setBanReason(e.target.value)}
-                placeholder="Enter the reason for banning this user..."
+                placeholder="このユーザーを停止する理由を入力してください..."
                 rows={4}
                 className="w-full px-4 py-3 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none"
               />
@@ -499,14 +499,14 @@ export default function UsersPage() {
                 }}
                 className="flex-1 px-4 py-2 bg-muted text-muted-foreground rounded-lg hover:bg-muted/80 transition-colors"
               >
-                Cancel
+                キャンセル
               </button>
               <button
                 onClick={handleConfirmBan}
                 disabled={!banReason.trim()}
                 className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Confirm Ban
+                停止を確定
               </button>
             </div>
           </div>
@@ -519,9 +519,9 @@ export default function UsersPage() {
           <div className="bg-card rounded-xl p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-xl font-semibold text-foreground">Evidence Files</h2>
+                <h2 className="text-xl font-semibold text-foreground">証拠ファイル</h2>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Report: {selectedReport.reason} - {selectedReport.reportedUser.name}
+                  報告: {selectedReport.reason} - {selectedReport.reportedUser.name}
                 </p>
               </div>
               <button
@@ -578,7 +578,7 @@ export default function UsersPage() {
                 }}
                 className="px-4 py-2 bg-muted text-muted-foreground rounded-lg hover:bg-muted/80 transition-colors"
               >
-                Close
+                閉じる
               </button>
             </div>
           </div>

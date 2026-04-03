@@ -242,7 +242,7 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={t("selectLevel") || "Select level"} />
+                  <SelectValue placeholder={t("selectLevel") || "レベルを選択"} />
                 </SelectTrigger>
                 <SelectContent>
                   {levelOptions.map((level) => (
@@ -267,7 +267,7 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
                 onChange={(e) =>
                   setNewLanguage((prev) => ({ ...prev, certificate: e.target.value || null }))
                 }
-                placeholder="e.g., JLPT N2, IELTS 7.0"
+                placeholder="例: JLPT N2, IELTS 7.0"
               />
             </div>
           </div>
@@ -338,7 +338,7 @@ export function LanguageSkillsTab({ user, onUpdate }: LanguageSkillsTabProps) {
                   onChange={(e) =>
                     handleUpdateLanguage(editingIndex, { certificate: e.target.value || null })
                   }
-                  placeholder="e.g., JLPT N2, IELTS 7.0"
+                  placeholder="例: JLPT N2, IELTS 7.0"
                 />
               </div>
             </div>

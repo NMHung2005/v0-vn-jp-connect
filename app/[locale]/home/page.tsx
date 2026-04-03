@@ -55,9 +55,9 @@ export default function HomePage() {
         // Fallback if missing
         return {
           ...base,
-          name: tRoot(`SampleProfiles.${index}.name`) !== `SampleProfiles.${index}.name` ? tRoot(`SampleProfiles.${index}.name`) : "User",
-          location: "Location",
-          distance: "Distance",
+          name: tRoot(`SampleProfiles.${index}.name`) !== `SampleProfiles.${index}.name` ? tRoot(`SampleProfiles.${index}.name`) : "ユーザー",
+          location: "場所",
+          distance: "距離",
           bio: "",
           languages: [],
           interests: []
@@ -65,10 +65,10 @@ export default function HomePage() {
       } catch (e) {
         return {
           ...base,
-          name: "User",
-          location: "Unknown",
-          distance: "Unknown",
-          bio: "No bio available",
+          name: "ユーザー",
+          location: "不明",
+          distance: "不明",
+          bio: "自己紹介は未設定です",
           languages: [],
           interests: []
         }

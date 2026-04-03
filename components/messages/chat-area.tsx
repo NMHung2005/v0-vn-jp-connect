@@ -1,106 +1,39 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useState, useEffect } from "react"
-import { 
-  Send, 
-  Smile, 
-  Paperclip, 
-  Phone, 
-  Video,
+import { useEffect, useState } from "react"
+import {
+  CheckCircle2,
+  ChevronDown,
+  Copy,
   Languages,
   Lightbulb,
-  ChevronDown,
-  CheckCircle2,
-  Copy,
+  Paperclip,
+  Phone,
+  Send,
+  Smile,
+  User,
+  Users,
+  Video,
   Volume2,
-  User,
-  ThumbsUp
-  User,
-  Heart,
-  X,
-  ThumbsUp,
-  ThumbsDown
 } from "lucide-react"
-import { cn } from "@/lib/utils"
 import Link from "next/link"
-import { useTranslations, useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
+import { cn } from "@/lib/utils"
+import { Conversation, UserProfile } from "@/components/messages/types"
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogClose,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog"
 
-interface Message {
-  id: string
-  senderId: string
-  text: string
-  translatedText?: string
-  time: string
-  isOwn: boolean
-}
-
 interface ChatAreaProps {
-  conversationId: string | null
-}
-
-const conversationData: Record<string, {
-  user: { id: number; nameKey: string; avatar: string; online: boolean; nationality: "VN" | "JP" }
-  messages: Message[]
-}> = {
-  "1": {
-    user: {
-      id: 1,
-      nameKey: "yuki",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face",
-      online: true,
-      nationality: "JP",
-    },
-    messages: [
-      {
-        id: "1",
-        senderId: "yuki",
-        text: "こんにちは！はじめまして。",
-        translatedText: "Xin chào! Rất vui được gặp bạn.",
-        time: "10:30 AM",
-        isOwn: false,
-      },
-      {
-        id: "2",
-        senderId: "me",
-        text: "Xin chào! Rất vui được gặp bạn.",
-        translatedText: "こんにちは！お会いできて嬉しいです。",
-        time: "10:32 AM",
-        isOwn: true,
-      },
-      {
-        id: "3",
-        senderId: "yuki",
-        text: "ベトナム語を勉強しています。手伝ってもらえますか？",
-        translatedText: "Tôi đang học tiếng Việt. Bạn có thể giúp tôi không?",
-        time: "10:33 AM",
-        isOwn: false,
-      },
-      {
-        id: "4",
-        senderId: "me",
-        text: "もちろん！ベトナム語の練習を手伝いますよ。日本語を教えてくれませんか？",
-        time: "10:35 AM",
-        isOwn: true,
-      },
-      {
-        id: "5",
-        senderId: "yuki",
-        text: "いいですね！喫茶店で会いましょう。",
-        time: "10:36 AM",
-        isOwn: false,
-      },
-    ],
-  },
+  conversation: Conversation | null
+  usersById: Record<string, UserProfile>
+  onSendMessage: (conversationId: string, text: string) => void
+  onAddMembers: () => void
 }
 
 const topicSuggestions = [
@@ -112,31 +45,39 @@ const topicSuggestions = [
   { icon: "🎵", text: "好きな音楽について話し合う" },
 ]
 
-export function ChatArea({ conversationId }: ChatAreaProps) {
+export function ChatArea({ conversation, usersById, onSendMessage, onAddMembers }: ChatAreaProps) {
   const [messageInput, setMessageInput] = useState("")
-  const [messages, setMessages] = useState<Message[]>([])
   const [showTranslation, setShowTranslation] = useState<Record<string, boolean>>({})
   const [showTopicSuggestions, setShowTopicSuggestions] = useState(false)
   const [translateMode, setTranslateMode] = useState<"vi-jp" | "jp-vi">("vi-jp")
   const [showTranslatePanel, setShowTranslatePanel] = useState(false)
   const [textToTranslate, setTextToTranslate] = useState("")
   const [translatedResult, setTranslatedResult] = useState("")
-  
   const [showLikePopup, setShowLikePopup] = useState(false)
   const [hasShownPopup, setHasShownPopup] = useState(false)
 
-  useEffect(() => {
-    if (conversationId && conversationData[conversationId]) {
-      setMessages(conversationData[conversationId].messages)
-      setHasShownPopup(false)
-    } else {
-      setMessages([])
-    }
-  }, [conversationId])
-
   const t = useTranslations("Messages")
+  const locale = useLocale()
 
-  if (!conversationId || !conversationData[conversationId]) {
+  useEffect(() => {
+    setMessageInput("")
+    setShowTranslation({})
+    setShowTopicSuggestions(false)
+    setShowTranslatePanel(false)
+    setTextToTranslate("")
+    setTranslatedResult("")
+    setShowLikePopup(false)
+    setHasShownPopup(false)
+  }, [conversation?.id])
+
+  useEffect(() => {
+    if (conversation?.kind === "direct" && conversation.messages.length >= 10 && !hasShownPopup) {
+      setShowLikePopup(true)
+      setHasShownPopup(true)
+    }
+  }, [conversation?.kind, conversation?.messages.length, hasShownPopup])
+
+  if (!conversation) {
     return (
       <div className="flex-1 flex items-center justify-center bg-muted/30">
         <div className="text-center">
@@ -150,15 +91,26 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
     )
   }
 
-  const { user } = conversationData[conversationId]
-  const userName = t(`users.${user.nameKey}`)
+  const participants = conversation.participantIds
+    .map((memberId) => usersById[memberId])
+    .filter((participant): participant is UserProfile => Boolean(participant))
+  const primaryParticipant = participants[0]
+  const isGroupConversation = conversation.kind === "group"
+  const conversationTitle =
+    isGroupConversation
+      ? conversation.groupName || t("groupChat")
+      : primaryParticipant
+        ? t(`users.${primaryParticipant.nameKey}`)
+        : t("yourMessages")
 
-  const toggleTranslation = (messageId: string) => {
-    setShowTranslation(prev => ({ ...prev, [messageId]: !prev[messageId] }))
+  const handleToggleTranslation = (messageId: string) => {
+    setShowTranslation((currentState) => ({
+      ...currentState,
+      [messageId]: !currentState[messageId],
+    }))
   }
 
   const handleTranslate = () => {
-    // Simulated translation
     if (translateMode === "vi-jp") {
       setTranslatedResult("これは翻訳されたテキストです。")
     } else {
@@ -171,68 +123,99 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
     setShowTopicSuggestions(false)
   }
 
-  const locale = useLocale()
-
   const handleSendMessage = () => {
-    if (!messageInput.trim()) return
-
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      senderId: "me",
-      text: messageInput,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      isOwn: true,
+    if (!messageInput.trim()) {
+      return
     }
 
-    const updatedMessages = [...messages, newMessage]
-    setMessages(updatedMessages)
+    onSendMessage(conversation.id, messageInput.trim())
     setMessageInput("")
-
-    // Check for 10 messages
-    if (updatedMessages.length >= 10 && !hasShownPopup) {
-      setShowLikePopup(true)
-      setHasShownPopup(true)
-    }
   }
 
   return (
     <div className="flex-1 flex flex-col bg-background relative">
       {/* Chat Header */}
-      <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-card">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <img
-              src={user.avatar}
-              alt={userName}
-              className="w-10 h-10 rounded-full object-cover"
-            />
-            {user.online && (
-              <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-card rounded-full" />
-            )}
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="font-semibold text-foreground">{userName}</h2>
-              <span className={cn(
-                "px-1.5 py-0.5 rounded text-[10px] font-bold text-white",
-                user.nationality === "JP" ? "bg-red-500" : "bg-yellow-500"
-              )}>
-                {user.nationality}
-              </span>
+      <header className="flex items-center justify-between gap-4 px-6 py-4 border-b border-border bg-card">
+        <div className="flex items-center gap-3 min-w-0">
+          {isGroupConversation ? (
+            <div className="relative h-11 w-11 flex-shrink-0">
+              {participants.slice(0, 3).map((participant, index) => (
+                <img
+                  key={participant.id}
+                  src={participant.avatar}
+                  alt={t(`users.${participant.nameKey}`)}
+                  className={cn(
+                    "absolute h-8 w-8 rounded-full border-2 border-card object-cover",
+                    index === 0 && "left-0 top-2",
+                    index === 1 && "right-0 top-0",
+                    index === 2 && "left-4 bottom-0",
+                  )}
+                />
+              ))}
             </div>
-            <p className="text-xs text-muted-foreground">
-              {user.online ? t("online") : t("offline")}
+          ) : primaryParticipant ? (
+            <div className="relative">
+              <img
+                src={primaryParticipant.avatar}
+                alt={conversationTitle}
+                className="w-10 h-10 rounded-full object-cover"
+              />
+              {primaryParticipant.online && (
+                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-card rounded-full" />
+              )}
+            </div>
+          ) : null}
+
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <h2 className="font-semibold text-foreground truncate">{conversationTitle}</h2>
+              {primaryParticipant && !isGroupConversation && (
+                <span
+                  className={cn(
+                    "px-1.5 py-0.5 rounded text-[10px] font-bold text-white",
+                    primaryParticipant.nationality === "JP" ? "bg-red-500" : "bg-yellow-500",
+                  )}
+                >
+                  {primaryParticipant.nationality}
+                </span>
+              )}
+              {isGroupConversation && (
+                <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground inline-flex items-center gap-1">
+                  <Users className="h-3 w-3" />
+                  {t("groupChat")}
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground truncate">
+              {isGroupConversation
+                ? t("memberCount", { count: conversation.participantIds.length + 1 })
+                : primaryParticipant && primaryParticipant.online
+                  ? t("online")
+                  : t("offline")}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+
+        <div className="flex items-center gap-2 flex-shrink-0">
           <Link
-            href={`/${locale}/home/user/${user.id}`}
-            className="flex items-center gap-2 px-3 py-1.5 bg-muted hover:bg-muted/80 rounded-full text-sm font-medium text-foreground transition-colors"
+            href={`/${locale}/home/user/${primaryParticipant?.id ?? ""}`}
+            className={cn(
+              "flex items-center gap-2 px-3 py-1.5 bg-muted hover:bg-muted/80 rounded-full text-sm font-medium text-foreground transition-colors",
+              !primaryParticipant && "pointer-events-none opacity-50",
+            )}
           >
             <User className="w-4 h-4" />
             <span>{t("viewProfile")}</span>
           </Link>
+          {isGroupConversation && (
+            <button
+              onClick={onAddMembers}
+              className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 hover:bg-primary/15 rounded-full text-sm font-medium text-primary transition-colors"
+            >
+              <Users className="w-4 h-4" />
+              <span>{t("addMembers")}</span>
+            </button>
+          )}
           <button className="p-2 hover:bg-muted rounded-full transition-colors">
             <Phone className="w-5 h-5 text-muted-foreground" />
           </button>
@@ -244,58 +227,70 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
 
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-6 space-y-4">
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={cn("flex", msg.isOwn ? "justify-end" : "justify-start")}
-          >
-            <div className={cn("max-w-[70%] group", msg.isOwn ? "order-1" : "order-2")}>
-              <div
-                className={cn(
-                  "px-4 py-3 rounded-2xl",
-                  msg.isOwn
-                    ? "bg-primary text-primary-foreground rounded-br-md"
-                    : "bg-muted text-foreground rounded-bl-md"
+        {conversation.messages.map((message) => {
+          const sender = usersById[message.senderId]
+          const senderName = sender ? t(`users.${sender.nameKey}`) : message.senderId
+
+          return (
+            <div
+              key={message.id}
+              className={cn("flex", message.isOwn ? "justify-end" : "justify-start")}
+            >
+              <div className={cn("max-w-[72%] group", message.isOwn ? "order-1" : "order-2")}> 
+                {!message.isOwn && isGroupConversation && (
+                  <p className="mb-1 px-1 text-xs font-medium text-muted-foreground">{senderName}</p>
                 )}
-              >
-                <p className="text-sm leading-relaxed">{msg.text}</p>
-                
-                {/* Show translation */}
-                {showTranslation[msg.id] && msg.translatedText && (
-                  <div className={cn(
-                    "mt-2 pt-2 border-t text-sm italic",
-                    msg.isOwn ? "border-primary-foreground/20 text-primary-foreground/80" : "border-border text-muted-foreground"
-                  )}>
-                    {msg.translatedText}
-                  </div>
-                )}
-              </div>
-              
-              {/* Message actions */}
-              <div className={cn(
-                "flex items-center gap-2 mt-1 opacity-0 group-hover:opacity-100 transition-opacity",
-                msg.isOwn ? "justify-end" : "justify-start"
-              )}>
-                <span className="text-xs text-muted-foreground">{msg.time}</span>
-                {msg.translatedText && (
-                  <button
-                    onClick={() => toggleTranslation(msg.id)}
-                    className="text-xs text-primary hover:underline flex items-center gap-1"
-                  >
-                    <Languages className="w-3 h-3" />
-                    {showTranslation[msg.id] ? t("hide") : t("translate")}
+                <div
+                  className={cn(
+                    "px-4 py-3 rounded-2xl",
+                    message.isOwn
+                      ? "bg-primary text-primary-foreground rounded-br-md"
+                      : "bg-muted text-foreground rounded-bl-md",
+                  )}
+                >
+                  <p className="text-sm leading-relaxed">{message.text}</p>
+
+                  {showTranslation[message.id] && message.translatedText && (
+                    <div
+                      className={cn(
+                        "mt-2 pt-2 border-t text-sm italic",
+                        message.isOwn
+                          ? "border-primary-foreground/20 text-primary-foreground/80"
+                          : "border-border text-muted-foreground",
+                      )}
+                    >
+                      {message.translatedText}
+                    </div>
+                  )}
+                </div>
+
+                <div
+                  className={cn(
+                    "flex items-center gap-2 mt-1 opacity-0 group-hover:opacity-100 transition-opacity",
+                    message.isOwn ? "justify-end" : "justify-start",
+                  )}
+                >
+                  <span className="text-xs text-muted-foreground">{message.time}</span>
+                  {message.translatedText && (
+                    <button
+                      onClick={() => handleToggleTranslation(message.id)}
+                      className="text-xs text-primary hover:underline flex items-center gap-1"
+                    >
+                      <Languages className="w-3 h-3" />
+                      {showTranslation[message.id] ? t("hide") : t("translate")}
+                    </button>
+                  )}
+                  <button className="p-1 hover:bg-muted rounded transition-colors">
+                    <Volume2 className="w-3 h-3 text-muted-foreground" />
                   </button>
-                )}
-                <button className="p-1 hover:bg-muted rounded transition-colors">
-                  <Volume2 className="w-3 h-3 text-muted-foreground" />
-                </button>
-                <button className="p-1 hover:bg-muted rounded transition-colors">
-                  <Copy className="w-3 h-3 text-muted-foreground" />
-                </button>
+                  <button className="p-1 hover:bg-muted rounded transition-colors">
+                    <Copy className="w-3 h-3 text-muted-foreground" />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {/* Topic Suggestions Panel */}
@@ -304,7 +299,7 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2 text-sm font-medium text-foreground">
               <Lightbulb className="w-4 h-4 text-primary" />
-              {t("topicSuggestions")}
+              {t("topicSuggestions")} 
             </div>
             <button
               onClick={() => setShowTopicSuggestions(false)}
@@ -343,16 +338,15 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
               <ChevronDown className="w-4 h-4" />
             </button>
           </div>
-          
-          {/* Language toggle */}
+
           <div className="flex items-center justify-center gap-3 mb-4">
             <button
               onClick={() => setTranslateMode("vi-jp")}
               className={cn(
                 "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
-                translateMode === "vi-jp" 
-                  ? "bg-primary text-primary-foreground" 
-                  : "bg-muted text-muted-foreground hover:text-foreground"
+                translateMode === "vi-jp"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:text-foreground",
               )}
             >
               {t("vietnameseToJapanese")}
@@ -361,9 +355,9 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
               onClick={() => setTranslateMode("jp-vi")}
               className={cn(
                 "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
-                translateMode === "jp-vi" 
-                  ? "bg-primary text-primary-foreground" 
-                  : "bg-muted text-muted-foreground hover:text-foreground"
+                translateMode === "jp-vi"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:text-foreground",
               )}
             >
               {t("japaneseToVietnamese")}
@@ -377,7 +371,7 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
               </label>
               <textarea
                 value={textToTranslate}
-                onChange={(e) => setTextToTranslate(e.target.value)}
+                onChange={(event) => setTextToTranslate(event.target.value)}
                 placeholder={translateMode === "vi-jp" ? "Nhập tiếng Việt..." : "日本語を入力..."}
                 className="w-full h-24 p-3 bg-muted rounded-lg text-sm text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
@@ -403,8 +397,8 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
             </button>
             {translatedResult && (
               <div className="flex items-center gap-2">
-                <button 
-                  onClick={() => setMessageInput(prev => prev + " " + translatedResult)}
+                <button
+                  onClick={() => setMessageInput((currentValue) => `${currentValue} ${translatedResult}`.trim())}
                   className="flex items-center gap-1 px-3 py-1.5 text-sm text-primary hover:bg-primary/10 rounded-lg transition-colors"
                 >
                   <CheckCircle2 className="w-4 h-4" />
@@ -422,107 +416,71 @@ export function ChatArea({ conversationId }: ChatAreaProps) {
         </div>
       )}
 
-      {/* Input Area */}
-      <div className="px-6 py-4 border-t border-border bg-card">
-        {/* Quick action buttons */}
-        <div className="flex items-center gap-2 mb-3">
-          <button
-            onClick={() => {
-              setShowTopicSuggestions(!showTopicSuggestions)
-              setShowTranslatePanel(false)
-            }}
-            className={cn(
-              "flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
-              showTopicSuggestions 
-                ? "bg-primary text-primary-foreground" 
-                : "bg-muted text-muted-foreground hover:text-foreground"
-            )}
-          >
-            <Lightbulb className="w-4 h-4" />
-            {t("topicIdeas")}
-          </button>
-          <button
-            onClick={() => {
-              setShowTranslatePanel(!showTranslatePanel)
-              setShowTopicSuggestions(false)
-            }}
-            className={cn(
-              "flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
-              showTranslatePanel 
-                ? "bg-primary text-primary-foreground" 
-                : "bg-muted text-muted-foreground hover:text-foreground"
-            )}
-          >
-            <Languages className="w-4 h-4" />
-            {t("translate")}
-          </button>
-        </div>
-
-        {/* Message input */}
+      {/* Composer */}
+      <div className="border-t border-border bg-card px-6 py-4">
         <div className="flex items-end gap-3">
-          <button className="p-2 hover:bg-muted rounded-full transition-colors flex-shrink-0">
-            <Paperclip className="w-5 h-5 text-muted-foreground" />
+          <button
+            onClick={() => setShowTopicSuggestions((currentValue) => !currentValue)}
+            className="p-2.5 rounded-full hover:bg-muted transition-colors"
+          >
+            <Lightbulb className="w-5 h-5 text-muted-foreground" />
+          </button>
+          <button
+            onClick={() => setShowTranslatePanel((currentValue) => !currentValue)}
+            className="p-2.5 rounded-full hover:bg-muted transition-colors"
+          >
+            <Languages className="w-5 h-5 text-muted-foreground" />
           </button>
           <div className="flex-1 relative">
             <textarea
               value={messageInput}
-              onChange={(e) => setMessageInput(e.target.value)}
+              onChange={(event) => setMessageInput(event.target.value)}
               placeholder={t("typeMessage")}
               rows={1}
-              className="w-full px-4 py-3 bg-muted rounded-2xl text-sm text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 max-h-32"
-              style={{ minHeight: "44px" }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault()
-                  handleSendMessage()
-                }
-              }}
+              className="w-full min-h-[52px] max-h-32 resize-none rounded-2xl border border-border bg-background px-4 py-3 pr-24 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
+            <div className="absolute right-3 bottom-3 flex items-center gap-1">
+              <button className="rounded-full p-2 hover:bg-muted transition-colors">
+                <Smile className="h-4 w-4 text-muted-foreground" />
+              </button>
+              <button className="rounded-full p-2 hover:bg-muted transition-colors">
+                <Paperclip className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </div>
           </div>
-          <button className="p-2 hover:bg-muted rounded-full transition-colors flex-shrink-0">
-            <Smile className="w-5 h-5 text-muted-foreground" />
-          </button>
-          <button 
+          <button
             onClick={handleSendMessage}
-            disabled={!messageInput.trim()}
-            className={cn(
-              "p-3 rounded-full transition-colors flex-shrink-0",
-              messageInput.trim() 
-                ? "bg-primary text-primary-foreground hover:bg-primary/90" 
-                : "bg-muted text-muted-foreground"
-            )}
+            className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            <Send className="w-5 h-5" />
+            <Send className="h-5 w-5" />
           </button>
         </div>
       </div>
 
       <Dialog open={showLikePopup} onOpenChange={setShowLikePopup}>
-        <DialogContent className="sm:max-w-[400px] text-center p-8">
-          <div className="flex flex-col items-center gap-6">
-            <div className="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center animate-bounce">
-              <ThumbsUp className="w-10 h-10 text-blue-600 fill-blue-600" />
-            </div>
-            <DialogHeader>
-              <DialogTitle className="text-2xl font-bold text-center">{t("likePopupTitle")}</DialogTitle>
-              <DialogDescription className="text-base pt-2 text-center">
-                {t("likePopupDescription", { name: userName, count: messages.length })}
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter className="flex flex-col sm:flex-row gap-3 w-full pt-4">
-              <DialogClose asChild>
-                <button className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-blue-200">
-                  <ThumbsUp className="w-5 h-5 fill-white" />
-                  {t("likeButton")}
-                </button>
-              </DialogClose>
-              <DialogClose asChild>
-                <button className="flex-1 px-4 py-3 bg-muted text-muted-foreground rounded-xl font-semibold hover:bg-muted/80 transition-all active:scale-95">
-                  {t("maybeLater")}
-                </button>
-              </DialogClose>
-            </DialogFooter>
-          </div>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("likePopupTitle")}</DialogTitle>
+            <DialogDescription>
+              {primaryParticipant
+                ? t("likePopupDescription", {
+                    name: t(`users.${primaryParticipant.nameKey}`),
+                    count: conversation.messages.length,
+                  })
+                : t("likePopupDescription", { name: conversationTitle, count: conversation.messages.length })}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <button
+              onClick={() => setShowLikePopup(false)}
+              className="rounded-md border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
+            >
+              {t("maybeLater")}
+            </button>
+            <button className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
+              {t("likeButton")}
+            </button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

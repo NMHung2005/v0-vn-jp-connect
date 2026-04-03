@@ -75,12 +75,12 @@ interface ReportData {
 }
 
 const reportReasons = [
-  { value: "fake_profile", label: "Fake Profile / Impersonation" },
-  { value: "inappropriate_content", label: "Inappropriate Content" },
-  { value: "harassment", label: "Harassment / Bullying" },
-  { value: "spam", label: "Spam / Scam" },
-  { value: "underage", label: "Underage User" },
-  { value: "other", label: "Other" },
+  { value: "fake_profile", label: "偽プロフィール・なりすまし" },
+  { value: "inappropriate_content", label: "不適切なコンテンツ" },
+  { value: "harassment", label: "ハラスメント・いじめ" },
+  { value: "spam", label: "スパム・詐欺" },
+  { value: "underage", label: "未成年ユーザー" },
+  { value: "other", label: "その他" },
 ]
 
 const levelOptions = [
@@ -101,10 +101,8 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
   const [reportSubmitted, setReportSubmitted] = useState(false)
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      month: "long",
-      year: "numeric",
-    })
+    const date = new Date(dateString)
+    return `${date.getFullYear()}年${date.getMonth() + 1}月`
   }
 
   const getLevelColor = (level: string) => {
@@ -170,7 +168,7 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
         <div className="relative h-48 bg-gradient-to-r from-primary/20 to-accent">
           <Image
             src={user.coverImage}
-            alt="Cover"
+            alt="カバー画像"
             fill
             sizes="(max-width: 768px) 100vw, 896px"
             className="object-cover"
@@ -213,7 +211,7 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
                   </span>
                   <span className="flex items-center gap-1">
                     <Calendar className="w-4 h-4" />
-                    Joined {formatDate(user.joinDate)}
+                    登録日 {formatDate(user.joinDate)}
                   </span>
                 </div>
               </div>
@@ -222,7 +220,7 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
               <div className="flex flex-wrap gap-2">
                 <Button onClick={onMessage} className="gap-2">
                   <MessageCircle className="w-4 h-4" />
-                  Message
+                  メッセージ
                 </Button>
                 <Button 
                   variant="ghost" 
@@ -243,7 +241,7 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
                 </div>
                 <div>
                   <p className="text-lg font-bold text-foreground">{user.positiveRating}%</p>
-                  <p className="text-xs text-muted-foreground">Positive Rating</p>
+                  <p className="text-xs text-muted-foreground">高評価率</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -252,14 +250,14 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
                 </div>
                 <div>
                   <p className="text-lg font-bold text-foreground">{user.connections}</p>
-                  <p className="text-xs text-muted-foreground">Connections</p>
+                  <p className="text-xs text-muted-foreground">つながり</p>
                 </div>
               </div>
             </div>
 
             {/* Bio */}
             <div className="mt-6">
-              <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-2">About</h3>
+              <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-2">自己紹介</h3>
               <p className="text-muted-foreground leading-relaxed">{user.bio}</p>
             </div>
           </div>
@@ -268,22 +266,22 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
 
       {/* Basic Info Grid */}
       <div className="bg-card rounded-xl border border-border p-6">
-        <h3 className="text-lg font-semibold text-foreground mb-4">Basic Information</h3>
+        <h3 className="text-lg font-semibold text-foreground mb-4">基本情報</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="p-3 rounded-lg bg-muted/50">
-            <p className="text-xs text-muted-foreground">Age</p>
-            <p className="font-semibold text-foreground">{user.age} years old</p>
+            <p className="text-xs text-muted-foreground">年齢</p>
+            <p className="font-semibold text-foreground">{user.age}歳</p>
           </div>
           <div className="p-3 rounded-lg bg-muted/50">
-            <p className="text-xs text-muted-foreground">Gender</p>
+            <p className="text-xs text-muted-foreground">性別</p>
             <p className="font-semibold text-foreground">{user.gender}</p>
           </div>
           <div className="p-3 rounded-lg bg-muted/50">
-            <p className="text-xs text-muted-foreground">Nationality</p>
+            <p className="text-xs text-muted-foreground">国籍</p>
             <p className="font-semibold text-foreground">{user.nationality}</p>
           </div>
           <div className="p-3 rounded-lg bg-muted/50">
-            <p className="text-xs text-muted-foreground">Education</p>
+            <p className="text-xs text-muted-foreground">学歴</p>
             <p className="font-semibold text-foreground text-sm">{user.education}</p>
           </div>
         </div>
@@ -293,7 +291,7 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
       <div className="bg-card rounded-xl border border-border p-6">
         <div className="flex items-center gap-2 mb-4">
           <Languages className="w-5 h-5 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">Language Skills</h3>
+          <h3 className="text-lg font-semibold text-foreground">言語スキル</h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -331,7 +329,7 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
 
       {/* Interests */}
       <div className="bg-card rounded-xl border border-border p-6">
-        <h3 className="text-lg font-semibold text-foreground mb-4">Interests & Hobbies</h3>
+        <h3 className="text-lg font-semibold text-foreground mb-4">興味・趣味</h3>
         <div className="flex flex-wrap gap-2">
           {user.interests.map((interest) => (
             <span
@@ -347,7 +345,7 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
       {/* Photos */}
       {user.photos.length > 0 && (
         <div className="bg-card rounded-xl border border-border p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Photos</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-4">写真</h3>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
             {user.photos.map((photo, index) => (
               <div
@@ -375,7 +373,7 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
             <div className="relative aspect-square w-full">
               <Image
                 src={selectedPhoto}
-                alt="Photo preview"
+                alt="写真プレビュー"
                 fill
                 sizes="(max-width: 768px) 100vw, 672px"
                 className="object-cover"
@@ -395,28 +393,28 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">Report Submitted</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-2">報告を送信しました</h3>
               <p className="text-muted-foreground mb-6">
-                Thank you for your report. Our team will review it and take appropriate action.
+                ご報告ありがとうございます。運営チームが内容を確認し、適切に対応します。
               </p>
-              <Button onClick={handleCloseReportDialog}>Close</Button>
+              <Button onClick={handleCloseReportDialog}>閉じる</Button>
             </div>
           ) : (
             <>
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <AlertTriangle className="w-5 h-5 text-destructive" />
-                  Report User
+                  ユーザーを報告
                 </DialogTitle>
                 <DialogDescription>
-                  Report {user.name} for violating community guidelines. Please provide details and evidence if available.
+                  {user.name}さんのコミュニティガイドライン違反を報告します。詳細と可能であれば証拠を入力してください。
                 </DialogDescription>
               </DialogHeader>
 
               <div className="space-y-6 py-4">
                 {/* Report Reason */}
                 <div className="space-y-3">
-                  <Label className="text-sm font-medium">Reason for Report *</Label>
+                  <Label className="text-sm font-medium">報告理由 *</Label>
                   <RadioGroup value={reportReason} onValueChange={setReportReason}>
                     {reportReasons.map((reason) => (
                       <div key={reason.value} className="flex items-center space-x-3">
@@ -432,26 +430,26 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
                 {/* Description */}
                 <div className="space-y-2">
                   <Label htmlFor="description" className="text-sm font-medium">
-                    Description *
+                    詳細説明 *
                   </Label>
                   <Textarea
                     id="description"
                     value={reportDescription}
                     onChange={(e) => setReportDescription(e.target.value)}
-                    placeholder="Please describe the issue in detail. Include specific examples, dates, or context that will help us investigate."
+                    placeholder="問題の内容を詳しく記入してください。具体例、日時、状況など調査に役立つ情報を含めてください。"
                     rows={4}
                     className="resize-none"
                   />
                   <p className="text-xs text-muted-foreground">
-                    {reportDescription.length}/1000 characters
+                    {reportDescription.length}/1000文字
                   </p>
                 </div>
 
                 {/* Evidence Upload */}
                 <div className="space-y-3">
-                  <Label className="text-sm font-medium">Evidence (Optional)</Label>
+                  <Label className="text-sm font-medium">証拠（任意）</Label>
                   <p className="text-xs text-muted-foreground">
-                    Upload screenshots or files as evidence. Max 5 files, 10MB each.
+                    証拠としてスクリーンショットやファイルをアップロードできます。最大5ファイル、各10MBまで。
                   </p>
                   
                   {/* Upload Area */}
@@ -474,10 +472,10 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
                     >
                       <Upload className="w-8 h-8 text-muted-foreground" />
                       <span className="text-sm text-muted-foreground">
-                        Click to upload or drag and drop
+                        クリックしてアップロード、またはドラッグ&ドロップ
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        Images, PDF, DOC (max 5 files)
+                        画像、PDF、DOC（最大5ファイル）
                       </span>
                     </label>
                   </div>
@@ -514,7 +512,7 @@ export function UserProfileView({ user, onMessage, onReport }: UserProfileViewPr
 
               <DialogFooter>
                 <Button variant="outline" onClick={handleCloseReportDialog}>
-                  Cancel
+                  キャンセル
                 </Button>
                 <Button
                   variant="destructive"

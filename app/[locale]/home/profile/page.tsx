@@ -24,9 +24,9 @@ const currentUser = {
   connections: 128,
   joinDate: "2024-03-15",
   languages: [
-    { language: "Vietnamese", level: "native", certificate: null },
-    { language: "Japanese", level: "n3", certificate: "JLPT N3" },
-    { language: "English", level: "advanced", certificate: "IELTS 7.0" },
+    { language: "ベトナム語", level: "母語", certificate: null },
+    { language: "日本語", level: "N3", certificate: "JLPT N3" },
+    { language: "英語", level: "上級", certificate: "IELTS 7.0" },
   ],
   interests: ["言語交換", "アニメ", "テクノロジー", "旅行", "写真", "コーヒー", "音楽", "料理"],
   photos: [

@@ -2,8 +2,8 @@ import { Suspense } from "react"
 import { AdminSidebar } from "@/components/admin/admin-sidebar"
 
 export const metadata = {
-  title: "Admin Dashboard | VN-JP Connect",
-  description: "Manage and monitor the VN-JP Connect platform",
+  title: "管理ダッシュボード | VN-JP Connect",
+  description: "VN-JP Connectプラットフォームを管理・監視",
 }
 
 function SidebarFallback() {

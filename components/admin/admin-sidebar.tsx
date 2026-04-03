@@ -13,9 +13,9 @@ import {
 import { cn } from "@/lib/utils"
 
 const menuItems = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/admin" },
-  { id: "users", label: "User Management", icon: Users, href: "/admin/users" },
-  { id: "events", label: "Create Event", icon: CalendarPlus, href: "/admin/organizers" },
+  { id: "dashboard", label: "ダッシュボード", icon: LayoutDashboard, href: "/admin" },
+  { id: "users", label: "ユーザー管理", icon: Users, href: "/admin/users" },
+  { id: "events", label: "イベント作成", icon: CalendarPlus, href: "/admin/organizers" },
 ]
 
 const bottomItems: any[] = []
@@ -43,7 +43,7 @@ export function AdminSidebar() {
             <span className="text-lg font-bold text-sidebar-foreground tracking-tight block">
               VN-JP Admin
             </span>
-            <span className="text-xs text-muted-foreground">Management Portal</span>
+            <span className="text-xs text-muted-foreground">管理ポータル</span>
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@ export function AdminSidebar() {
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
         <div className="px-3 py-2">
           <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            Main Menu
+            メインメニュー
           </span>
         </div>
         {menuItems.map((item) => {
@@ -102,7 +102,7 @@ export function AdminSidebar() {
           className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent transition-all text-sm"
         >
           <LogOut className="w-5 h-5" />
-          <span className="font-medium">Log out</span>
+          <span className="font-medium">ログアウト</span>
         </Link>
       </div>
     </aside>
